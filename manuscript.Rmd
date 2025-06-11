@@ -1,0 +1,184 @@
+---
+title             : "The title"
+shorttitle        : "Title"
+
+author: 
+  - name          : "Karolina Muszyńska"
+    affiliation   : "1"
+    corresponding : yes    # Define only one corresponding author
+    address       : "University of Warsaw, Faculty of Psychology, ul. Stefana Banacha 2D, 02-097 Warsaw, Poland"
+    email         : "karolina.muszynska@psych.uw.edu.pl"
+    role: # Contributorship roles (e.g., CRediT, https://credit.niso.org/)
+      - "Conceptualization"
+      - "Writing - Original Draft Preparation"
+      - "Writing - Review & Editing"
+  - name          : "XXX"
+    affiliation   : "2"
+    role:
+      - "Writing - Review & Editing"
+      - "Supervision"
+
+affiliation:
+  - id            : "1"
+    institution   : "University of Warsaw, Faculty of Psychology"
+  - id            : "2"
+    institution   : "Stanford University"
+
+authornote: |
+  Add complete departmental affiliations for each author here. Each new line herein must be indented, like this line.
+
+  Enter author note here.
+
+abstract: |
+  One or two sentences providing a **basic introduction** to the field,  comprehensible to a scientist in any discipline.
+  Two to three sentences of **more detailed background**, comprehensible  to scientists in related disciplines.
+  One sentence clearly stating the **general problem** being addressed by  this particular study.
+  One sentence summarizing the main result (with the words "**here we show**" or their equivalent).
+  Two or three sentences explaining what the **main result** reveals in direct comparison to what was thought to be the case previously, or how the  main result adds to previous knowledge.
+  One or two sentences to put the results into a more **general context**.
+  Two or three sentences to provide a **broader perspective**, readily comprehensible to a scientist in any discipline.
+  
+  <!-- https://tinyurl.com/ybremelq -->
+  
+keywords          : "keywords"
+wordcount         : "X"
+
+bibliography      : "r-references.bib"
+
+floatsintext      : yes
+linenumbers       : yes
+draft             : no
+mask              : no
+
+figurelist        : no
+tablelist         : no
+footnotelist      : no
+
+classoption       : "man"
+output            : papaja::apa6_pdf
+---
+
+```{r setup, include = FALSE}
+library("papaja")
+r_refs("r-references.bib")
+
+library(tidyverse)
+library(Multilada)
+library(here)
+
+```
+
+```{r analysis-preferences}
+# Seed for random number generation
+set.seed(123)
+knitr::opts_chunk$set(cache.extra = knitr::rand_seed, echo = F, include = F, warning = F, message = F, out.width="60%")
+```
+
+
+```{r}
+# Data
+source(here("data_polish.R"))
+source(here("data_ame_english.R"))
+```
+
+# Methods
+(to paste from [google doc](https://docs.google.com/document/d/1MPInUTyY2Y81EtiiK0tUOo8vG3zowfqiXjpBF0p8Mzs/edit?tab=t.0))
+
+## Participants
+(to paste from [google doc](https://docs.google.com/document/d/1MPInUTyY2Y81EtiiK0tUOo8vG3zowfqiXjpBF0p8Mzs/edit?tab=t.0))
+Mention the bilinguals and multilinguals
+
+## Material
+(to paste from [google doc](https://docs.google.com/document/d/1MPInUTyY2Y81EtiiK0tUOo8vG3zowfqiXjpBF0p8Mzs/edit?tab=t.0))
+
+## Procedure
+(to paste from [google doc](https://docs.google.com/document/d/1MPInUTyY2Y81EtiiK0tUOo8vG3zowfqiXjpBF0p8Mzs/edit?tab=t.0))
+
+## Data analysis
+
+
+# Results
+
+## Psychometric properties of the two CAT-CDIs
+
+Our first aim was to examine whether CAT-CDIs in American English and Polish demonstrate comparable psychometric properties. To that end, we revisit the psychometric properties reported for the American English CAT-CDI (word production) in Kachergis et al. (2022) and compare those to the data from Polish CAT-CDI (Words and Sentences).
+
+<!-- AmE r values copied from Kachergis et al. 2022 -->
+```{r}
+cor(by_child_pl$cat_theta, by_child_pl$score_full) # AmE:.86, PL: 0.86
+cor(by_child_pl$cat_theta, by_child_pl$full_theta) # AmE: .92, PL: .92
+cor(by_child_pl$full_theta, by_child_pl$score_full) # AmE: .95, PL: 0.94
+```
+
+We found similarly strong correlations in the two languages between the abilities estimated from CDI-CAT and full CDI scores (American English and Polish: $r$ = .86), the abilities estimated from the CDI-CAT and abilities estimated from full CDI (American English and Polish: $r$ = .92), and the abilities estimated from the full CDI and the full CDI scores (American English: $r$ = .95, Polish: $r$ = `r cor(by_child_pl$full_theta, by_child_pl$score_full)`). The abilities estimated from the CDI-CAT and the full CDI scores were also strongly correlated within individual age groups (see Table \@ref(tab:corr-by-age)).
+
+
+```{r corr-by-age, include = T}
+# Correlations by age
+# to-do: merge both tables?
+# English
+valid_tab <- prod_s %>% 
+  mutate(age_group = cut(age_full, breaks=seq(12,36,3), right=F, include.lowest = T)) %>%
+  group_by(age_group) %>%
+  summarise(r = cor(fullTheta, catTheta), n=n()) #%>% kableExtra::kable(digits=2)
+
+valid_tab_wide = rbind(round(valid_tab$r, 2), as.character(valid_tab$n))
+colnames(valid_tab_wide) = as.character(valid_tab$age_group)
+row.names(valid_tab_wide) = c('r ability CAT vs full CDI', 'N')
+
+apa_table(valid_tab_wide, caption="American English: Correlations between ability estimated by CAT-CDI and ability estimated from full CDI by children's age") 
+
+# Polish
+age_cor_table <- by_child_pl %>% 
+  mutate(age_group = cut(age_CAT, breaks=seq(12,36,3), right=F, include.lowest = T)) %>%
+  group_by(age_group) %>%
+  summarise(r = cor(full_theta, cat_theta), n=n())
+
+age_cor_table_wide = rbind(round(age_cor_table$r, 2), as.character(age_cor_table$n))
+colnames(age_cor_table_wide) = as.character(age_cor_table$age_group)
+row.names(age_cor_table_wide) = c('r ability CAT vs full CDI', 'N')
+
+apa_table(age_cor_table_wide, caption = "Polish: Correlations between ability estimated by CAT-CDI and ability estimated from full CDI by children's age")
+```
+
+
+The Polish validation study included `r sum(by_child_pl$lang_group == "multilingual")` data from bi- and multilingual families. Though it is a small group, we decided to explore their correlation coefficients (non-parametric Spearman's rho) and found these were similar to those found for Polish monolingual children (see Table X in Supplementary Materials). <!-- TO DO -->
+
+```{r, include = T}
+
+cor1 <- by_child_pl %>%
+  group_by(lang_group) %>%
+  summarise(r = cor(cat_theta, score_full, method = "spearman"), n = n()) %>%
+  mutate(correlation = "Ability from CDI-CAT ~ full CDI score")
+
+cor2 <- by_child_pl %>%
+  group_by(lang_group) %>%
+  summarise(r = cor(cat_theta, full_theta, method = "spearman"), n = n()) %>%
+  mutate(correlation = "Ability from CDI-CAT ~ ability from full CDI")
+
+cor3 <- by_child_pl %>%
+  group_by(lang_group) %>%
+  summarise(r = cor(full_theta, score_full, method = "spearman"), n = n()) %>%
+  mutate(correlation = "Ability from full CDI ~ full CDI score")
+
+lang_cor_table <- bind_rows(cor1, cor2, cor3)
+rm(cor1, cor2, cor3)
+
+apa_table(lang_cor_table, caption = "Supplementary Material: Table S1 - Spearman's correlations for monolingual and multilingual children in the Polish dataset")
+
+```
+
+
+
+
+
+
+# Discussion
+
+
+\newpage
+
+# References
+```{r create_r-references}
+r_refs(file = "references.bib")
+```

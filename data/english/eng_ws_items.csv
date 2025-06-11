@@ -1,0 +1,681 @@
+item_id,definition,language,form,type,category,lexical_category,lexical_class,uni_lemma,complexity_category,num_item_id
+item_637,a,English (American),WS,word,quantifiers,function_words,function_words,a,,637
+item_639,a lot,English (American),WS,word,quantifiers,function_words,function_words,a lot,,639
+item_611,about,English (American),WS,word,locations,function_words,function_words,about,,611
+item_612,above,English (American),WS,word,locations,function_words,function_words,above,,612
+item_567,after,English (American),WS,word,time_words,other,other,after,,567
+item_56,airplane,English (American),WS,word,vehicles,nouns,nouns,airplane,,56
+item_638,all,English (American),WS,word,quantifiers,function_words,function_words,all,,638
+item_504,all gone,English (American),WS,word,descriptive_words,predicates,adjectives,all gone,,504
+item_13,alligator,English (American),WS,word,animals,nouns,nouns,alligator,,13
+item_654,am,English (American),WS,word,helping_verbs,function_words,function_words,am,,654
+item_640,an,English (American),WS,word,quantifiers,function_words,function_words,a,,640
+item_675,and,English (American),WS,word,connecting_words,function_words,function_words,and,,675
+item_14,animal,English (American),WS,word,animals,nouns,nouns,animal,,14
+item_184,ankle,English (American),WS,word,body_parts,nouns,nouns,ankle,,184
+item_641,another,English (American),WS,word,quantifiers,function_words,function_words,another,,641
+item_15,ant,English (American),WS,word,animals,nouns,nouns,ant,,15
+item_642,any,English (American),WS,word,quantifiers,function_words,function_words,any,,642
+item_88,apple,English (American),WS,word,food_drink,nouns,nouns,apple,,88
+item_89,applesauce,English (American),WS,word,food_drink,nouns,nouns,applesauce,,89
+item_655,are,English (American),WS,word,helping_verbs,function_words,function_words,are,,655
+item_185,arm,English (American),WS,word,body_parts,nouns,nouns,arm,,185
+item_613,around,English (American),WS,word,locations,function_words,function_words,around,,613
+item_505,asleep,English (American),WS,word,descriptive_words,predicates,adjectives,asleep,,505
+item_614,at,English (American),WS,word,locations,function_words,function_words,at,,614
+item_347,aunt,English (American),WS,word,people,other,other,aunt,,347
+item_506,awake,English (American),WS,word,descriptive_words,predicates,adjectives,awake,,506
+item_615,away,English (American),WS,word,locations,function_words,function_words,away,,615
+item_1,baa baa,English (American),WS,word,sounds,other,other,baa baa,,1
+item_348,baby,English (American),WS,word,people,other,other,baby,,348
+item_349,babysitter,English (American),WS,word,people,other,other,babysitter,,349
+item_350,babysitter's name,English (American),WS,word,people,other,other,babysitter's name,,350
+item_616,back,English (American),WS,word,locations,function_words,function_words,back (location),,616
+item_294,backyard,English (American),WS,word,outside,nouns,nouns,yard,,294
+item_507,bad,English (American),WS,word,descriptive_words,predicates,adjectives,bad,,507
+item_70,ball,English (American),WS,word,toys,nouns,nouns,ball,,70
+item_71,balloon,English (American),WS,word,toys,nouns,nouns,balloon,,71
+item_90,banana,English (American),WS,word,food_drink,nouns,nouns,banana,,90
+item_261,basement,English (American),WS,word,furniture_rooms,nouns,nouns,basement,,261
+item_211,basket,English (American),WS,word,household,nouns,nouns,basket,,211
+item_72,bat,English (American),WS,word,toys,nouns,nouns,bat,,72
+item_376,bath,English (American),WS,word,games_routines,other,other,bath,,376
+item_262,bathroom,English (American),WS,word,furniture_rooms,nouns,nouns,bathroom,,262
+item_263,bathtub,English (American),WS,word,furniture_rooms,nouns,nouns,bathtub,,263
+item_656,be,English (American),WS,word,helping_verbs,function_words,function_words,be,,656
+item_325,beach,English (American),WS,word,places,other,other,beach,,325
+item_156,beads,English (American),WS,word,clothing,nouns,nouns,beads,,156
+item_91,beans,English (American),WS,word,food_drink,nouns,nouns,beans,,91
+item_16,bear,English (American),WS,word,animals,nouns,nouns,bear,,16
+item_676,because,English (American),WS,word,connecting_words,function_words,function_words,because,,676
+item_264,bed,English (American),WS,word,furniture_rooms,nouns,nouns,bed,,264
+item_265,bedroom,English (American),WS,word,furniture_rooms,nouns,nouns,bedroom,,265
+item_17,bee,English (American),WS,word,animals,nouns,nouns,bee,,17
+item_568,before,English (American),WS,word,time_words,other,other,before,,568
+item_617,behind,English (American),WS,word,locations,function_words,function_words,behind,,617
+item_186,belly button,English (American),WS,word,body_parts,nouns,nouns,belly button,,186
+item_157,belt,English (American),WS,word,clothing,nouns,nouns,belt,,157
+item_266,bench,English (American),WS,word,furniture_rooms,nouns,nouns,bench,,266
+item_618,beside,English (American),WS,word,locations,function_words,function_words,beside,,618
+item_508,better,English (American),WS,word,descriptive_words,predicates,adjectives,better,,508
+item_158,bib,English (American),WS,word,clothing,nouns,nouns,bib,,158
+item_57,bicycle,English (American),WS,word,vehicles,nouns,nouns,bicycle,,57
+item_509,big,English (American),WS,word,descriptive_words,predicates,adjectives,big,,509
+item_18,bird,English (American),WS,word,animals,nouns,nouns,bird,,18
+item_401,bite,English (American),WS,word,action_words,predicates,verbs,bite,,401
+item_510,black,English (American),WS,word,descriptive_words,predicates,adjectives,black,,510
+item_212,blanket,English (American),WS,word,household,nouns,nouns,blanket,,212
+item_73,block,English (American),WS,word,toys,nouns,nouns,block,,73
+item_402,blow,English (American),WS,word,action_words,predicates,verbs,blow,,402
+item_511,blue,English (American),WS,word,descriptive_words,predicates,adjectives,blue,,511
+item_58,boat,English (American),WS,word,vehicles,nouns,nouns,boat,,58
+item_74,book,English (American),WS,word,toys,nouns,nouns,book,,74
+item_159,boots,English (American),WS,word,clothing,nouns,nouns,boots,,159
+item_213,bottle,English (American),WS,word,household,nouns,nouns,bottle,,213
+item_214,bowl,English (American),WS,word,household,nouns,nouns,bowl,,214
+item_215,box,English (American),WS,word,household,nouns,nouns,box,,215
+item_351,boy,English (American),WS,word,people,other,other,boy,,351
+item_92,bread,English (American),WS,word,food_drink,nouns,nouns,bread,,92
+item_403,break,English (American),WS,word,action_words,predicates,verbs,break,,403
+item_377,breakfast,English (American),WS,word,games_routines,other,other,breakfast,,377
+item_404,bring,English (American),WS,word,action_words,predicates,verbs,bring,,404
+item_512,broken,English (American),WS,word,descriptive_words,predicates,adjectives,broken,,512
+item_216,broom,English (American),WS,word,household,nouns,nouns,broom,,216
+item_352,brother,English (American),WS,word,people,other,other,brother,,352
+item_513,brown,English (American),WS,word,descriptive_words,predicates,adjectives,brown,,513
+item_217,brush,English (American),WS,word,household,nouns,nouns,brush (object),,217
+item_75,bubbles,English (American),WS,word,toys,nouns,nouns,bubbles,,75
+item_218,bucket,English (American),WS,word,household,nouns,nouns,bucket,,218
+item_19,bug,English (American),WS,word,animals,nouns,nouns,bug,,19
+item_405,build,English (American),WS,word,action_words,predicates,verbs,build,,405
+item_406,bump,English (American),WS,word,action_words,predicates,verbs,bump,,406
+item_20,bunny,English (American),WS,word,animals,nouns,nouns,bunny,,20
+item_59,bus,English (American),WS,word,vehicles,nouns,nouns,bus,,59
+item_677,but,English (American),WS,word,connecting_words,function_words,function_words,but,,677
+item_93,butter,English (American),WS,word,food_drink,nouns,nouns,butter,,93
+item_21,butterfly,English (American),WS,word,animals,nouns,nouns,butterfly,,21
+item_187,buttocks/bottom*,English (American),WS,word,body_parts,nouns,nouns,butt,,187
+item_160,button,English (American),WS,word,clothing,nouns,nouns,button,,160
+item_407,buy,English (American),WS,word,action_words,predicates,verbs,buy,,407
+item_619,by,English (American),WS,word,locations,function_words,function_words,by,,619
+item_378,bye,English (American),WS,word,games_routines,other,other,bye,,378
+item_94,cake,English (American),WS,word,food_drink,nouns,nouns,cake,,94
+item_379,call (on phone),English (American),WS,word,games_routines,other,other,call on phone,,379
+item_219,camera,English (American),WS,word,household,nouns,nouns,camera,,219
+item_326,camping,English (American),WS,word,places,other,other,camping,,326
+item_657,can (auxiliary),English (American),WS,word,helping_verbs,function_words,function_words,can (auxiliary),,657
+item_220,can (object),English (American),WS,word,household,nouns,nouns,can (object),,220
+item_95,candy,English (American),WS,word,food_drink,nouns,nouns,candy,,95
+item_60,car,English (American),WS,word,vehicles,nouns,nouns,car,,60
+item_514,careful,English (American),WS,word,descriptive_words,predicates,adjectives,careful,,514
+item_96,carrots,English (American),WS,word,food_drink,nouns,nouns,carrots,,96
+item_408,carry,English (American),WS,word,action_words,predicates,verbs,carry,,408
+item_22,cat,English (American),WS,word,animals,nouns,nouns,cat,,22
+item_409,catch,English (American),WS,word,action_words,predicates,verbs,catch,,409
+item_97,cereal,English (American),WS,word,food_drink,nouns,nouns,cereal,,97
+item_267,chair,English (American),WS,word,furniture_rooms,nouns,nouns,chair,,267
+item_76,chalk,English (American),WS,word,toys,nouns,nouns,chalk,,76
+item_410,chase,English (American),WS,word,action_words,predicates,verbs,chase,,410
+item_188,cheek,English (American),WS,word,body_parts,nouns,nouns,cheek,,188
+item_98,cheerios,English (American),WS,word,food_drink,nouns,nouns,cheerios,,98
+item_99,cheese,English (American),WS,word,food_drink,nouns,nouns,cheese,,99
+item_23,chicken (animal),English (American),WS,word,animals,nouns,nouns,chicken (animal),,23
+item_100,chicken (food),English (American),WS,word,food_drink,nouns,nouns,chicken (food),,100
+item_353,child,English (American),WS,word,people,other,other,child,,353
+item_368,child's own name,English (American),WS,word,people,other,other,child's own name,,368
+item_189,chin,English (American),WS,word,body_parts,nouns,nouns,chin,,189
+item_101,chocolate,English (American),WS,word,food_drink,nouns,nouns,chocolate,,101
+item_2,choo choo,English (American),WS,word,sounds,other,other,choo choo,,2
+item_327,church*,English (American),WS,word,places,other,other,church,,327
+item_328,circus,English (American),WS,word,places,other,other,circus,,328
+item_411,clap,English (American),WS,word,action_words,predicates,verbs,clap,,411
+item_412,clean (action),English (American),WS,word,action_words,predicates,verbs,clean (action),,412
+item_515,clean (description),English (American),WS,word,descriptive_words,predicates,adjectives,clean (description),,515
+item_413,climb,English (American),WS,word,action_words,predicates,verbs,climb,,413
+item_221,clock,English (American),WS,word,household,nouns,nouns,clock,,221
+item_414,close,English (American),WS,word,action_words,predicates,verbs,close,,414
+item_268,closet,English (American),WS,word,furniture_rooms,nouns,nouns,closet,,268
+item_295,cloud,English (American),WS,word,outside,nouns,nouns,cloud,,295
+item_354,clown,English (American),WS,word,people,other,other,clown,,354
+item_161,coat,English (American),WS,word,clothing,nouns,nouns,coat,,161
+item_3,cockadoodledoo,English (American),WS,word,sounds,other,other,cockadoodledoo,,3
+item_102,coffee,English (American),WS,word,food_drink,nouns,nouns,coffee,,102
+item_103,coke,English (American),WS,word,food_drink,nouns,nouns,coke,,103
+item_516,cold,English (American),WS,word,descriptive_words,predicates,adjectives,cold,,516
+item_222,comb,English (American),WS,word,household,nouns,nouns,comb (object),,222
+item_415,cook,English (American),WS,word,action_words,predicates,verbs,cook,,415
+item_104,cookie,English (American),WS,word,food_drink,nouns,nouns,cookie,,104
+item_105,corn,English (American),WS,word,food_drink,nouns,nouns,corn,,105
+item_269,couch,English (American),WS,word,furniture_rooms,nouns,nouns,couch,,269
+item_658,could,English (American),WS,word,helping_verbs,function_words,function_words,could,,658
+item_329,country,English (American),WS,word,places,other,other,country,,329
+item_416,cover,English (American),WS,word,action_words,predicates,verbs,cover (action),,416
+item_24,cow,English (American),WS,word,animals,nouns,nouns,cow,,24
+item_355,cowboy,English (American),WS,word,people,other,other,cowboy,,355
+item_106,cracker,English (American),WS,word,food_drink,nouns,nouns,cracker,,106
+item_77,crayon,English (American),WS,word,toys,nouns,nouns,crayon,,77
+item_270,crib,English (American),WS,word,furniture_rooms,nouns,nouns,crib,,270
+item_417,cry,English (American),WS,word,action_words,predicates,verbs,cry,,417
+item_223,cup,English (American),WS,word,household,nouns,nouns,cup,,223
+item_418,cut,English (American),WS,word,action_words,predicates,verbs,cut,,418
+item_517,cute,English (American),WS,word,descriptive_words,predicates,adjectives,cute,,517
+item_356,daddy*,English (American),WS,word,people,other,other,daddy,,356
+item_419,dance,English (American),WS,word,action_words,predicates,verbs,dance,,419
+item_518,dark,English (American),WS,word,descriptive_words,predicates,adjectives,dark,,518
+item_569,day,English (American),WS,word,time_words,other,other,day,,569
+item_25,deer,English (American),WS,word,animals,nouns,nouns,deer,,25
+item_162,diaper,English (American),WS,word,clothing,nouns,nouns,diaper,,162
+item_659,did/did ya,English (American),WS,word,helping_verbs,function_words,function_words,did,,659
+item_380,dinner,English (American),WS,word,games_routines,other,other,dinner,,380
+item_519,dirty,English (American),WS,word,descriptive_words,predicates,adjectives,dirty,,519
+item_224,dish,English (American),WS,word,household,nouns,nouns,dish,,224
+item_660,do,English (American),WS,word,helping_verbs,function_words,function_words,do,,660
+item_357,doctor,English (American),WS,word,people,other,other,doctor,,357
+item_661,does,English (American),WS,word,helping_verbs,function_words,function_words,does,,661
+item_26,dog,English (American),WS,word,animals,nouns,nouns,dog,,26
+item_78,doll,English (American),WS,word,toys,nouns,nouns,doll,,78
+item_662,don't,English (American),WS,word,helping_verbs,function_words,function_words,don't,,662
+item_27,donkey,English (American),WS,word,animals,nouns,nouns,donkey,,27
+item_107,donut,English (American),WS,word,food_drink,nouns,nouns,donut,,107
+item_271,door,English (American),WS,word,furniture_rooms,nouns,nouns,door,,271
+item_620,down,English (American),WS,word,locations,function_words,function_words,down,,620
+item_330,downtown,English (American),WS,word,places,other,other,downtown,,330
+item_420,draw,English (American),WS,word,action_words,predicates,verbs,draw,,420
+item_272,drawer,English (American),WS,word,furniture_rooms,nouns,nouns,drawer,,272
+item_163,dress (object),English (American),WS,word,clothing,nouns,nouns,dress (object),,163
+item_421,drink (action),English (American),WS,word,action_words,predicates,verbs,drink (action),,421
+item_108,drink (beverage),English (American),WS,word,food_drink,nouns,nouns,drink (beverage),,108
+item_422,drive,English (American),WS,word,action_words,predicates,verbs,drive,,422
+item_423,drop,English (American),WS,word,action_words,predicates,verbs,drop,,423
+item_424,dry (action),English (American),WS,word,action_words,predicates,verbs,dry (action),,424
+item_520,dry (description),English (American),WS,word,descriptive_words,predicates,adjectives,dry (description),,520
+item_273,dryer,English (American),WS,word,furniture_rooms,nouns,nouns,dryer,,273
+item_28,duck,English (American),WS,word,animals,nouns,nouns,duck,,28
+item_425,dump,English (American),WS,word,action_words,predicates,verbs,dump,,425
+item_643,each,English (American),WS,word,quantifiers,function_words,function_words,each,,643
+item_190,ear,English (American),WS,word,body_parts,nouns,nouns,ear,,190
+item_426,eat,English (American),WS,word,action_words,predicates,verbs,eat,,426
+item_109,egg,English (American),WS,word,food_drink,nouns,nouns,egg,,109
+item_29,elephant,English (American),WS,word,animals,nouns,nouns,elephant,,29
+item_521,empty,English (American),WS,word,descriptive_words,predicates,adjectives,empty,,521
+item_644,every,English (American),WS,word,quantifiers,function_words,function_words,every,,644
+item_191,eye,English (American),WS,word,body_parts,nouns,nouns,eye,,191
+item_192,face,English (American),WS,word,body_parts,nouns,nouns,face,,192
+item_427,fall,English (American),WS,word,action_words,predicates,verbs,fall,,427
+item_331,farm,English (American),WS,word,places,other,other,farm,,331
+item_522,fast,English (American),WS,word,descriptive_words,predicates,adjectives,fast,,522
+item_428,feed,English (American),WS,word,action_words,predicates,verbs,feed,,428
+item_429,find,English (American),WS,word,action_words,predicates,verbs,find,,429
+item_523,fine,English (American),WS,word,descriptive_words,predicates,adjectives,fine,,523
+item_193,finger,English (American),WS,word,body_parts,nouns,nouns,finger,,193
+item_430,finish,English (American),WS,word,action_words,predicates,verbs,finish,,430
+item_358,fireman,English (American),WS,word,people,other,other,firefighter,,358
+item_61,firetruck,English (American),WS,word,vehicles,nouns,nouns,firetruck,,61
+item_524,first,English (American),WS,word,descriptive_words,predicates,adjectives,first,,524
+item_30,fish (animal),English (American),WS,word,animals,nouns,nouns,fish (animal),,30
+item_110,fish (food),English (American),WS,word,food_drink,nouns,nouns,fish (food),,110
+item_431,fit,English (American),WS,word,action_words,predicates,verbs,fit,,431
+item_432,fix,English (American),WS,word,action_words,predicates,verbs,fix,,432
+item_296,flag,English (American),WS,word,outside,nouns,nouns,flag,,296
+item_297,flower,English (American),WS,word,outside,nouns,nouns,flower,,297
+item_111,food,English (American),WS,word,food_drink,nouns,nouns,food,,111
+item_194,foot,English (American),WS,word,body_parts,nouns,nouns,foot,,194
+item_621,for,English (American),WS,word,locations,function_words,function_words,for,,621
+item_225,fork,English (American),WS,word,household,nouns,nouns,fork,,225
+item_112,french fries,English (American),WS,word,food_drink,nouns,nouns,french fries,,112
+item_359,friend,English (American),WS,word,people,other,other,friend,,359
+item_31,frog,English (American),WS,word,animals,nouns,nouns,frog,,31
+item_525,full,English (American),WS,word,descriptive_words,predicates,adjectives,full,,525
+item_79,game,English (American),WS,word,toys,nouns,nouns,game,,79
+item_274,garage,English (American),WS,word,furniture_rooms,nouns,nouns,garage,,274
+item_226,garbage,English (American),WS,word,household,nouns,nouns,garbage,,226
+item_298,garden,English (American),WS,word,outside,nouns,nouns,garden,,298
+item_332,gas station,English (American),WS,word,places,other,other,gas station,,332
+item_526,gentle,English (American),WS,word,descriptive_words,predicates,adjectives,gentle,,526
+item_433,get,English (American),WS,word,action_words,predicates,verbs,get,,433
+item_32,giraffe,English (American),WS,word,animals,nouns,nouns,giraffe,,32
+item_360,girl,English (American),WS,word,people,other,other,girl,,360
+item_434,give,English (American),WS,word,action_words,predicates,verbs,give,,434
+item_381,give me five!,English (American),WS,word,games_routines,other,other,give me five,,381
+item_227,glass,English (American),WS,word,household,nouns,nouns,glass,,227
+item_228,glasses,English (American),WS,word,household,nouns,nouns,glasses,,228
+item_164,gloves,English (American),WS,word,clothing,nouns,nouns,gloves,,164
+item_80,glue,English (American),WS,word,toys,nouns,nouns,glue,,80
+item_435,go,English (American),WS,word,action_words,predicates,verbs,go,,435
+item_383,go potty,English (American),WS,word,games_routines,other,other,go potty,,383
+item_382,gonna get you!,English (American),WS,word,games_routines,other,other,gonna get you,,382
+item_663,gonna/going to,English (American),WS,word,helping_verbs,function_words,function_words,gonna,,663
+item_527,good,English (American),WS,word,descriptive_words,predicates,adjectives,good,,527
+item_33,goose,English (American),WS,word,animals,nouns,nouns,goose,,33
+item_664,gotta/got to,English (American),WS,word,helping_verbs,function_words,function_words,gotta,,664
+item_361,grandma*,English (American),WS,word,people,other,other,grandma,,361
+item_362,grandpa*,English (American),WS,word,people,other,other,grandpa,,362
+item_113,grapes,English (American),WS,word,food_drink,nouns,nouns,grapes,,113
+item_299,grass,English (American),WS,word,outside,nouns,nouns,grass,,299
+item_528,green,English (American),WS,word,descriptive_words,predicates,adjectives,green,,528
+item_114,green beans,English (American),WS,word,food_drink,nouns,nouns,green beans,,114
+item_4,grrr,English (American),WS,word,sounds,other,other,grrr,,4
+item_115,gum,English (American),WS,word,food_drink,nouns,nouns,gum,,115
+item_665,hafta/have to,English (American),WS,word,helping_verbs,function_words,function_words,hafta,,665
+item_195,hair,English (American),WS,word,body_parts,nouns,nouns,hair,,195
+item_116,hamburger,English (American),WS,word,food_drink,nouns,nouns,hamburger,,116
+item_229,hammer,English (American),WS,word,household,nouns,nouns,hammer,,229
+item_196,hand,English (American),WS,word,body_parts,nouns,nouns,hand,,196
+item_529,happy,English (American),WS,word,descriptive_words,predicates,adjectives,happy,,529
+item_530,hard,English (American),WS,word,descriptive_words,predicates,adjectives,hard,,530
+item_165,hat,English (American),WS,word,clothing,nouns,nouns,hat,,165
+item_436,hate,English (American),WS,word,action_words,predicates,verbs,hate,,436
+item_437,have,English (American),WS,word,action_words,predicates,verbs,have,,437
+item_579,he,English (American),WS,word,pronouns,function_words,function_words,he,,579
+item_197,head,English (American),WS,word,body_parts,nouns,nouns,head,,197
+item_438,hear,English (American),WS,word,action_words,predicates,verbs,hear,,438
+item_531,heavy,English (American),WS,word,descriptive_words,predicates,adjectives,heavy,,531
+item_62,helicopter,English (American),WS,word,vehicles,nouns,nouns,helicopter,,62
+item_384,hello,English (American),WS,word,games_routines,other,other,hello,,384
+item_439,help,English (American),WS,word,action_words,predicates,verbs,help,,439
+item_34,hen,English (American),WS,word,animals,nouns,nouns,hen,,34
+item_580,her,English (American),WS,word,pronouns,function_words,function_words,her,,580
+item_622,here,English (American),WS,word,locations,function_words,function_words,here,,622
+item_581,hers,English (American),WS,word,pronouns,function_words,function_words,hers,,581
+item_385,hi,English (American),WS,word,games_routines,other,other,hi,,385
+item_440,hide,English (American),WS,word,action_words,predicates,verbs,hide,,440
+item_532,high,English (American),WS,word,descriptive_words,predicates,adjectives,high,,532
+item_275,high chair,English (American),WS,word,furniture_rooms,nouns,nouns,high chair,,275
+item_582,him,English (American),WS,word,pronouns,function_words,function_words,him,,582
+item_583,his,English (American),WS,word,pronouns,function_words,function_words,his,,583
+item_441,hit,English (American),WS,word,action_words,predicates,verbs,hit,,441
+item_442,hold,English (American),WS,word,action_words,predicates,verbs,hold,,442
+item_333,home,English (American),WS,word,places,other,other,home,,333
+item_35,horse,English (American),WS,word,animals,nouns,nouns,horse,,35
+item_300,hose,English (American),WS,word,outside,nouns,nouns,hose,,300
+item_533,hot,English (American),WS,word,descriptive_words,predicates,adjectives,hot,,533
+item_334,house,English (American),WS,word,places,other,other,house,,334
+item_604,how,English (American),WS,word,question_words,function_words,function_words,how,,604
+item_443,hug,English (American),WS,word,action_words,predicates,verbs,hug,,443
+item_534,hungry,English (American),WS,word,descriptive_words,predicates,adjectives,hungry,,534
+item_444,hurry,English (American),WS,word,action_words,predicates,verbs,hurry,,444
+item_535,hurt,English (American),WS,word,descriptive_words,predicates,adjectives,hurt (description),,535
+item_584,I,English (American),WS,word,pronouns,function_words,function_words,i,,584
+item_117,ice,English (American),WS,word,food_drink,nouns,nouns,ice,,117
+item_118,ice cream,English (American),WS,word,food_drink,nouns,nouns,ice cream,,118
+item_678,if,English (American),WS,word,connecting_words,function_words,function_words,if,,678
+item_623,inside/in,English (American),WS,word,locations,function_words,function_words,in,,623
+item_624,into,English (American),WS,word,locations,function_words,function_words,into,,624
+item_666,is,English (American),WS,word,helping_verbs,function_words,function_words,is,,666
+item_585,it,English (American),WS,word,pronouns,function_words,function_words,it,,585
+item_166,jacket,English (American),WS,word,clothing,nouns,nouns,jacket,,166
+item_230,jar,English (American),WS,word,household,nouns,nouns,jar,,230
+item_167,jeans,English (American),WS,word,clothing,nouns,nouns,jeans,,167
+item_119,jello,English (American),WS,word,food_drink,nouns,nouns,jello,,119
+item_120,jelly,English (American),WS,word,food_drink,nouns,nouns,jelly,,120
+item_121,juice,English (American),WS,word,food_drink,nouns,nouns,juice,,121
+item_445,jump,English (American),WS,word,action_words,predicates,verbs,jump,,445
+item_231,keys,English (American),WS,word,household,nouns,nouns,keys,,231
+item_446,kick,English (American),WS,word,action_words,predicates,verbs,kick,,446
+item_447,kiss,English (American),WS,word,action_words,predicates,verbs,kiss,,447
+item_276,kitchen,English (American),WS,word,furniture_rooms,nouns,nouns,kitchen,,276
+item_36,kitty,English (American),WS,word,animals,nouns,nouns,kitty,,36
+item_198,knee,English (American),WS,word,body_parts,nouns,nouns,knee,,198
+item_232,knife,English (American),WS,word,household,nouns,nouns,knife,,232
+item_448,knock,English (American),WS,word,action_words,predicates,verbs,knock,,448
+item_301,ladder,English (American),WS,word,outside,nouns,nouns,ladder,,301
+item_363,lady,English (American),WS,word,people,other,other,lady,,363
+item_37,lamb,English (American),WS,word,animals,nouns,nouns,lamb,,37
+item_233,lamp,English (American),WS,word,household,nouns,nouns,lamp,,233
+item_536,last,English (American),WS,word,descriptive_words,predicates,adjectives,last,,536
+item_570,later,English (American),WS,word,time_words,other,other,later,,570
+item_302,lawn mower,English (American),WS,word,outside,nouns,nouns,lawn mower,,302
+item_199,leg,English (American),WS,word,body_parts,nouns,nouns,leg,,199
+item_667,lemme/let me,English (American),WS,word,helping_verbs,function_words,function_words,lemme,,667
+item_449,lick,English (American),WS,word,action_words,predicates,verbs,lick,,449
+item_234,light,English (American),WS,word,household,nouns,nouns,light (object),,234
+item_450,like,English (American),WS,word,action_words,predicates,verbs,like (action),,450
+item_38,lion,English (American),WS,word,animals,nouns,nouns,lion,,38
+item_200,lips,English (American),WS,word,body_parts,nouns,nouns,lips,,200
+item_451,listen,English (American),WS,word,action_words,predicates,verbs,listen,,451
+item_537,little (description),English (American),WS,word,descriptive_words,predicates,adjectives,little (description),,537
+item_277,living room,English (American),WS,word,furniture_rooms,nouns,nouns,living room,,277
+item_122,lollipop,English (American),WS,word,food_drink,nouns,nouns,lollipop,,122
+item_538,long,English (American),WS,word,descriptive_words,predicates,adjectives,long,,538
+item_452,look,English (American),WS,word,action_words,predicates,verbs,look,,452
+item_539,loud,English (American),WS,word,descriptive_words,predicates,adjectives,loud,,539
+item_453,love,English (American),WS,word,action_words,predicates,verbs,love,,453
+item_386,lunch,English (American),WS,word,games_routines,other,other,lunch,,386
+item_540,mad,English (American),WS,word,descriptive_words,predicates,adjectives,mad,,540
+item_364,mailman,English (American),WS,word,people,other,other,mailman,,364
+item_454,make,English (American),WS,word,action_words,predicates,verbs,make,,454
+item_365,man,English (American),WS,word,people,other,other,man,,365
+item_586,me,English (American),WS,word,pronouns,function_words,function_words,me,,586
+item_123,meat,English (American),WS,word,food_drink,nouns,nouns,meat,,123
+item_235,medicine,English (American),WS,word,household,nouns,nouns,medicine,,235
+item_124,melon,English (American),WS,word,food_drink,nouns,nouns,melon,,124
+item_5,meow,English (American),WS,word,sounds,other,other,meow,,5
+item_125,milk,English (American),WS,word,food_drink,nouns,nouns,milk,,125
+item_587,mine,English (American),WS,word,pronouns,function_words,function_words,mine,,587
+item_168,mittens,English (American),WS,word,clothing,nouns,nouns,mittens,,168
+item_366,mommy*,English (American),WS,word,people,other,other,mommy,,366
+item_236,money,English (American),WS,word,household,nouns,nouns,money,,236
+item_39,monkey,English (American),WS,word,animals,nouns,nouns,monkey,,39
+item_6,moo,English (American),WS,word,sounds,other,other,moo,,6
+item_303,moon,English (American),WS,word,outside,nouns,nouns,moon,,303
+item_40,moose,English (American),WS,word,animals,nouns,nouns,moose,,40
+item_237,mop,English (American),WS,word,household,nouns,nouns,mop,,237
+item_645,more,English (American),WS,word,quantifiers,function_words,function_words,more,,645
+item_571,morning,English (American),WS,word,time_words,other,other,morning,,571
+item_63,motorcycle,English (American),WS,word,vehicles,nouns,nouns,motorcycle,,63
+item_41,mouse,English (American),WS,word,animals,nouns,nouns,mouse,,41
+item_201,mouth,English (American),WS,word,body_parts,nouns,nouns,mouth,,201
+item_335,movie,English (American),WS,word,places,other,other,movie,,335
+item_646,much,English (American),WS,word,quantifiers,function_words,function_words,much,,646
+item_126,muffin,English (American),WS,word,food_drink,nouns,nouns,muffin,,126
+item_588,my,English (American),WS,word,pronouns,function_words,function_words,my,,588
+item_589,myself,English (American),WS,word,pronouns,function_words,function_words,myself,,589
+item_238,nail,English (American),WS,word,household,nouns,nouns,nail (object),,238
+item_387,nap,English (American),WS,word,games_routines,other,other,nap,,387
+item_239,napkin,English (American),WS,word,household,nouns,nouns,napkin,,239
+item_541,naughty,English (American),WS,word,descriptive_words,predicates,adjectives,naughty,,541
+item_169,necklace,English (American),WS,word,clothing,nouns,nouns,necklace,,169
+item_668,need/need to,English (American),WS,word,helping_verbs,function_words,function_words,need,,668
+item_542,new,English (American),WS,word,descriptive_words,predicates,adjectives,new,,542
+item_625,next to,English (American),WS,word,locations,function_words,function_words,next to,,625
+item_543,nice,English (American),WS,word,descriptive_words,predicates,adjectives,nice,,543
+item_572,night,English (American),WS,word,time_words,other,other,night,,572
+item_388,night night,English (American),WS,word,games_routines,other,other,good night,,388
+item_389,no,English (American),WS,word,games_routines,other,other,no,,389
+item_544,noisy,English (American),WS,word,descriptive_words,predicates,adjectives,noisy,,544
+item_647,none,English (American),WS,word,quantifiers,function_words,function_words,none,,647
+item_127,noodles,English (American),WS,word,food_drink,nouns,nouns,pasta,,127
+item_202,nose,English (American),WS,word,body_parts,nouns,nouns,nose,,202
+item_648,not,English (American),WS,word,quantifiers,function_words,function_words,not,,648
+item_573,now,English (American),WS,word,time_words,other,other,now,,573
+item_367,nurse,English (American),WS,word,people,other,other,nurse,,367
+item_128,nuts,English (American),WS,word,food_drink,nouns,nouns,nuts,,128
+item_626,of,English (American),WS,word,locations,function_words,function_words,of,,626
+item_627,off,English (American),WS,word,locations,function_words,function_words,off,,627
+item_545,old,English (American),WS,word,descriptive_words,predicates,adjectives,old,,545
+item_628,on,English (American),WS,word,locations,function_words,function_words,on,,628
+item_629,on top of,English (American),WS,word,locations,function_words,function_words,on top of,,629
+item_455,open,English (American),WS,word,action_words,predicates,verbs,open (action),,455
+item_546,orange (description),English (American),WS,word,descriptive_words,predicates,adjectives,orange (description),,546
+item_129,orange (food),English (American),WS,word,food_drink,nouns,nouns,orange (food),,129
+item_649,other,English (American),WS,word,quantifiers,function_words,function_words,other,,649
+item_7,ouch,English (American),WS,word,sounds,other,other,ouch,,7
+item_590,our,English (American),WS,word,pronouns,function_words,function_words,our,,590
+item_630,out,English (American),WS,word,locations,function_words,function_words,out,,630
+item_336,outside,English (American),WS,word,places,other,other,outside,,336
+item_278,oven,English (American),WS,word,furniture_rooms,nouns,nouns,oven,,278
+item_631,over,English (American),WS,word,locations,function_words,function_words,over,,631
+item_203,owie/boo boo,English (American),WS,word,body_parts,nouns,nouns,owie,,203
+item_42,owl,English (American),WS,word,animals,nouns,nouns,owl,,42
+item_456,paint,English (American),WS,word,action_words,predicates,verbs,paint (action),,456
+item_170,pajamas,English (American),WS,word,clothing,nouns,nouns,pajamas,,170
+item_130,pancake,English (American),WS,word,food_drink,nouns,nouns,pancake,,130
+item_171,pants,English (American),WS,word,clothing,nouns,nouns,pants,,171
+item_240,paper,English (American),WS,word,household,nouns,nouns,paper,,240
+item_337,park,English (American),WS,word,places,other,other,park,,337
+item_338,party,English (American),WS,word,places,other,other,party,,338
+item_390,pattycake,English (American),WS,word,games_routines,other,other,pattycake,,390
+item_132,peanut butter,English (American),WS,word,food_drink,nouns,nouns,peanut butter,,132
+item_131,peas,English (American),WS,word,food_drink,nouns,nouns,peas,,131
+item_391,peekaboo,English (American),WS,word,games_routines,other,other,peekaboo,,391
+item_81,pen,English (American),WS,word,toys,nouns,nouns,pen,,81
+item_82,pencil,English (American),WS,word,toys,nouns,nouns,pencil,,82
+item_43,penguin,English (American),WS,word,animals,nouns,nouns,penguin,,43
+item_204,penis*,English (American),WS,word,body_parts,nouns,nouns,penis,,204
+item_241,penny,English (American),WS,word,household,nouns,nouns,penny,,241
+item_369,people,English (American),WS,word,people,other,other,people,,369
+item_370,person,English (American),WS,word,people,other,other,person,,370
+item_371,pet's name,English (American),WS,word,people,other,other,pet's name,,371
+item_457,pick,English (American),WS,word,action_words,predicates,verbs,pick,,457
+item_133,pickle,English (American),WS,word,food_drink,nouns,nouns,pickle,,133
+item_339,picnic,English (American),WS,word,places,other,other,picnic,,339
+item_242,picture,English (American),WS,word,household,nouns,nouns,picture,,242
+item_44,pig,English (American),WS,word,animals,nouns,nouns,pig,,44
+item_243,pillow,English (American),WS,word,household,nouns,nouns,pillow,,243
+item_134,pizza,English (American),WS,word,food_drink,nouns,nouns,pizza,,134
+item_244,plant,English (American),WS,word,household,nouns,nouns,plant,,244
+item_245,plate,English (American),WS,word,household,nouns,nouns,plate,,245
+item_458,play,English (American),WS,word,action_words,predicates,verbs,play,,458
+item_83,play dough,English (American),WS,word,toys,nouns,nouns,play dough,,83
+item_279,play pen,English (American),WS,word,furniture_rooms,nouns,nouns,play pen,,279
+item_340,playground,English (American),WS,word,places,other,other,playground,,340
+item_392,please,English (American),WS,word,games_routines,other,other,please,,392
+item_372,police,English (American),WS,word,people,other,other,police,,372
+item_45,pony,English (American),WS,word,animals,nouns,nouns,pony,,45
+item_304,pool,English (American),WS,word,outside,nouns,nouns,pool,,304
+item_547,poor,English (American),WS,word,descriptive_words,predicates,adjectives,poor,,547
+item_135,popcorn,English (American),WS,word,food_drink,nouns,nouns,popcorn,,135
+item_136,popsicle,English (American),WS,word,food_drink,nouns,nouns,popsicle,,136
+item_280,porch,English (American),WS,word,furniture_rooms,nouns,nouns,porch,,280
+item_138,potato,English (American),WS,word,food_drink,nouns,nouns,potato,,138
+item_137,potato chip,English (American),WS,word,food_drink,nouns,nouns,chips,,137
+item_281,potty,English (American),WS,word,furniture_rooms,nouns,nouns,potty,,281
+item_459,pour,English (American),WS,word,action_words,predicates,verbs,pour,,459
+item_84,present,English (American),WS,word,toys,nouns,nouns,present,,84
+item_460,pretend,English (American),WS,word,action_words,predicates,verbs,pretend,,460
+item_548,pretty,English (American),WS,word,descriptive_words,predicates,adjectives,pretty,,548
+item_139,pretzel,English (American),WS,word,food_drink,nouns,nouns,pretzel,,139
+item_140,pudding,English (American),WS,word,food_drink,nouns,nouns,pudding,,140
+item_461,pull,English (American),WS,word,action_words,predicates,verbs,pull,,461
+item_141,pumpkin,English (American),WS,word,food_drink,nouns,nouns,pumpkin,,141
+item_46,puppy,English (American),WS,word,animals,nouns,nouns,puppy,,46
+item_246,purse,English (American),WS,word,household,nouns,nouns,purse,,246
+item_462,push,English (American),WS,word,action_words,predicates,verbs,push,,462
+item_463,put,English (American),WS,word,action_words,predicates,verbs,put,,463
+item_85,puzzle,English (American),WS,word,toys,nouns,nouns,puzzle,,85
+item_8,quack quack,English (American),WS,word,sounds,other,other,quack quack,,8
+item_549,quiet,English (American),WS,word,descriptive_words,predicates,adjectives,quiet,,549
+item_247,radio,English (American),WS,word,household,nouns,nouns,radio,,247
+item_305,rain,English (American),WS,word,outside,nouns,nouns,rain,,305
+item_142,raisin,English (American),WS,word,food_drink,nouns,nouns,raisin,,142
+item_464,read,English (American),WS,word,action_words,predicates,verbs,read,,464
+item_550,red,English (American),WS,word,descriptive_words,predicates,adjectives,red,,550
+item_283,refrigerator,English (American),WS,word,furniture_rooms,nouns,nouns,refrigerator,,283
+item_465,ride,English (American),WS,word,action_words,predicates,verbs,ride,,465
+item_466,rip,English (American),WS,word,action_words,predicates,verbs,rip,,466
+item_306,rock,English (American),WS,word,outside,nouns,nouns,rock (object),,306
+item_282,rocking chair,English (American),WS,word,furniture_rooms,nouns,nouns,rocking chair,,282
+item_307,roof,English (American),WS,word,outside,nouns,nouns,roof,,307
+item_284,room,English (American),WS,word,furniture_rooms,nouns,nouns,room,,284
+item_47,rooster,English (American),WS,word,animals,nouns,nouns,rooster,,47
+item_467,run,English (American),WS,word,action_words,predicates,verbs,run,,467
+item_551,sad,English (American),WS,word,descriptive_words,predicates,adjectives,sad,,551
+item_143,salt,English (American),WS,word,food_drink,nouns,nouns,salt,,143
+item_650,same,English (American),WS,word,quantifiers,function_words,function_words,same,,650
+item_308,sandbox,English (American),WS,word,outside,nouns,nouns,sandbox,,308
+item_144,sandwich,English (American),WS,word,food_drink,nouns,nouns,sandwich,,144
+item_145,sauce,English (American),WS,word,food_drink,nouns,nouns,sauce,,145
+item_468,say,English (American),WS,word,action_words,predicates,verbs,say,,468
+item_552,scared,English (American),WS,word,descriptive_words,predicates,adjectives,scared,,552
+item_172,scarf,English (American),WS,word,clothing,nouns,nouns,scarf,,172
+item_341,school,English (American),WS,word,places,other,other,school,,341
+item_248,scissors,English (American),WS,word,household,nouns,nouns,scissors,,248
+item_469,see,English (American),WS,word,action_words,predicates,verbs,see,,469
+item_470,shake,English (American),WS,word,action_words,predicates,verbs,shake,,470
+item_471,share,English (American),WS,word,action_words,predicates,verbs,share,,471
+item_591,she,English (American),WS,word,pronouns,function_words,function_words,she,,591
+item_48,sheep,English (American),WS,word,animals,nouns,nouns,sheep,,48
+item_393,shh/shush/hush,English (American),WS,word,games_routines,other,other,shh,,393
+item_173,shirt,English (American),WS,word,clothing,nouns,nouns,shirt,,173
+item_174,shoe,English (American),WS,word,clothing,nouns,nouns,shoe,,174
+item_394,shopping,English (American),WS,word,games_routines,other,other,shopping,,394
+item_175,shorts,English (American),WS,word,clothing,nouns,nouns,shorts,,175
+item_205,shoulder,English (American),WS,word,body_parts,nouns,nouns,shoulder,,205
+item_309,shovel,English (American),WS,word,outside,nouns,nouns,shovel,,309
+item_472,show,English (American),WS,word,action_words,predicates,verbs,show,,472
+item_285,shower,English (American),WS,word,furniture_rooms,nouns,nouns,shower,,285
+item_553,sick,English (American),WS,word,descriptive_words,predicates,adjectives,sick,,553
+item_310,sidewalk,English (American),WS,word,outside,nouns,nouns,sidewalk,,310
+item_473,sing,English (American),WS,word,action_words,predicates,verbs,sing,,473
+item_286,sink,English (American),WS,word,furniture_rooms,nouns,nouns,sink,,286
+item_373,sister,English (American),WS,word,people,other,other,sister,,373
+item_474,sit,English (American),WS,word,action_words,predicates,verbs,sit,,474
+item_475,skate,English (American),WS,word,action_words,predicates,verbs,skate,,475
+item_311,sky,English (American),WS,word,outside,nouns,nouns,sky,,311
+item_64,sled,English (American),WS,word,vehicles,nouns,nouns,sled,,64
+item_476,sleep,English (American),WS,word,action_words,predicates,verbs,sleep,,476
+item_554,sleepy,English (American),WS,word,descriptive_words,predicates,adjectives,sleepy,,554
+item_477,slide (action),English (American),WS,word,action_words,predicates,verbs,slide (action),,477
+item_312,slide (object),English (American),WS,word,outside,nouns,nouns,slide (object),,312
+item_176,slipper,English (American),WS,word,clothing,nouns,nouns,slipper,,176
+item_555,slow,English (American),WS,word,descriptive_words,predicates,adjectives,slow,,555
+item_478,smile,English (American),WS,word,action_words,predicates,verbs,smile,,478
+item_395,snack,English (American),WS,word,games_routines,other,other,snack,,395
+item_177,sneaker,English (American),WS,word,clothing,nouns,nouns,sneaker,,177
+item_313,snow,English (American),WS,word,outside,nouns,nouns,snow,,313
+item_314,snowman,English (American),WS,word,outside,nouns,nouns,snowman,,314
+item_178,snowsuit,English (American),WS,word,clothing,nouns,nouns,snowsuit,,178
+item_679,so,English (American),WS,word,connecting_words,function_words,function_words,so,,679
+item_396,so big!,English (American),WS,word,games_routines,other,other,so big,,396
+item_249,soap,English (American),WS,word,household,nouns,nouns,soap,,249
+item_179,sock,English (American),WS,word,clothing,nouns,nouns,sock,,179
+item_146,soda/pop,English (American),WS,word,food_drink,nouns,nouns,soda,,146
+item_287,sofa,English (American),WS,word,furniture_rooms,nouns,nouns,sofa,,287
+item_556,soft,English (American),WS,word,descriptive_words,predicates,adjectives,soft,,556
+item_651,some,English (American),WS,word,quantifiers,function_words,function_words,some,,651
+item_147,soup,English (American),WS,word,food_drink,nouns,nouns,soup,,147
+item_148,spaghetti,English (American),WS,word,food_drink,nouns,nouns,pasta,,148
+item_479,spill,English (American),WS,word,action_words,predicates,verbs,spill,,479
+item_480,splash,English (American),WS,word,action_words,predicates,verbs,splash,,480
+item_250,spoon,English (American),WS,word,household,nouns,nouns,spoon,,250
+item_315,sprinkler,English (American),WS,word,outside,nouns,nouns,sprinkler,,315
+item_49,squirrel,English (American),WS,word,animals,nouns,nouns,squirrel,,49
+item_288,stairs,English (American),WS,word,furniture_rooms,nouns,nouns,stairs,,288
+item_481,stand,English (American),WS,word,action_words,predicates,verbs,stand,,481
+item_316,star,English (American),WS,word,outside,nouns,nouns,star,,316
+item_482,stay,English (American),WS,word,action_words,predicates,verbs,stay,,482
+item_317,stick,English (American),WS,word,outside,nouns,nouns,stick,,317
+item_557,sticky,English (American),WS,word,descriptive_words,predicates,adjectives,sticky,,557
+item_318,stone,English (American),WS,word,outside,nouns,nouns,stone,,318
+item_483,stop,English (American),WS,word,action_words,predicates,verbs,stop,,483
+item_342,store,English (American),WS,word,places,other,other,store,,342
+item_86,story,English (American),WS,word,toys,nouns,nouns,story,,86
+item_289,stove,English (American),WS,word,furniture_rooms,nouns,nouns,stove,,289
+item_149,strawberry,English (American),WS,word,food_drink,nouns,nouns,strawberry,,149
+item_319,street,English (American),WS,word,outside,nouns,nouns,street,,319
+item_65,stroller,English (American),WS,word,vehicles,nouns,nouns,stroller,,65
+item_558,stuck,English (American),WS,word,descriptive_words,predicates,adjectives,stuck,,558
+item_320,sun,English (American),WS,word,outside,nouns,nouns,sun,,320
+item_180,sweater,English (American),WS,word,clothing,nouns,nouns,sweater,,180
+item_484,sweep,English (American),WS,word,action_words,predicates,verbs,sweep,,484
+item_485,swim,English (American),WS,word,action_words,predicates,verbs,swim,,485
+item_486,swing (action),English (American),WS,word,action_words,predicates,verbs,swing (action),,486
+item_321,swing (object),English (American),WS,word,outside,nouns,nouns,swing (object),,321
+item_290,table,English (American),WS,word,furniture_rooms,nouns,nouns,table,,290
+item_487,take,English (American),WS,word,action_words,predicates,verbs,take,,487
+item_488,talk,English (American),WS,word,action_words,predicates,verbs,talk,,488
+item_251,tape,English (American),WS,word,household,nouns,nouns,tape,,251
+item_489,taste,English (American),WS,word,action_words,predicates,verbs,taste,,489
+item_374,teacher,English (American),WS,word,people,other,other,teacher,,374
+item_490,tear,English (American),WS,word,action_words,predicates,verbs,tear,,490
+item_50,teddybear,English (American),WS,word,animals,nouns,nouns,teddybear,,50
+item_252,telephone,English (American),WS,word,household,nouns,nouns,telephone,,252
+item_397,thank you,English (American),WS,word,games_routines,other,other,thank you,,397
+item_592,that,English (American),WS,word,pronouns,function_words,function_words,that,,592
+item_652,the,English (American),WS,word,quantifiers,function_words,function_words,the,,652
+item_593,their,English (American),WS,word,pronouns,function_words,function_words,their,,593
+item_594,them,English (American),WS,word,pronouns,function_words,function_words,them,,594
+item_680,then,English (American),WS,word,connecting_words,function_words,function_words,then,,680
+item_632,there,English (American),WS,word,locations,function_words,function_words,there,,632
+item_595,these,English (American),WS,word,pronouns,function_words,function_words,these,,595
+item_596,they,English (American),WS,word,pronouns,function_words,function_words,they,,596
+item_491,think,English (American),WS,word,action_words,predicates,verbs,think,,491
+item_559,thirsty,English (American),WS,word,descriptive_words,predicates,adjectives,thirsty,,559
+item_597,this,English (American),WS,word,pronouns,function_words,function_words,this,,597
+item_398,this little piggy,English (American),WS,word,games_routines,other,other,this little piggy,,398
+item_598,those,English (American),WS,word,pronouns,function_words,function_words,those,,598
+item_492,throw,English (American),WS,word,action_words,predicates,verbs,throw,,492
+item_493,tickle,English (American),WS,word,action_words,predicates,verbs,tickle,,493
+item_51,tiger,English (American),WS,word,animals,nouns,nouns,tiger,,51
+item_181,tights,English (American),WS,word,clothing,nouns,nouns,tights,,181
+item_574,time,English (American),WS,word,time_words,other,other,time,,574
+item_560,tiny,English (American),WS,word,descriptive_words,predicates,adjectives,tiny,,560
+item_561,tired,English (American),WS,word,descriptive_words,predicates,adjectives,tired,,561
+item_253,tissue/kleenex,English (American),WS,word,household,nouns,nouns,tissue,,253
+item_633,to,English (American),WS,word,locations,function_words,function_words,to,,633
+item_150,toast,English (American),WS,word,food_drink,nouns,nouns,toast,,150
+item_575,today,English (American),WS,word,time_words,other,other,today,,575
+item_206,toe,English (American),WS,word,body_parts,nouns,nouns,toe,,206
+item_576,tomorrow,English (American),WS,word,time_words,other,other,tomorrow,,576
+item_207,tongue,English (American),WS,word,body_parts,nouns,nouns,tongue,,207
+item_577,tonight,English (American),WS,word,time_words,other,other,tonight,,577
+item_653,too,English (American),WS,word,quantifiers,function_words,function_words,too,,653
+item_208,tooth,English (American),WS,word,body_parts,nouns,nouns,tooth,,208
+item_254,toothbrush,English (American),WS,word,household,nouns,nouns,toothbrush,,254
+item_494,touch,English (American),WS,word,action_words,predicates,verbs,touch,,494
+item_255,towel,English (American),WS,word,household,nouns,nouns,towel,,255
+item_87,toy (object),English (American),WS,word,toys,nouns,nouns,toy (object),,87
+item_66,tractor,English (American),WS,word,vehicles,nouns,nouns,tractor,,66
+item_67,train,English (American),WS,word,vehicles,nouns,nouns,train,,67
+item_256,trash,English (American),WS,word,household,nouns,nouns,trash,,256
+item_257,tray,English (American),WS,word,household,nouns,nouns,tray,,257
+item_322,tree,English (American),WS,word,outside,nouns,nouns,tree,,322
+item_68,tricycle,English (American),WS,word,vehicles,nouns,nouns,tricycle,,68
+item_69,truck,English (American),WS,word,vehicles,nouns,nouns,truck,,69
+item_669,try/try to,English (American),WS,word,helping_verbs,function_words,function_words,try,,669
+item_209,tummy,English (American),WS,word,body_parts,nouns,nouns,tummy,,209
+item_151,tuna,English (American),WS,word,food_drink,nouns,nouns,tuna,,151
+item_52,turkey,English (American),WS,word,animals,nouns,nouns,turkey,,52
+item_399,turn around,English (American),WS,word,games_routines,other,other,turn around,,399
+item_53,turtle,English (American),WS,word,animals,nouns,nouns,turtle,,53
+item_291,TV,English (American),WS,word,furniture_rooms,nouns,nouns,tv,,291
+item_9,uh oh,English (American),WS,word,sounds,other,other,uh oh,,9
+item_375,uncle,English (American),WS,word,people,other,other,uncle,,375
+item_634,under,English (American),WS,word,locations,function_words,function_words,under,,634
+item_182,underpants,English (American),WS,word,clothing,nouns,nouns,underpants,,182
+item_635,up,English (American),WS,word,locations,function_words,function_words,up,,635
+item_599,us,English (American),WS,word,pronouns,function_words,function_words,us,,599
+item_258,vacuum,English (American),WS,word,household,nouns,nouns,vacuum,,258
+item_210,vagina*,English (American),WS,word,body_parts,nouns,nouns,vagina,,210
+item_152,vanilla,English (American),WS,word,food_drink,nouns,nouns,vanilla,,152
+item_153,vitamins,English (American),WS,word,food_drink,nouns,nouns,vitamins,,153
+item_10,vroom,English (American),WS,word,sounds,other,other,vroom,,10
+item_495,wait,English (American),WS,word,action_words,predicates,verbs,wait,,495
+item_496,wake,English (American),WS,word,action_words,predicates,verbs,wake,,496
+item_497,walk,English (American),WS,word,action_words,predicates,verbs,walk,,497
+item_259,walker,English (American),WS,word,household,nouns,nouns,walker,,259
+item_670,wanna/want to,English (American),WS,word,helping_verbs,function_words,function_words,wanna,,670
+item_671,was,English (American),WS,word,helping_verbs,function_words,function_words,was,,671
+item_498,wash,English (American),WS,word,action_words,predicates,verbs,wash,,498
+item_293,washing machine,English (American),WS,word,furniture_rooms,nouns,nouns,washing machine,,293
+item_499,watch (action),English (American),WS,word,action_words,predicates,verbs,watch (action),,499
+item_260,watch (object),English (American),WS,word,household,nouns,nouns,watch (object),,260
+item_154,water (beverage),English (American),WS,word,food_drink,nouns,nouns,water (beverage),,154
+item_323,water (not beverage),English (American),WS,word,outside,nouns,nouns,water (not beverage),,323
+item_600,we,English (American),WS,word,pronouns,function_words,function_words,we,,600
+item_672,were,English (American),WS,word,helping_verbs,function_words,function_words,were,,672
+item_562,wet,English (American),WS,word,descriptive_words,predicates,adjectives,wet (description),,562
+item_605,what,English (American),WS,word,question_words,function_words,function_words,what,,605
+item_606,when,English (American),WS,word,question_words,function_words,function_words,when (question),,606
+item_607,where,English (American),WS,word,question_words,function_words,function_words,where (question),,607
+item_608,which,English (American),WS,word,question_words,function_words,function_words,which (question),,608
+item_563,white,English (American),WS,word,descriptive_words,predicates,adjectives,white,,563
+item_609,who,English (American),WS,word,question_words,function_words,function_words,who,,609
+item_610,why,English (American),WS,word,question_words,function_words,function_words,why,,610
+item_673,will,English (American),WS,word,helping_verbs,function_words,function_words,will,,673
+item_324,wind,English (American),WS,word,outside,nouns,nouns,wind,,324
+item_292,window,English (American),WS,word,furniture_rooms,nouns,nouns,window,,292
+item_564,windy,English (American),WS,word,descriptive_words,predicates,adjectives,windy,,564
+item_500,wipe,English (American),WS,word,action_words,predicates,verbs,wipe,,500
+item_501,wish,English (American),WS,word,action_words,predicates,verbs,wish,,501
+item_636,with,English (American),WS,word,locations,function_words,function_words,with,,636
+item_54,wolf,English (American),WS,word,animals,nouns,nouns,wolf,,54
+item_343,woods,English (American),WS,word,places,other,other,woods,,343
+item_11,woof woof,English (American),WS,word,sounds,other,other,woof woof,,11
+item_502,work (action),English (American),WS,word,action_words,predicates,verbs,work (action),,502
+item_344,work (place),English (American),WS,word,places,other,other,work (place),,344
+item_674,would,English (American),WS,word,helping_verbs,function_words,function_words,would,,674
+item_503,write,English (American),WS,word,action_words,predicates,verbs,write,,503
+item_345,yard,English (American),WS,word,places,other,other,yard,,345
+item_565,yellow,English (American),WS,word,descriptive_words,predicates,adjectives,yellow,,565
+item_400,yes,English (American),WS,word,games_routines,other,other,yes,,400
+item_578,yesterday,English (American),WS,word,time_words,other,other,yesterday,,578
+item_155,yogurt,English (American),WS,word,food_drink,nouns,nouns,yogurt,,155
+item_601,you,English (American),WS,word,pronouns,function_words,function_words,you,,601
+item_602,your,English (American),WS,word,pronouns,function_words,function_words,your,,602
+item_603,yourself,English (American),WS,word,pronouns,function_words,function_words,yourself,,603
+item_566,yucky,English (American),WS,word,descriptive_words,predicates,adjectives,yucky,,566
+item_12,yum yum,English (American),WS,word,sounds,other,other,yum yum,,12
+item_55,zebra,English (American),WS,word,animals,nouns,nouns,zebra,,55
+item_183,zipper,English (American),WS,word,clothing,nouns,nouns,zipper,,183
+item_346,zoo,English (American),WS,word,places,other,other,zoo,,346
