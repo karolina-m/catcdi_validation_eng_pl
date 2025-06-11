@@ -66,6 +66,7 @@ library(tidyverse)
 library(Multilada)
 library(here)
 
+
 ```
 
 ```{r analysis-preferences}
@@ -77,8 +78,8 @@ knitr::opts_chunk$set(cache.extra = knitr::rand_seed, echo = F, include = F, war
 
 ```{r}
 # Data
-source(here("data_polish.R"))
-source(here("data_ame_english.R"))
+source(here("data/polish/data_polish.R"))
+source(here("data/english/data_ame_english.R"))
 ```
 
 # Methods
@@ -179,6 +180,8 @@ apa_table(lang_cor_table, caption = "Supplementary Material: Table S1 - Spearman
 \newpage
 
 # References
-```{r create_r-references}
-r_refs(file = "references.bib")
-```
+
+::: {#refs custom-style="Bibliography"}
+:::
+
+`r cite_r("r-references.bib")`
