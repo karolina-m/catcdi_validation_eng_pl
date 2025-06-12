@@ -122,15 +122,7 @@ prod_s$fullTheta_SE <- full_thetas[,2]
 prod_s$catTheta <- cat_thetas[,1]
 prod_s$catTheta_SE <- cat_thetas[,2]
 
-
-# mean squared error
-prod_s <- prod_s %>% mutate(sq_err = (fullTheta - catTheta)^2,
-                            full_cat_diff = fullTheta - catTheta)
-
-bad_thresh <- mean(prod_s$sq_err) + 1.5*sd(prod_s$sq_err) # mean=.55, med = .17
-mean(prod_s$sq_err)
-
-bad <- subset(prod_s, sq_err > bad_thresh) # 18
-good <- subset(prod_s, sq_err <= bad_thresh) # 186
 #t.test(prod_s$full_cat_diff) # CAT on average shows higher ability (mean=.52)
 #t.test(good$full_cat_diff) # mean=.40 even without the 18 outliers showing the largest error
+
+
