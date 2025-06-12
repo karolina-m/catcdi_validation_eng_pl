@@ -266,6 +266,43 @@ We also re-calculated the mean squared error without the cases of extreme discre
 ## Item properties in the two CAT-CDIs
 Our second aim was to analyze similarities and differences in IRT item properties and item selection in CAT in English and Polish.
 
+There were 679 items in the English CAT-CDI and 666 items in the Polish CAT-CDI. For both sets of items, the items' difficulty and discrimination parameters were calculated using IRT 2 parameter model (these included separate samples, see Kachergis et al. 2022 and Krajewski et al. (in preparation)). An item’s difficulty indicates the ability level at which there is a 50% probability that a participant will respond correctly. It includes negative and positive values, with 0 indicating medium difficulty, thus reflecting the possible values of ability, i.e. theta. An item’s discrimination reflects how well it distinguishes between individuals with slightly different ability levels—especially those near that difficulty point. Of these two parameters, item difficulty is of greater interest to the present paper as it is directly linked to ability and as discrimination power is more about how good the item is at measuring, rather than what it is measuring.<!-- this could potentially go up, into Intro/Methods? -->
+
+```{r diff_across_lgs}
+items_cat_en %>% 
+     dplyr::summarise(min(d), max(d), mean(d), median(d), sd(d))
+
+items_cat_pl %>% 
+     dplyr::summarise(min(d), max(d), mean(d), median(d), sd(d))
+
+t1 <- apa_print(t.test(items_cat_en$d, items_cat_pl$d))
+```
+
+```{r common_items}
+
+items_en_pl <- merge(items_cat_pl, items_cat_en, 
+                  all.x = T, all.y = T,
+                  suffixes = c("_pl","_en"),
+                  by = "uni_lemma") %>% filter(!is.na(item) & !is.na(definition))
+count(items_en_pl) # 390
+
+t2 <- apa_print(t.test(items_en_pl$d_en, items_en_pl$d_pl, paired = T))
+# t = -23.112, df = 389, p-value < 2.2e-16
+
+# visualise
+items_en_pl %>% select(uni_lemma, d_pl, d_en) %>% pivot_longer(cols = d_pl:d_en, names_to = "lang", values_to = "d") %>% ggplot(aes(x = lang, y = d, group = lang)) + geom_boxplot() + geom_jitter(alpha = 0.3)
+
+
+c <- apa_print(cor.test(items_en_pl$d_pl, items_en_pl$d_en)) # 0.65
+```
+
+English items are more difficult than the Polish items, `r t1$full_result` (English: min = `r round(min(items_cat_en$d),2)`, max = `r round(max(items_cat_en$d),2)`, *M* = `r round(mean(items_cat_en$d),2)`, *Mdn* = `r round(median(items_cat_en$d),2)`, *SD* = `r round(sd(items_cat_en$d),2)`; Polish: min = `r round(min(items_cat_pl$d),2)`, max = `r round(max(items_cat_pl$d),2)`, *M* = `r round(mean(items_cat_pl$d),2)`, *Mdn* = `r round(median(items_cat_pl$d),2)`, *SD* = `r round(sd(items_cat_pl$d),2)`). Notably, this was true even for a subset of `r count(items_en_pl)` items common to both languages - these items showed lower mean difficulty in English than in Polish: `r t2$full_result`. This difference in mean difficulty may be influenced by the characteristics of the samples used to estimate the IRT models. In English, item difficulty was calculated based on a broader sample of children aged 12–36 months (spanning the CDI:WG, CDI:WS, and CDI-III), whereas the Polish data came from a narrower age range of 18–36 months, corresponding to the CDI:WS. As a result, item difficulty in English was estimated using a relatively younger sample, for whom certain items may have been more challenging—thus appearing more difficult—compared to the older Polish sample. Still the item difficulty in the two languages was positively and moderately correlated: `r c$full_result`.
+
+
+```{r}
+
+```
+
 
 # Discussion
 1. Correlations strong in both languages (overall and in age-bins; in PL: multi and mono correlations similar and strong).   
