@@ -59,7 +59,8 @@ output            : papaja::apa6_pdf
 ---
 
 ```{r setup, include = FALSE}
-library("papaja")
+
+library(papaja)
 r_refs("r-references.bib")
 
 library(tidyverse)
@@ -76,7 +77,7 @@ knitr::opts_chunk$set(cache.extra = knitr::rand_seed, echo = F, include = F, war
 ```
 
 
-```{r}
+```{r, echo = F}
 # Data
 source(here("data/polish/data_polish.R"))
 source(here("data/english/data_ame_english.R"))
@@ -115,8 +116,11 @@ We found similarly strong correlations in the two languages between the abilitie
 
 
 ```{r corr-by-age, include = T}
-# Correlations by age
-# to-do: merge both tables?
+
+# TODO:
+# 1. merge both tables?
+# 2. can we specify place in text where the tables should be placed (rn it seems random)
+
 # English
 valid_tab <- prod_s %>% 
   mutate(age_group = cut(age_full, breaks=seq(12,36,3), right=F, include.lowest = T)) %>%
@@ -143,9 +147,13 @@ apa_table(age_cor_table_wide, caption = "Polish: Correlations between ability es
 ```
 
 
-The Polish validation study included `r sum(by_child_pl$lang_group == "multilingual")` data from bi- and multilingual families. Though it is a small group, we decided to explore their correlation coefficients (non-parametric Spearman's rho) and found these were similar to those found for Polish monolingual children (see Table X in Supplementary Materials). <!-- TO DO -->
+The Polish validation study included `r sum(by_child_pl$lang_group == "multilingual")` data from bi- and multilingual families. Though it is a small group, we decided to explore their correlation coefficients (non-parametric Spearman's rho) and found these were similar to those found for Polish monolingual children (see Table \@ref(tab:corr-by-langgroup) in Supplementary Materials). 
 
-```{r, include = T}
+```{r corr-by-langgroup, include = T}
+
+# TODO: 
+# 1. the table could use some re-styling (lgs as columns?)
+# 2. move to Supplementary (separate .Rmd?)
 
 cor1 <- by_child_pl %>%
   group_by(lang_group) %>%
@@ -169,13 +177,100 @@ apa_table(lang_cor_table, caption = "Supplementary Material: Table S1 - Spearman
 
 ```
 
+```{r mse}
+# TODO
+# 1. Eng values shifted slightly? 
 
+# Polish
+by_child_pl <- by_child_pl %>% mutate(sq_err = (full_theta - cat_theta)^2,
+                                      full_cat_diff = full_theta - cat_theta)
+mean(by_child_pl$sq_err) # 0.19
+median(by_child_pl$sq_err) # 0.08
+sd(by_child_pl$sq_err) # 0.45
+
+bad_thresh_pl <- mean(by_child_pl$sq_err) + 1.5*sd(by_child_pl$sq_err)
+bad_thresh_pl # 0.86
+
+by_child_pl <- by_child_pl %>% mutate(extreme_discrep = 
+                                           case_when(
+                                                sq_err > bad_thresh_pl ~ "yes",
+                                                .default = "no"
+                                           ))
+
+table(by_child_pl$extreme_discrep)
+
+# English
+
+# mean squared error
+prod_s <- prod_s %>% mutate(sq_err = (fullTheta - catTheta)^2,
+                            full_cat_diff = fullTheta - catTheta)
+
+bad_thresh_en <- mean(prod_s$sq_err) + 1.5*sd(prod_s$sq_err) # mean=.55, med = .17
+
+# bad_en <- subset(prod_s, sq_err > bad_thresh_en) # 18 --> 15?
+# good_en <- subset(prod_s, sq_err <= bad_thresh_en) # 186 --> 189?
+
+prod_s <- prod_s %>% mutate(extreme_discrep = 
+                                           case_when(
+                                                sq_err > bad_thresh_en ~ "yes",
+                                                .default = "no"
+                                           ))
+
+table(prod_s$extreme_discrep)
+
+
+```
+
+```{r duration_full}
+
+# Polish
+mean(by_child_pl$duration_full) # 133892.9 sec
+sd(by_child_pl$duration_full) # 980822.7 sec
+# sd larger than mean - highly skewed
+
+ecdf_fun <- ecdf(as.numeric(by_child_pl$duration_full))
+by_child_pl <- by_child_pl %>%
+  mutate(duration_full_percentile = ecdf_fun(duration_full) * 100)
+
+# English
+# create and attach duration_full to prod_s
+
+demo <- demo %>% mutate(
+     duration_full = lubridate::as.duration(last_modified_full - created_date_full))
+prod_s <- merge(prod_s, demo[,c("subject_id", "duration_full")], all.x = T, by = "subject_id")
+
+ecdf_fun <- ecdf(as.numeric(prod_s$duration_full))
+prod_s <- prod_s %>%
+  mutate(duration_full_percentile = ecdf_fun(duration_full) * 100)
+
+prod_s %>% ggplot(aes(y = duration_full, x = extreme_discrep)) + geom_jitter(alpha = 0.3)
+# extreme_discrep cases are scattered across the whole range of durations
+
+```
+
+We also compared the mean squared error between the abilities as estimated by CAT-CDI and from the full CDI. The mean squared error in English was 0.55 (*Mdn* = 0.17, *SD* = 1), and in Polish it was `r mean(by_child_pl$sq_err)` (*Mdn* = `r median(by_child_pl$sq_err)`, *SD* = `r sd(by_child_pl$sq_err)`). We also looked at the children for whom the estimates from the CAT-CDI and full CDI diverged extremely, i.e. their difference between the errors was 1.5 SD from the mean. There were `r sum(prod_s$extreme_discrep == "yes")` such cases (`r round(sum(prod_s$extreme_discrep == "yes")/count(prod_s)*100,2)`%) in the English dataset and `r sum(by_child_pl$extreme_discrep == "yes")` cases (`r round(sum(by_child_pl$extreme_discrep == "yes")/count(prod_s)*100,2)`%) in the Polish dataset. All participants (in both datasets) showed a higher CDI-CAT ability as compared to their ability estimated from the full CDI. All of the Polish participants showing extreme discrepancy completed the full CDI in an unusually short time--their completion times were among the shortest 5% in the sample, meaning 95% of participants took longer. This might suggest their ability estimates from the full CDI may have been underestimated, possibly due to rushed (and/or less attentive responses). In support of this view, their CAT-CDI scores had acceptable measurement errors (<= 0.15 for English, <= 0.1 for Polish), indicating that the CAT-CDI was able to estimate their abilities reliably, in contrast to the full CDI. However, the pattern was not replicated in the English dataset, where only `r sum(by_child_pl$extreme_discrep == "yes" & by_child_pl$duration_full_percentile <= 5)` participants who showed extreme discrepancy also showed very short administrations of the full CDI. 
+
+**NOTE TO US**: Below I'm printing the participants with extreme discrepancies, you can see they vary in age, duration of CAT/full, SE of theta, etc. I myself don't see a pattern here:
+
+```{r, include = T}
+extreme_discrep <- prod_s %>% filter(extreme_discrep == "yes") %>% select(-subject_id, duration_full_percentile)
+apa_table(extreme_discrep)
+```
+
+```{r MSE_without_outliers}
+
+
+```
+
+We also re-calculated the mean squared error without the cases of extreme discrepancy, which yielded a MSE of XX in English and MSE of XX in Polish.
 
 
 
 
 # Discussion
-
+1. Correlations strong in both languages (overall and in age-bins; in PL: multi and mono correlations similar and strong).   
+2. MSE after removing cases with extreme discrepancies.  
+3. Extreme discrepancies - in both lgs, we see XXX
 
 \newpage
 
