@@ -357,11 +357,102 @@ fig1
 
 We also wanted to do check whether items in particular CDI semantic categories show related parameter values across the two languages. We performed a series of Spearman's rank correlations (on the items common to CDI-CATs in Polish and English) for each CDI semantic category (see Table \@ref(tab:d_by_cdi_category_tab)). The rank correlations coefficients vary by category, but for half of the categories the correlations are moderate to strong (0.52 to 0.91). Figure \@ref(fig:d-by-cdi-category-fig) shows the relative positioning of the items by semantic category (colored) plotted in the context of the full item pool (grey) in the two languages. It can be seen from the figure that many categories (e.g., sounds) show a similar distribution of items relative to the whole item pool across Polish and English.
 
-
+## Item selection in the two CAT-CDIs
 
 ```{r}
+# Data prep
+
+# POLISH
+items_run_pl <- responses_cat_pl %>% select(items) %>% group_by(items) %>% summarise(n = length(items))
+items_run_pl <- merge(items_cat_pl, items_run_pl, by.x = "item", by.y = "items", all.x = T)
+items_run_pl[is.na(items_run_pl)] <- 0
+items_run_pl$never <- ifelse(items_run_pl$n == 0, "never", "at_least_once")
+
+items_run_pl <- items_run_pl %>% 
+  mutate(items_perc = (n/115)*100) %>%
+  mutate(percent_for_color = ifelse(items_perc == 0, NA, items_perc)) 
+
+# AMERICAN ENGLISH
+
+items_run_en <- resps %>%
+  select(subject_id, response_cat, definition)
+
+items_run_en <- items_run_en %>% mutate(
+  item_used = case_when(
+    response_cat == "no_test" ~ 0,
+    .default = 1
+  )
+)
+
+items_run_en <- items_run_en %>%
+  select(definition, item_used) %>%
+  group_by(definition) %>%
+  mutate(n = sum(item_used)) %>%
+  select(definition, n) %>% unique()
+
+# how many participants in resps?
+resps %>% select(subject_id) %>% unique() %>% nrow()
+
+items_run_en <- items_run_en %>% 
+  mutate(items_perc = (n/204)*100) %>%
+  mutate(percent_for_color = ifelse(items_perc == 0, NA, items_perc)) 
+
+items_run_en <- merge(items_run_en, coefs_2pl[,c("definition", "a1", "d")], 
+                   all.x = T,
+                   by = "definition")
+
+# ame items lack categories
+eng_ws_items <- read_csv("data/english/eng_ws_items.csv")
+items_run_en <- merge(items_run_en, eng_ws_items[,c("definition", "category")], all.x = T, by = "definition")
+rm(eng_ws_items)
+```
+
+```{r}
+# PL
+sum(items_run_pl$n != 0) # 258
+round(sum(items_run_pl$n != 0)/count(items_run_pl)*100,2) # 38.74
+
+# EN
+sum(items_run_en$n != 0) # 251
+round(sum(items_run_en$n != 0)/count(items_run_en)*100,2) # 36.91
+```
+```{r used-items-fig, fig.cap = "How often a given item was used in CAT-CDI administrations in the validation study in (A) English and (B) Polish. The items (points) are colored by the percentage of their appearance in the CAT-CDI administrations. Items colored in grey are items never used in any of the CAT-CDI administrations.", fig.pos = '!h', include = T}
+
+# Plotting (un)used items - cloud
+# PL
+fig2b <- items_run_pl %>%
+  ggplot(aes(x = d, y = a1)) +
+  geom_jitter(aes(color = percent_for_color), aplha = 0.8) +
+  scale_color_viridis(option = "D", na.value = "grey", name = "Percent", begin = 1, end = 0) +
+  xlim(-7.5, 7.5) +
+  ylim(0,7.5) +
+  labs(x = "Difficulty (d) (lower values are more difficult)", y = "Discrimination (a1) ", 
+       title = "(B) Polish",
+       caption = "Grey are unused items") +
+  theme_light() + theme(legend.position = c(0.85, 0.75))
+
+# EN
+fig2a <- items_run_en %>%
+  ggplot(aes(x = d, y = a1)) +
+  geom_jitter(aes(color = percent_for_color), aplha = 0.8) +
+  scale_color_viridis(option = "D", na.value = "grey", name = "Percent", begin = 1, end = 0) +
+  xlim(-7.5, 7.5) +
+  ylim(0,7.5) +
+  labs(x = "Difficulty (d) (lower values are more difficult)", y = "Discrimination (a1) ", 
+       title = "(A) English",
+       caption = "Grey are unused items") +
+  theme_light() + theme(legend.position = c(0.85, 0.75))
+
+fig2 <- ggarrange(fig2a, fig2b, nrow = 1, ncol = 2)
+fig2
+  
 
 ```
+
+
+It is to be expected that a CDI-CAT will not need to administer all the items in the item bank. In fact, in the validation study the English CAT-CDI used `r sum(items_run_en$n != 0)` items (`r round(sum(items_run_en$n != 0)/count(items_run_en)*100,2)`%) and similarly, the Polish CAT-CDI used `r sum(items_run_pl$n != 0)` items (`r round(sum(items_run_pl$n != 0)/count(items_run_pl)*100,2)`%). Figure \@ref(fig:used-items-fig) shows how often a given item was used in CAT-CDI administrations in the validation study in English and Polish.
+By design, a CDI-CAT selects items that are most informative for each participant. This means it draws from a subset of available items--typically those matched to the participant’s current ability estimate in terms of difficulty, and with high discrimination, meaning they effectively distinguish between individuals with abilities close to that estimate.
+
 
 
 
