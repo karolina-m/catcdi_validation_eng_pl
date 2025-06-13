@@ -73,7 +73,7 @@ library(here)
 ```{r analysis-preferences}
 # Seed for random number generation
 set.seed(123)
-knitr::opts_chunk$set(cache.extra = knitr::rand_seed, echo = F, include = F, warning = F, message = F, out.width="60%")
+knitr::opts_chunk$set(cache.extra = knitr::rand_seed, echo = F, include = F, warning = F, message = F, out.width="100%")
 ```
 
 
@@ -131,7 +131,7 @@ valid_tab_wide = rbind(round(valid_tab$r, 2), as.character(valid_tab$n))
 colnames(valid_tab_wide) = as.character(valid_tab$age_group)
 row.names(valid_tab_wide) = c('r ability CAT vs full CDI', 'N')
 
-apa_table(valid_tab_wide, caption="American English: Correlations between ability estimated by CAT-CDI and ability estimated from full CDI by children's age") 
+apa_table(valid_tab_wide, caption="American English: Correlations between ability estimated by CAT-CDI and ability estimated from full CDI by children's age", placement = "H") 
 
 # Polish
 age_cor_table <- by_child_pl %>% 
@@ -143,7 +143,7 @@ age_cor_table_wide = rbind(round(age_cor_table$r, 2), as.character(age_cor_table
 colnames(age_cor_table_wide) = as.character(age_cor_table$age_group)
 row.names(age_cor_table_wide) = c('r ability CAT vs full CDI', 'N')
 
-apa_table(age_cor_table_wide, caption = "Polish: Correlations between ability estimated by CAT-CDI and ability estimated from full CDI by children's age")
+apa_table(age_cor_table_wide, caption = "Polish: Correlations between ability estimated by CAT-CDI and ability estimated from full CDI by children's age", placement = "H")
 ```
 
 
@@ -173,7 +173,7 @@ cor3 <- by_child_pl %>%
 lang_cor_table <- bind_rows(cor1, cor2, cor3)
 rm(cor1, cor2, cor3)
 
-apa_table(lang_cor_table, caption = "Supplementary Material: Table S1 - Spearman's correlations for monolingual and multilingual children in the Polish dataset")
+apa_table(lang_cor_table, caption = "Supplementary Material: Table S1 - Spearman's correlations for monolingual and multilingual children in the Polish dataset", placement = "H")
 
 ```
 
@@ -221,7 +221,7 @@ table(prod_s$extreme_discrep)
 
 ```
 
-```{r duration_full}
+```{r duration-full}
 
 # Polish
 mean(by_child_pl$duration_full) # 133892.9 sec
@@ -266,9 +266,10 @@ We also re-calculated the mean squared error without the cases of extreme discre
 ## Item properties in the two CAT-CDIs
 Our second aim was to analyze similarities and differences in IRT item properties and item selection in CAT in English and Polish.
 
-There were 679 items in the English CAT-CDI and 666 items in the Polish CAT-CDI. For both sets of items, the items' difficulty and discrimination parameters were calculated using IRT 2 parameter model (these included separate samples, see Kachergis et al. 2022 and Krajewski et al. (in preparation)). An item’s difficulty indicates the ability level at which there is a 50% probability that a participant will respond correctly. It includes negative and positive values, with 0 indicating medium difficulty, thus reflecting the possible values of ability, i.e. theta. An item’s discrimination reflects how well it distinguishes between individuals with slightly different ability levels—especially those near that difficulty point. Of these two parameters, item difficulty is of greater interest to the present paper as it is directly linked to ability and as discrimination power is more about how good the item is at measuring, rather than what it is measuring.<!-- this could potentially go up, into Intro/Methods? -->
+There are 679 items in the English CAT-CDI and 666 items in the Polish CAT-CDI. For both sets of items, the items' difficulty and discrimination parameters were calculated using IRT 2 parameter model (these included separate samples, see Kachergis et al. 2022 and Krajewski et al. (in preparation)). An item’s difficulty indicates the ability level at which there is a 50% probability that a participant will respond correctly. <!-- is that still true of d, not b? --> It includes negative and positive values, with 0 indicating medium difficulty, thus reflecting the range of values of ability, i.e. theta. An item’s discrimination indicates how well it distinguishes between individuals with slightly different ability levels--especially those near that difficulty point. Of these two parameters, item difficulty is of greater interest to the present paper as it is directly linked to ability and as discrimination power is more about how good the item is at measuring, rather than what it is measuring.<!-- this could potentially go up, into Intro/Methods? -->
 
 ```{r diff_across_lgs}
+# item difficulty by language 
 items_cat_en %>% 
      dplyr::summarise(min(d), max(d), mean(d), median(d), sd(d))
 
@@ -276,9 +277,11 @@ items_cat_pl %>%
      dplyr::summarise(min(d), max(d), mean(d), median(d), sd(d))
 
 t1 <- apa_print(t.test(items_cat_en$d, items_cat_pl$d))
+
 ```
 
 ```{r common_items}
+# common items - still different mean difficulty?
 
 items_en_pl <- merge(items_cat_pl, items_cat_en, 
                   all.x = T, all.y = T,
@@ -292,16 +295,74 @@ t2 <- apa_print(t.test(items_en_pl$d_en, items_en_pl$d_pl, paired = T))
 # visualise
 items_en_pl %>% select(uni_lemma, d_pl, d_en) %>% pivot_longer(cols = d_pl:d_en, names_to = "lang", values_to = "d") %>% ggplot(aes(x = lang, y = d, group = lang)) + geom_boxplot() + geom_jitter(alpha = 0.3)
 
-
+# corr
 c <- apa_print(cor.test(items_en_pl$d_pl, items_en_pl$d_en)) # 0.65
 ```
 
-English items are more difficult than the Polish items, `r t1$full_result` (English: min = `r round(min(items_cat_en$d),2)`, max = `r round(max(items_cat_en$d),2)`, *M* = `r round(mean(items_cat_en$d),2)`, *Mdn* = `r round(median(items_cat_en$d),2)`, *SD* = `r round(sd(items_cat_en$d),2)`; Polish: min = `r round(min(items_cat_pl$d),2)`, max = `r round(max(items_cat_pl$d),2)`, *M* = `r round(mean(items_cat_pl$d),2)`, *Mdn* = `r round(median(items_cat_pl$d),2)`, *SD* = `r round(sd(items_cat_pl$d),2)`). Notably, this was true even for a subset of `r count(items_en_pl)` items common to both languages - these items showed lower mean difficulty in English than in Polish: `r t2$full_result`. This difference in mean difficulty may be influenced by the characteristics of the samples used to estimate the IRT models. In English, item difficulty was calculated based on a broader sample of children aged 12–36 months (spanning the CDI:WG, CDI:WS, and CDI-III), whereas the Polish data came from a narrower age range of 18–36 months, corresponding to the CDI:WS. As a result, item difficulty in English was estimated using a relatively younger sample, for whom certain items may have been more challenging—thus appearing more difficult—compared to the older Polish sample. Still the item difficulty in the two languages was positively and moderately correlated: `r c$full_result`.
+English items are more difficult than the Polish items, `r t1$full_result` (English: min = `r round(min(items_cat_en$d),2)`, max = `r round(max(items_cat_en$d),2)`, *M* = `r round(mean(items_cat_en$d),2)`, *Mdn* = `r round(median(items_cat_en$d),2)`, *SD* = `r round(sd(items_cat_en$d),2)`; Polish: min = `r round(min(items_cat_pl$d),2)`, max = `r round(max(items_cat_pl$d),2)`, *M* = `r round(mean(items_cat_pl$d),2)`, *Mdn* = `r round(median(items_cat_pl$d),2)`, *SD* = `r round(sd(items_cat_pl$d),2)`). Notably, this was true even for a subset of `r count(items_en_pl)` items common to both languages - these items still proved to be more difficult in English than in Polish: `r t2$full_result`. This difference in mean difficulty may be influenced by the characteristics of the samples used to estimate the IRT models. In English, item difficulty was calculated based on a broader sample of children aged 12–36 months (spanning the CDI:WG, CDI:WS, and CDI-III), whereas the Polish data came from a sample of narrower age range of 18–36 months, corresponding to the CDI:WS. As a result, item difficulty in English was estimated using a relatively younger sample, for whom certain items may have been more challenging—thus appearing more difficult—compared to the older Polish sample. Still the item difficulty for common items in the two languages was positively and moderately correlated: `r c$full_result`.
+
+```{r d_by_cdi_category_tab, include = T}
+# correlations by cdi semantic category on common words
+# spearman because ranked
+
+items_en_pl %>% group_by(category_pl) %>% summarise(
+     rho = cor(d_pl, d_en, method = "spearman", use = "complete.obs"),
+     n = length(category_pl)) %>% arrange(rho) -> corr_by_category
+
+apa_table(corr_by_category, placement = "H")
+```
+
+```{r d-by-cdi-category-fig, fig.width = 10, fig.height = 5, fig.cap = "The relative positioning of the items by semantic category (colored) plotted in the context of the full item pool (grey): (A) English, (B) Polish.", fig.pos = '!h', include = T}
+
+# TODO: adjust order, put "helping_verbs" at the end
+
+# AMERICAN ENGLISH
+fig1a <- items_cat_en %>%
+ggplot(aes(d, a1))  + 
+  geom_point(data = items_cat_en %>%
+               select(-category), aes(x = d, y = a1), color = 'grey', size = 0.4) +
+  geom_point(aes(color=as.factor(category)), size = 0.4) +
+  facet_wrap(~category) +
+  xlim(-8, 8) +
+  ylim(0,8) +
+  labs(x = "Item difficulty (d)", y = "Item discrimination (a1)", title = "(A) English") +
+  theme(legend.position = "none")
+
+# TODO: adjust order, put "modal_adverbs" and "prepositions" at the end
+
+# POLISH
+fig1b <- items_cat_pl %>%
+  mutate(category = case_when(
+    category == "descriptive_words (adjectives)" ~ "descriptive_words",
+    category == "descriptive_words (adverbs)" ~ "descriptive_words",
+    category == "pronouns_demonstrative" ~ "pronouns",
+    category == "pronouns_personal" ~ "pronouns",
+    .default = category
+  )) %>%
+  filter(!is.na(category)) %>% # tylko has category == NA
+ggplot(aes(d, a1))  + 
+  geom_point(data = items_cat_pl %>%
+               select(-category), aes(x = d, y = a1), color = 'grey', size = 0.4) +
+  geom_point(aes(color=as.factor(category)), size = 0.4) +
+  facet_wrap(~category)  +
+  xlim(-8, 8) +
+  ylim(0,8) +
+  labs(x = "Item difficulty (d)", y = "Item discrimination (a1)", title = "(B) Polish") +
+  theme(legend.position = "none")
+
+fig1 <- ggarrange(fig1a, fig1b, ncol = 2, nrow = 1)
+fig1
+
+```
+
+We also wanted to do check whether items in particular CDI semantic categories show related parameter values across the two languages. We performed a series of Spearman's rank correlations (on the items common to CDI-CATs in Polish and English) for each CDI semantic category (see Table \@ref(tab:d_by_cdi_category_tab)). The rank correlations coefficients vary by category, but for half of the categories the correlations are moderate to strong (0.52 to 0.91). Figure \@ref(fig:d-by-cdi-category-fig) shows the relative positioning of the items by semantic category (colored) plotted in the context of the full item pool (grey) in the two languages. It can be seen from the figure that many categories (e.g., sounds) show a similar distribution of items relative to the whole item pool across Polish and English.
+
 
 
 ```{r}
 
 ```
+
 
 
 # Discussion
