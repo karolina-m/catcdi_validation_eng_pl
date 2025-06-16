@@ -416,33 +416,42 @@ round(sum(items_run_pl$n != 0)/count(items_run_pl)*100,2) # 38.74
 sum(items_run_en$n != 0) # 251
 round(sum(items_run_en$n != 0)/count(items_run_en)*100,2) # 36.91
 ```
-```{r used-items-fig, fig.cap = "How often a given item was used in CAT-CDI administrations in the validation study in (A) English and (B) Polish. The items (points) are colored by the percentage of their appearance in the CAT-CDI administrations. Items colored in grey are items never used in any of the CAT-CDI administrations.", fig.pos = '!h', include = T}
+```{r used-items-fig, fig.width = 10, fig.height = 5, fig.cap = "How often a given item was used in CAT-CDI administrations in the validation study in (A) English and (B) Polish. The items (points) are colored by the percentage of their appearance in the CAT-CDI administrations. Items colored in grey are items never used in any of the CAT-CDI administrations.", fig.pos = '!h', include = T}
 
 # Plotting (un)used items - cloud
 # PL
 fig2b <- items_run_pl %>%
-  ggplot(aes(x = d, y = a1)) +
-  geom_jitter(aes(color = percent_for_color), aplha = 0.8) +
+  mutate(d_bin = cut(d, breaks = seq(-7.5, 7.5, by = 1))) %>%
+  ggplot(aes(x = d_bin, y = a1)) +
+  geom_jitter(aes(color = percent_for_color), alpha = 0.7, width = 0.2) +  # Points
+  geom_boxplot(alpha = 0.2, width = 0.5, outlier.shape = NA) +  # Add boxplots
   scale_color_viridis(option = "D", na.value = "grey", name = "Percent", begin = 1, end = 0) +
-  xlim(-7.5, 7.5) +
-  ylim(0,7.5) +
-  labs(x = "Difficulty (d) (lower values are more difficult)", y = "Discrimination (a1) ", 
-       title = "(B) Polish",
-       caption = "Grey are unused items") +
-  theme_light() + theme(legend.position = c(0.85, 0.75))
+  ylim(0, 7.5) +
+  labs(
+    x = "Difficulty (d)",
+    y = "Discrimination (a1)",
+    title = "(B) Polish",
+    caption = "Grey are unused items"
+  ) +
+  theme_light() +
+  theme(legend.position = c(0.95, 0.85))
 
 # EN
 fig2a <- items_run_en %>%
-  ggplot(aes(x = d, y = a1)) +
-  geom_jitter(aes(color = percent_for_color), aplha = 0.8) +
+  mutate(d_bin = cut(d, breaks = seq(-7.5, 7.5, by = 1))) %>%
+  ggplot(aes(x = d_bin, y = a1)) +
+  geom_jitter(aes(color = percent_for_color), alpha = 0.7, width = 0.2) +  # Points
+  geom_boxplot(alpha = 0.2, width = 0.5, outlier.shape = NA) +  # Add boxplots
   scale_color_viridis(option = "D", na.value = "grey", name = "Percent", begin = 1, end = 0) +
-  xlim(-7.5, 7.5) +
-  ylim(0,7.5) +
-  labs(x = "Difficulty (d) (lower values are more difficult)", y = "Discrimination (a1) ", 
-       title = "(A) English",
-       caption = "Grey are unused items") +
-  theme_light() + theme(legend.position = c(0.85, 0.75))
-
+  ylim(0, 7.5) +
+  labs(
+    x = "Difficulty (d)",
+    y = "Discrimination (a1)",
+    title = "(A) English",
+    caption = "Grey are unused items"
+  ) +
+  theme_light() +
+  theme(legend.position = c(0.95, 0.85))
 fig2 <- ggarrange(fig2a, fig2b, nrow = 1, ncol = 2)
 fig2
   
@@ -450,9 +459,32 @@ fig2
 ```
 
 
-It is to be expected that a CDI-CAT will not need to administer all the items in the item bank. In fact, in the validation study the English CAT-CDI used `r sum(items_run_en$n != 0)` items (`r round(sum(items_run_en$n != 0)/count(items_run_en)*100,2)`%) and similarly, the Polish CAT-CDI used `r sum(items_run_pl$n != 0)` items (`r round(sum(items_run_pl$n != 0)/count(items_run_pl)*100,2)`%). Figure \@ref(fig:used-items-fig) shows how often a given item was used in CAT-CDI administrations in the validation study in English and Polish.
-By design, a CDI-CAT selects items that are most informative for each participant. This means it draws from a subset of available items--typically those matched to the participant’s current ability estimate in terms of difficulty, and with high discrimination, meaning they effectively distinguish between individuals with abilities close to that estimate.
+It is to be expected that a CDI-CAT will not need to administer all the items in the item bank. In fact, in the validation study the English CAT-CDI used `r sum(items_run_en$n != 0)` items (`r round(sum(items_run_en$n != 0)/count(items_run_en)*100,2)`%) and similarly, the Polish CAT-CDI used `r sum(items_run_pl$n != 0)` items (`r round(sum(items_run_pl$n != 0)/count(items_run_pl)*100,2)`%).
+By design, a CDI-CAT selects items that are most informative for each participant. This means it draws from a subset of available items--typically those matched to the participant’s current ability estimate in terms of difficulty, and with high discrimination, meaning they effectively distinguish between individuals with abilities close to that estimate. Figure \@ref(fig:used-items-fig) plots the items by their difficulty and discrimination parameters and colors the items (points) by how often they were used in CAT-CDI administrations in English and Polish. A few findings are of note here. First, both CAT-CDIs used items of very low discrimination (i.e, items that do no discriminate well between ability levels). Often that was because for a given difficulty level there were not enough items and CAT-CDI had to use all the items available (this is particularly true of the items on the two ends of difficulty). However, more surprisingly, it is also true of items of medium difficulty, where items of higher discrimination were available (but were not chosen by the CAT algorithm).
+*[NOTE TO US: I emailed Phil Chalmers, the author of mirtcat and mirt packages in R to ask if he has any idea why this is so].*
 
+Finally, some items keep being shown in many CAT administrations. In English, 3 items appear in more than half of administrations - *"long"* in 64% of administrations, *"make"* in 54% of administrations, and *"last"* in 53% of administrations. They are also high discrimination items in their difficulty bins. "Long" is additionally one of the starting items, i.e. a first item shown to the parent, chosen so that there is high probability the parent can respond positively. In Polish, 3 items appear in more than half of administrations - *"szukać"* (to look for) appearing in 83% of administrations, *"znaleźć"* (to find) appearing in 61% of administrations, and *"babcia"* (grandmother) appearing in 60% of administrations. All three items show very high discrimination. "Szukać" (to look for) and "znaleźć" (to find) are also in top 5 discrimination items in general. "Babcia" (grandmother) is one of the starting items. 
+
+```{r}
+items_en_pl <- merge(items_en_pl, items_run_pl[,c("item", "items_perc")], all.x = T, by = "item")
+names(items_en_pl)[names(items_en_pl) == "items_perc"] <- "items_perc_pl"
+
+items_en_pl <- merge(items_en_pl, items_run_en[,c("definition", "items_perc")], all.x = T, by = "definition")
+names(items_en_pl)[names(items_en_pl) == "items_perc"] <- "items_perc_en"
+
+c3 <- apa_print(cor.test(items_en_pl$items_perc_pl, items_en_pl$items_perc_en, paired = T, method = "spearman")) # .37
+
+```
+
+
+To check whether the CDI items common in both languages may show similar frequencies in CAT-CDI administrations, we ran Spearman's rank correlation and found that the items frequencies in administrations were weakly correlated, `r c3$full_result`. However, the two CAT-CDIs differed in their potential length, as the English CAT-CDI was set to administer 25--50 items and the Polish CAT-CDI could administer up to 75 items (no minimum was set, but in practice the minimum items administered were 13). As an item is more likely to appear in longer tests (simply due to test length), then frequency of the Polish items could be inflated. Therefore, we also recalculated item frequency not per total number of administrations, but per total number of items administered. For each item (in each language) we calculated its frequency per 1000 administered items.  
+
+```{r}
+
+```
+
+
+## CAT-CDIs' usefullness in research and practice
 
 
 
