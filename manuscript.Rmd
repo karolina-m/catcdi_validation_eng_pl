@@ -72,7 +72,6 @@ source(here("data/english/data_ame_english.R"))
 
 # Methods
 
-
 ## Participants
 
 In the American English validation study, the participants were 204 parents of children aged 15 to 36 months (*M* = `r round(mean(kept_demo$age_cat),2)`, *Mdn* = `r round(median(kept_demo$age_cat),2)`, SD = `r round(sd(kept_demo$age_cat),2)`). There were 103 girls in the sample (`r round(sum(kept_demo$sex_cat == "F")/count(kept_demo)*100,2)`%). The sample was ethnically diverse, including White, Black, Latino/Hispanic, Asian, Native American, and other races/ethnicities. None of the children were reported to hear other languages apart from English. <!-- as checked in kept_demo$other_languages --> The average
@@ -81,15 +80,11 @@ number of years of education attained by the primary caregiver was `r round(mean
 In the Polish validation study, the participants were 113 parents of children aged 18 to 34 months (*M* = `r round(mean(by_child_pl$age_CAT),2)`, *Mdn* = `r round(median(by_child_pl$age_CAT),2)`, SD = `r round(sd(by_child_pl$age_CAT),2)`). There were 49 girls in the sample (`r round(sum(by_child_pl$sex == "dziewczynka")/count(by_child_pl)*100,2)`%). The sample was White (reflecting the limited ethnic diversity within the Polish population). However, there were 28 children multilingual with Polish (as their home language) and some other (majority) language. [todo: add info on parental edu]
 
 
-## Material
+## Materials
 The data was gathered with CAT-CDIs in American English and Polish. The American English CAT-CDI was created from the items that were common to three CDIs: Words and Gestures, Words and Sentences and CDI-III. With these items, two CAT-CDIs were created, one for word production and another for word comprehension (see Kachergis et al. 2022 for more details). The Polish CAT-CDIs were created following a largely similar procedure as the ones in American English, but there was a separate CDI-CAT developed for each CDI version (CDI: Words and Gestures and CDI: Words and Sentences) and for each CDI:WG subscale (word production, word comprehension, gesture use) (Krajewski et al. in preparation). Here we show data from the validation study of American English CAT-CDI word production (i.e. 679 items) and Polish CAT-CDI version of WS: Words and Sentences (i.e. 666 items). There are 395 words that appear in both CDI-CAT language versions. 
 
 ## Procedure
 Though in both validation studies the parents were asked to fill in both the full CDI and the CAT-CDI, the procedure differed between the two validation studies. In the validation of American English CDI-CAT, parents were given both CDIs in one sitting, but the order of the CDI versions was counterbalanced. In the Polish validation study, the order of the CDIs was fixed, with the full CDI always first, and then, after 1–30 days (*M* = `r round(mean(by_child_pl$days_between),2)`, *Mdn* = `r round(median(by_child_pl$days_between),2)`, SD = `r round(sd(by_child_pl$days_between),2)`) parents were asked to fill in the CAT-CDI. Both studies were done fully online and obtained the approval of adequate ethics committees.
-
-
-## Data analysis
-
 
 # Results
 
@@ -237,15 +232,15 @@ prod_s <- prod_s %>%
 
 prod_s %>% ggplot(aes(y = duration_full, x = extreme_discrep)) + geom_jitter(alpha = 0.3)
 # extreme_discrep cases are scattered across the whole range of durations
+# but all kids with extreme_discrep in english showed too high SE
 
 ```
 
-We also looked at the mean squared error between the abilities as estimated by CAT-CDI and from the full CDI. The mean squared error in English was 0.55 (*Mdn* = 0.17, *SD* = 1), and in Polish it was `r mean(by_child_pl$sq_err)` (*Mdn* = `r median(by_child_pl$sq_err)`, *SD* = `r sd(by_child_pl$sq_err)`). We also looked at the children for whom the estimates from the CAT-CDI and full CDI diverged extremely, i.e. their difference between the errors was 1.5 SD from the mean. There were `r sum(prod_s$extreme_discrep == "yes")` such cases (`r round(sum(prod_s$extreme_discrep == "yes")/count(prod_s)*100,2)`%) in the English dataset and `r sum(by_child_pl$extreme_discrep == "yes")` cases (`r round(sum(by_child_pl$extreme_discrep == "yes")/count(prod_s)*100,2)`%) in the Polish dataset. All participants in both datasets showed higher ability estimates on the CDI-CAT compared to the full CDI. If the full CDI is considered the baseline, this suggests that parents may have overestimated their child’s vocabulary on the CDI-CAT, potentially responding “yes – produces” to more items than expected based on full CDI estimates (as suggested by Kachergis, et al. 2022). An alternative explanation is that, for these participants, the full CDI may have underestimated the child’s true ability. Notably, all Polish participants with large discrepancies completed the full CDI in unusually short times (their completion times were among the shortest 5% in the sample) suggesting their responses may have been rushed or less attentive. This could have led to lower ability estimates from the full CDI. Supporting this interpretation, their CDI-CAT scores had acceptable measurement errors (below or equal to 0.1 for Polish), indicating reliable ability estimation by the CDI-CAT, in contrast to the full CDI. However, this pattern did not appear in the English dataset, where only `r sum(by_child_pl$extreme_discrep == "yes" & by_child_pl$duration_full_percentile <= 5)` participants who showed extreme discrepancy also showed very short administrations of the full CDI. 
+We also looked at the mean squared error between the abilities as estimated by CAT-CDI and from the full CDI. The mean squared error in English was 0.55 (*Mdn* = 0.17, *SD* = 1), and in Polish it was `r mean(by_child_pl$sq_err)` (*Mdn* = `r median(by_child_pl$sq_err)`, *SD* = `r sd(by_child_pl$sq_err)`). We then zoomed in on children for whom the estimates from the CAT-CDI and full CDI diverged extremely, i.e. their difference between the errors was 1.5 SD from the mean. There were `r sum(prod_s$extreme_discrep == "yes")` such cases (`r round(sum(prod_s$extreme_discrep == "yes")/count(prod_s)*100,2)`%) in the English dataset and `r sum(by_child_pl$extreme_discrep == "yes")` cases (`r round(sum(by_child_pl$extreme_discrep == "yes")/count(prod_s)*100,2)`%) in the Polish dataset. All participants in both datasets showed higher ability estimates on the CDI-CAT compared to the full CDI. If the full CDI is considered the baseline, this suggests that parents may have overestimated their child’s vocabulary on the CDI-CAT, potentially responding “yes – produces” to more items than expected based on full CDI estimates (as suggested by Kachergis, et al. 2022). An alternative explanation is that, for these participants, the full CDI may have underestimated the child’s true ability. Notably, all Polish participants with large discrepancies completed the full CDI in unusually short times (their completion times were among the shortest 5% in the sample) suggesting their responses may have been rushed or less attentive. This could have led to lower ability estimates from the full CDI and larger discrepancies between estimates from full and CAT CDI. Supporting this interpretation, their CDI-CAT scores had acceptable measurement errors (below or equal to 0.1 for Polish), indicating reliable ability estimation by the CDI-CAT, in contrast to the full CDI. However, this pattern did not appear in the English dataset, where all of the participants with extreme discrepancy showed higher measurement errors than acceptable (i.e. > 0.15).
 
-```{r, include = T}
+```{r, include = F}
 # participants with extreme discrepancy in English dataset:
 extreme_discrep <- prod_s %>% filter(extreme_discrep == "yes") %>% select(-subject_id, duration_full_percentile)
-apa_table(extreme_discrep, landscape = T)
 ```
 
 ```{r}
@@ -478,14 +473,57 @@ To check whether the CDI items common in both languages may show similar frequen
 
 ## CAT-CDIs' usefullness in research and practice
 
+```{r}
+# calculate and add duration_cat for Eng
+demo <- demo %>% mutate(
+     duration_cat = lubridate::as.duration(last_modified_cat - created_date_cat))
+
+prod_s <- merge(prod_s, demo[,c("subject_id", "duration_cat")], all.x = T, by = "subject_id")
+
+```
+
+```{r}
+# mean number of items administered in CAT
+# PL
+by_child_pl %>% summarise(mean(no_items),
+                          median(no_items),
+                          min(no_items),
+                          max(no_items),
+                          sd(no_items))
+
+# ENG
+resps_sum <- resps %>% filter(response_cat != "no_test") %>%
+     group_by(subject_id) %>%
+     summarise(n = length(test_word))
+
+resps_sum %>% summarise(mean(n),
+                          median(n),
+                          min(n),
+                          max(n),
+                          sd(n))
+```
+
+One of the key metrics for CAT-CDI's usefulness is whether it can obtain a reliable estimate of child's lexical ability in shorter time (and less effort) compared to the full CDI. Indeed, we have found that CAT-CDIs were significantly shorter to administer--the English CAT-CDI median time was `r duration(median(prod_s$duration_cat))` (median full CDI time was `r duration(median(prod_s$duration_full))`) and the Polish CAT-CDI median time was `r duration(median(by_child_pl$duration_cat))` (median full CDI time was `r duration(median(by_child_pl$duration_full))`). <!-- the shorter time for CAT-CDI in Polish (compared to English) might potentially been due to Polish items being shown quicker, we may want to check this --> Even though the CAT-CDI in Polish seemed shorter (compared to English CAT-CDI), the number of items administered in the two language versions of CAT-CDI was similar: English *M* = `r round(mean(resps_sum$n),2)`, *Mdn* = `r median(resps_sum$n)`, Polish *M* = `r round(mean(by_child_pl$no_items),2)`, *Mdn* = `r median(by_child_pl$no_items)`.
+
+```{r}
+
+
+```
+
+Overall, CAT-CDIs yielded a reliable estimate of the child's ability for `r round(sum(prod_s$catTheta_SE <= 0.15)/count(prod_s)*100,2)` participants (`r round(sum(prod_s$catTheta_SE <= 0.15)/count(prod_s)*100,2)`%) in English and XX participants (%) in Polish.
+
+Next:
+- Parental consistency.   
+
 
 
 # Discussion
 
 1. CAT-CDIs are strongly correlated with the full CDI in both languages. That's a good sign for the overall CAT development. Also the correlations are high for both monolingual and multilingual sample, though it's a small sample in Polish and more research is needed (and planned).    
-2. CAT-CDIs showed diverged largely from full estimates only for a handful of children. We cannot yet rule out that CAT was to blame, but for large majority of them (with few exceptions) the ability estimate was reliable (acceptable SE). Could it be 
-4. Item properties - correlated (moderately!) across lgs, differences due to calibration samples? similarities across lgs per cdi semantic category
-5. 
+2. CAT-CDIs showed diverged largely from full estimates only for a handful of children in both languages. However, different things characterise the two groups. In Polish, we cannot for sure rule out that CAT was to blame, but all kids the ability estimate was reliable (acceptable SE) and their full CDIs were extra short. However, in English none of the kids' SEs were acceptable. This suggests a between-samples difference...?     
+4. Item properties - correlated (moderately!) across lgs, differences due to calibration samples? Mention similarities across lgs per cdi semantic category (there are some similar patterns).    
+5. Item selection - CATs use half of the all CDI items, they overuse few items. Yes, they also use some items that we wouldn't expect, maybe Phil Chalmers might have some answers for us?    
+6. 
 
 \newpage
 
