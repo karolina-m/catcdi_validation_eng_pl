@@ -232,11 +232,10 @@ prod_s <- prod_s %>%
 
 prod_s %>% ggplot(aes(y = duration_full, x = extreme_discrep)) + geom_jitter(alpha = 0.3)
 # extreme_discrep cases are scattered across the whole range of durations
-# but all kids with extreme_discrep in english showed too high SE
 
 ```
 
-We also looked at the mean squared error between the abilities as estimated by CAT-CDI and from the full CDI. The mean squared error in English was 0.55 (*Mdn* = 0.17, *SD* = 1), and in Polish it was `r mean(by_child_pl$sq_err)` (*Mdn* = `r median(by_child_pl$sq_err)`, *SD* = `r sd(by_child_pl$sq_err)`). We then zoomed in on children for whom the estimates from the CAT-CDI and full CDI diverged extremely, i.e. their difference between the errors was 1.5 SD from the mean. There were `r sum(prod_s$extreme_discrep == "yes")` such cases (`r round(sum(prod_s$extreme_discrep == "yes")/count(prod_s)*100,2)`%) in the English dataset and `r sum(by_child_pl$extreme_discrep == "yes")` cases (`r round(sum(by_child_pl$extreme_discrep == "yes")/count(prod_s)*100,2)`%) in the Polish dataset. All participants in both datasets showed higher ability estimates on the CDI-CAT compared to the full CDI. If the full CDI is considered the baseline, this suggests that parents may have overestimated their child’s vocabulary on the CDI-CAT, potentially responding “yes – produces” to more items than expected based on full CDI estimates (as suggested by Kachergis, et al. 2022). An alternative explanation is that, for these participants, the full CDI may have underestimated the child’s true ability. Notably, all Polish participants with large discrepancies completed the full CDI in unusually short times (their completion times were among the shortest 5% in the sample) suggesting their responses may have been rushed or less attentive. This could have led to lower ability estimates from the full CDI and larger discrepancies between estimates from full and CAT CDI. Supporting this interpretation, their CDI-CAT scores had acceptable measurement errors (below or equal to 0.1 for Polish), indicating reliable ability estimation by the CDI-CAT, in contrast to the full CDI. However, this pattern did not appear in the English dataset, where all of the participants with extreme discrepancy showed higher measurement errors than acceptable (i.e. > 0.15).
+We also looked at the mean squared error between the abilities as estimated by CAT-CDI and from the full CDI. The mean squared error in English was 0.55 (*Mdn* = 0.17, *SD* = 1), and in Polish it was `r mean(by_child_pl$sq_err)` (*Mdn* = `r median(by_child_pl$sq_err)`, *SD* = `r sd(by_child_pl$sq_err)`). We then zoomed in on children for whom the estimates from the CAT-CDI and full CDI diverged extremely, i.e. their difference between the errors was 1.5 SD from the mean. There were `r sum(prod_s$extreme_discrep == "yes")` such cases (`r round(sum(prod_s$extreme_discrep == "yes")/count(prod_s)*100,2)`%) in the English dataset and `r sum(by_child_pl$extreme_discrep == "yes")` cases (`r round(sum(by_child_pl$extreme_discrep == "yes")/count(prod_s)*100,2)`%) in the Polish dataset. All participants in both datasets showed higher ability estimates on the CDI-CAT compared to the full CDI. If the full CDI is considered the baseline, this suggests that parents may have overestimated their child’s vocabulary on the CDI-CAT, potentially responding “yes – produces” to more items than expected based on full CDI estimates (as suggested by Kachergis, et al. 2022). An alternative explanation is that, for these participants, the full CDI may have underestimated the child’s true ability. Notably, all Polish participants with large discrepancies completed the full CDI in unusually short times (their completion times were among the shortest 5% in the sample) suggesting their responses may have been rushed or less attentive. This could have led to lower ability estimates from the full CDI and larger discrepancies between estimates from full and CAT CDI. Supporting this interpretation, their CDI-CAT scores had acceptable measurement errors (below or equal to 0.1 for Polish), indicating reliable ability estimation by the CDI-CAT, in contrast to the full CDI. This was partially true for the American sample - though only 2 participants had similarly short full CDIs, all but two showed relatively low measurement errors (more on measurement error in Section XX).
 
 ```{r, include = F}
 # participants with extreme discrepancy in English dataset:
@@ -570,9 +569,6 @@ fig3
 
 ```
 
-```{r}
-
-```
 
 
 Next:
@@ -582,11 +578,23 @@ Next:
 
 # Discussion
 
-1. CAT-CDIs are strongly correlated with the full CDI in both languages. That's a good sign for the overall CAT development. Also the correlations are high for both monolingual and multilingual sample, though it's a small sample in Polish and more research is needed (and planned).    
-2. CAT-CDIs showed diverged largely from full estimates only for a handful of children in both languages. However, different things characterise the two groups. In Polish, we cannot for sure rule out that CAT was to blame, but all kids the ability estimate was reliable (acceptable SE) and their full CDIs were extra short. However, in English none of the kids' SEs were acceptable. This suggests a between-samples difference...?     
-4. Item properties - correlated (moderately!) across lgs, differences due to calibration samples? Mention similarities across lgs per cdi semantic category (there are some similar patterns).    
-5. Item selection - CATs use half of the all CDI items, they overuse few items. Yes, they also use some items that we wouldn't expect, maybe Phil Chalmers might have some answers for us?    
-6. CAT-CDIs significantly shorter while retaining high reliability of the estimate. A % of children with less reliable estimates are children on the ends of the ability scale. (1) compare the abilities that were ok for Polish and English - these reflect differences in calibration samples (stress the need for good, varied calibration samples). (2) CAT-CDI may not work best for diagnosis (better for "pomiar przesiewowy"? initial identification?)
+In points for now:    
+
+1. *Strong correlations with full CDI*.   
+The CAT-CDIs were strongly correlated with the full CDI versions in both languages, which supports the overall validity of the CAT approach. These correlations held for both monolingual and multilingual participants. However, the Polish sample was small, so further research is needed—and planned—to confirm these findings.    
+
+2. *Cases of extreme divergence*.   
+CAT-CDI scores diverged notably from full CDI estimates for only a small number of children in both language groups. In the Polish sample all divergent cases had low SEM, and their full CDIs were unusually short--maybe the full form underestimated their ability? In the English sample, their full CDIs were not very short, but SEM was relatively low, which is good.     
+
+3. *Item paramteres across languages*.   
+Item parameters (i.e., difficulty and discrimination) showed moderate correlations across languages. These likely stem from variations in the calibration samples. Still, some semantic categories showed consistent patterns across languages, suggesting underlying structural similarities in lexical development.   
+
+4. *Item selection*.   
+Each CAT version used c.a. half of the full CDI item pool. Few items were overused (mostly those with highest discrimination in the item pool or starting items). But we also saw items being chosen for CAT that wouldn't be considered very informative (i.e., of low discrimination). That's something to explore further, I wrote to Phil Chalmers (author of mirt and mirtCAT), maybe he'll be able to help?    
+
+5. *Efficiency and Reliability*.   
+CAT-CDIs were significantly shorter than the full CDIs while maintaining high reliability for most children. The few less reliable estimates were for children at the ends of the ability range (children with either very low or very high lexical skills). Comparing Polish and English samples, the ability ranges with low SEM differed (see Figure 3) - this again might be a result of the calibration samples and item parameters? This is a good place to stress the importance of well-balanced, diverse calibration datasets. 
+Also, while the CAT-CDI is efficient and useful for screening or initial identification (“pomiar przesiewowy” in Polish), it may be less suited for diagnostic purposes where high precision is needed across the full ability range.
 
 \newpage
 
