@@ -491,7 +491,7 @@ by_child_pl %>% summarise(mean(no_items),
                           max(no_items),
                           sd(no_items))
 
-# ENG
+# EN
 resps_sum <- resps %>% filter(response_cat != "no_test") %>%
      group_by(subject_id) %>%
      summarise(n = length(test_word))
@@ -501,19 +501,82 @@ resps_sum %>% summarise(mean(n),
                           min(n),
                           max(n),
                           sd(n))
+
+t1 <- apa_print(t.test(resps_sum$n, by_child_pl$no_items))
 ```
 
-One of the key metrics for CAT-CDI's usefulness is whether it can obtain a reliable estimate of child's lexical ability in shorter time (and less effort) compared to the full CDI. Indeed, we have found that CAT-CDIs were significantly shorter to administer--the English CAT-CDI median time was `r duration(median(prod_s$duration_cat))` (median full CDI time was `r duration(median(prod_s$duration_full))`) and the Polish CAT-CDI median time was `r duration(median(by_child_pl$duration_cat))` (median full CDI time was `r duration(median(by_child_pl$duration_full))`). <!-- the shorter time for CAT-CDI in Polish (compared to English) might potentially been due to Polish items being shown quicker, we may want to check this --> Even though the CAT-CDI in Polish seemed shorter (compared to English CAT-CDI), the number of items administered in the two language versions of CAT-CDI was similar: English *M* = `r round(mean(resps_sum$n),2)`, *Mdn* = `r median(resps_sum$n)`, Polish *M* = `r round(mean(by_child_pl$no_items),2)`, *Mdn* = `r median(by_child_pl$no_items)`.
+One of the key metrics for CAT-CDI's usefulness is whether it can shorten the CDI administration compared to the full CDI, but still obtain a reliable estimate of child's lexical ability. We have found that CAT-CDIs were significantly shorter to administer: the English CAT-CDI median time was `r duration(median(prod_s$duration_cat))` (median full CDI time was `r duration(median(prod_s$duration_full))`) and the Polish CAT-CDI median time was `r duration(median(by_child_pl$duration_cat))` (median full CDI time was `r duration(median(by_child_pl$duration_full))`). Even though the CAT-CDI in Polish seemed shorter (compared to English CAT-CDI), the number of items administered in the two language versions of CAT-CDI was comparable: English *M* = `r round(mean(resps_sum$n),2)`, *Mdn* = `r median(resps_sum$n)` (25--50 items), Polish *M* = `r round(mean(by_child_pl$no_items),2)`, *Mdn* = `r median(by_child_pl$no_items)` (`r min(by_child_pl$no_items)`--`r max(by_child_pl$no_items)` items).
+
+```{r}
+#  SEM
+
+# PL
+mean(by_child_pl$cat_theta_se) # 0.11
+median(by_child_pl$cat_theta_se) # 0.10
+
+# EN
+mean(prod_s$catTheta_SE) # 0.17
+median(prod_s$catTheta_SE) # 0.16
+
+t2 <- apa_print(t.test(prod_s$catTheta_SE, by_child_pl$cat_theta_se)) # p < 0.001
+
+```
+
+The two CAT-CDIs differed in their settings as to when to finish the administration. Specifically, the Polish CAT-CDI was set so that the SEM as low as 0.1 be reached (with as few items as possible), and if the SEM could not be lowered to or below 0.1, the CAT-CDI stopped after administering a maximum of 75 items. The English CAT-CDI on the other hand was set to administer a maximum of 50 items, but the administration could be stopped earlier if the SEM of 0.15 or lower was reached. In other words, the Polish CAT-CDI prioritized as low SEM as possible, while the English CAT-CDI prioritized shorter test length. This difference resulted in slightly lower mean SEM in Polish CAT-CDI, compared to English CAT-CDI `r t2$full_result` but comparable mean number of items administered, `r t1$full_result`.
+
+```{r}
+# SEM percentiles
+
+# PL
+ecdf_fun <- ecdf(as.numeric(by_child_pl$cat_theta_se))
+by_child_pl <- by_child_pl %>%
+  mutate(cat_theta_se_percentile = ecdf_fun(cat_theta_se) * 100) %>%
+     relocate(cat_theta_se_percentile, .after = cat_theta_se)
+
+# EN
+ecdf_fun <- ecdf(as.numeric(prod_s$catTheta_SE))
+prod_s <- prod_s %>%
+  mutate(catTheta_SE_percentile = ecdf_fun(catTheta_SE) * 100) %>%
+     relocate(catTheta_SE_percentile, .after = catTheta_SE)
+```
+
+In both CAT-CDIs, we have been able to reliably estimate lexical ability for majority of children. For 93% of the American participants, the SEM was 0.2 or lower and for 93% of Polish participants, the SEM was below 0.15 and for `r sum(by_child_pl$above_max_se_cat == "no")` participants (`r round(sum(by_child_pl$above_max_se_cat == "no")/count(by_child_pl)*100,2)`%) the Polish CAT-CDI SEM was 0.1 or lower. The remaining particiapants, i.e. those with higher standard errors of measurement (in other words, lower reliability of ability estimates) were typically those at the extremes of the ability scale--children with either relatively low or relatively high lexical skills (see Figure \@ref(fig:se-fig)).
+
+
+```{r se-fig, fig.width = 10, fig.height = 5, fig.cap = "Standard Error of Measurement (SEM) by ability estimate in (A) English and (B) Polish.", fig.pos = '!h', include = T}
+
+# PL
+fig3b <- by_child_pl %>%
+  ggplot(aes(x = cat_theta, y = se_theta)) + geom_point(color = "#00416d", alpha = 0.5) +
+  labs(title = "(B) Polish", x = "Ability level", y = "Standard error (SEM)") +
+  ylim(0, 0.4) +
+  theme_light() +  theme(legend.position = "none")
+
+# EN
+prod_s <- prod_s %>% 
+  mutate(above_max_se_cat = case_when(
+    catTheta_SE > 0.15 ~ "yes",
+    .default = "no"
+  ))
+
+fig3a <- prod_s %>%
+  ggplot(aes(x = catTheta, y = catTheta_SE)) + geom_point(color = "#00416d", alpha = 0.5) +
+  labs(title = "(A) English", x = "Ability level", y = "Standard error (SEM)") +
+  ylim(0, 0.4) +
+  theme_light() +  theme(legend.position = "none")
+
+fig3 <- ggarrange(fig3a, fig3b, ncol = 2)
+fig3
+
+```
 
 ```{r}
 
-
 ```
 
-Overall, CAT-CDIs yielded a reliable estimate of the child's ability for `r round(sum(prod_s$catTheta_SE <= 0.15)/count(prod_s)*100,2)` participants (`r round(sum(prod_s$catTheta_SE <= 0.15)/count(prod_s)*100,2)`%) in English and XX participants (%) in Polish.
 
 Next:
-- Parental consistency.   
+- Parental (in)consistency.   
 
 
 
@@ -523,7 +586,7 @@ Next:
 2. CAT-CDIs showed diverged largely from full estimates only for a handful of children in both languages. However, different things characterise the two groups. In Polish, we cannot for sure rule out that CAT was to blame, but all kids the ability estimate was reliable (acceptable SE) and their full CDIs were extra short. However, in English none of the kids' SEs were acceptable. This suggests a between-samples difference...?     
 4. Item properties - correlated (moderately!) across lgs, differences due to calibration samples? Mention similarities across lgs per cdi semantic category (there are some similar patterns).    
 5. Item selection - CATs use half of the all CDI items, they overuse few items. Yes, they also use some items that we wouldn't expect, maybe Phil Chalmers might have some answers for us?    
-6. 
+6. CAT-CDIs significantly shorter while retaining high reliability of the estimate. A % of children with less reliable estimates are children on the ends of the ability scale. (1) compare the abilities that were ok for Polish and English - these reflect differences in calibration samples (stress the need for good, varied calibration samples). (2) CAT-CDI may not work best for diagnosis (better for "pomiar przesiewowy"? initial identification?)
 
 \newpage
 
