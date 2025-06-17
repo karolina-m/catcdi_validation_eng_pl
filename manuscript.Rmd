@@ -449,6 +449,85 @@ It is to be expected that a CDI-CAT will not need to administer all the items in
 By design, a CDI-CAT selects items that are most informative for each participant. This means it draws from a subset of available items--typically those matched to the participant’s current ability estimate in terms of difficulty, and with high discrimination, meaning they effectively distinguish between individuals with abilities close to that estimate. Figure \@ref(fig:used-items-fig) plots the items by their difficulty and discrimination parameters and colors the items (points) by how often they were used in CAT-CDI administrations in English and Polish. A few findings are of note here. First, both CAT-CDIs used items of very low discrimination (i.e, items that do no discriminate well between ability levels). Often that was because for a given difficulty level there were not enough items and CAT-CDI had to use all the items available (this is particularly true of the items on the two ends of difficulty). However, more surprisingly, it is also true of items of medium difficulty, where items of higher discrimination were available (but were not chosen by the CAT algorithm).
 <!-- SEE ISSUE #2 https://github.com/karolina-m/catcdi_validation_eng_pl/issues/2. NOTE TO US: I emailed Phil Chalmers, the author of mirtcat and mirt packages in R to ask if he has any idea why this is so -->
 
+```{r}
+# ISSUE #2
+# https://github.com/karolina-m/catcdi_validation_eng_pl/issues/2
+
+# testing Phil Chalmer's idea that low discrimination items are used early on in CAT administration, when the location of the latent trait estimate is highly uncertain, and therefore having concentrated statistical information at an exact theta location is impractical
+
+# PL
+
+# items of low discrimination that are still run by CAT algorithm
+# PL: a1 < 3 and d between -1.5 to 1.5 (in other difficulty/theta levels, CAT is taking all items available, irregardless of their a1, see used-items-fig)
+low_a1_items_pl <- items_run_pl %>% filter(n > 0) %>%
+     filter(a1 < 2) %>%
+     filter(d > -1.5 & d < 1.5) %>% select(item, a1) #12 items like that, and mostly SOUNDS
+
+# add information on item's place (nth item) in administration
+responses_cat_pl %>%
+     select(items, q_id) %>%
+     left_join(low_a1_items_pl, join_by(items == item)) %>% filter(!is.na(a1)) -> low_a1_items_pl
+
+# plot items' position in test by a1
+# merge to have item's a1, theta AND item position in test
+responses_cat_pl <- merge(responses_cat_pl, items_cat_pl[,c("item", "a1", "d")],
+                          all.x = T,
+                          by.x = "items", by.y = "item")
+
+# mark the low discrimination items
+responses_cat_pl <- responses_cat_pl %>%
+     mutate(unlikely_item = case_when(
+         a1 < 2 & d > -1.5 & d < 1.5 ~ "yes",
+         .default = "no"
+     ))
+
+# there should be 12 unique items in the unlikely category
+responses_cat_pl %>% select(items, unlikely_item) %>% filter(unlikely_item == "yes") %>% unique() %>% summarise(n()) # 12 --> ok
+
+# plot only the ids where the unlikely items were shown 
+# idxs where unlikely_item == "yes"
+ids_with_unlikely <- responses_cat_pl %>%
+  filter(unlikely_item == "yes") %>%
+  distinct(idx)
+
+# theta and se are char --> numeric
+responses_cat_pl$theta <- as.numeric(responses_cat_pl$theta)
+responses_cat_pl$se_theta <- as.numeric(responses_cat_pl$se_theta)
+
+# plot
+responses_cat_pl %>%
+  semi_join(ids_with_unlikely, by = "idx") %>% 
+  # mutate(se_color = ifelse(se_theta == 0.1, "green", "red")) %>% #none reach acceptable SEM
+  ggplot() +
+  geom_point(aes(x = q_id, y = a1), color = "blue", alpha = 0.3) +
+  geom_point(aes(x = q_id, y = theta), alpha = 0.3) +
+  # geom_point(aes(x = q_id, y = se_theta, color = se_color), alpha = 0.3) +
+  geom_hline(yintercept = 2, color = "blue", alpha = 0.3) +
+  ylim(-4, 7) +
+  labs(
+    y = "",
+    x = "item's position in test",
+    title = "Polish data: blue marks item's a1, black marks theta estimate at this item; none reached acceptable SEM (0.1)"
+  ) +
+  facet_wrap(~ idx, ncol = 2) +
+  theme(axis.text.x = element_text(angle = 90, hjust = 1)) +
+  scale_color_identity()
+
+ggsave("only_idx_with_any_low_a1_item.jpeg", dpi = 300, height = 3000, width = 3000, units = "px")
+
+# EN
+low_a1_items_en <- items_run_en %>% filter(n > 0) %>%
+     filter(a1 < 2) %>%
+     filter(d > -1.5 & d < 1.5) %>% select(definition, a1) #19 items like that, and many are sounds
+
+# add item position in CAT administrations
+# is there anywhere to find this? need a more detailed "resps" df
+# not here: resps_more <- read.csv("data/english/EngWS_16to36mos_cleaned.csv")
+
+
+```
+
+
 Finally, some items keep being shown in many CAT administrations. In English, 3 items appear in more than half of administrations - *"long"* in 64% of administrations, *"make"* in 54% of administrations, and *"last"* in 53% of administrations. They are also high discrimination items in their difficulty bins. "Long" is additionally one of the starting items, i.e. a first item shown to the parent, chosen so that there is high probability the parent can respond positively. In Polish, 3 items appear in more than half of administrations - *"szukać"* (to look for) appearing in 83% of administrations, *"znaleźć"* (to find) appearing in 61% of administrations, and *"babcia"* (grandmother) appearing in 60% of administrations. All three items show very high discrimination. "Szukać" (to look for) and "znaleźć" (to find) are also in top 5 discrimination items in general. "Babcia" (grandmother) is one of the starting items. 
 
 ```{r}
