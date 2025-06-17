@@ -24,21 +24,8 @@ affiliation:
   - id            : "2"
     institution   : "To fill in later on"
 
-authornote: |
-  Add complete departmental affiliations for each author here. Each new line herein must be indented, like this line.
-
-  Enter author note here.
-
 abstract: |
-  One or two sentences providing a **basic introduction** to the field,  comprehensible to a scientist in any discipline.
-  Two to three sentences of **more detailed background**, comprehensible  to scientists in related disciplines.
-  One sentence clearly stating the **general problem** being addressed by  this particular study.
-  One sentence summarizing the main result (with the words "**here we show**" or their equivalent).
-  Two or three sentences explaining what the **main result** reveals in direct comparison to what was thought to be the case previously, or how the  main result adds to previous knowledge.
-  One or two sentences to put the results into a more **general context**.
-  Two or three sentences to provide a **broader perspective**, readily comprehensible to a scientist in any discipline.
-  
-  <!-- https://tinyurl.com/ybremelq -->
+  Abstract here
   
 keywords          : "keywords"
 wordcount         : "X"
@@ -85,27 +72,21 @@ source(here("data/english/data_ame_english.R"))
 
 # Methods
 
-The data was gathered with CAT-CDIs in American English and Polish. The American English CAT-CDI was created from the items that were common to three CDIs: Words and Gestures, Words and Sentences and CDI-III. With these items, two CAT-CDIs were created, one for word production and another for word comprehension (see Kachergis et al. 2022 for more details). The Polish CAT-CDIs were created following a largely similar procedure as the ones in American English, but there was a separate CDI-CAT developed for each CDI version (CDI: Words and Gestures and CDI: Words and Sentences) and for each CDI:WG subscale (word production, word comprehension, gesture use) (Krajewski et al. in preparation). Here we show data from the validation study of American English CAT-CDI word production (i.e. 679 items) and Polish CAT-CDI version of WS: Words and Sentences (i.e. 666 items). There are 395 words that appear in both CDI-CAT language versions. 
-
 
 ## Participants
 
-In the American English validation study, the participants were 204 parents of children aged 15 to 36 months (*M* = `r round(mean(kept_demo$age_cat),2)`, *Mdn* = `r round(median(kept_demo$age_cat),2)`, SD = `r round(sd(kept_demo$age_cat),2)`). There were 103 girls in the sample (`r round(sum(kept_demo$sex_cat == "F")/count(kept_demo)*100,2)`%). The sample was ethnically diverse, including White, Black, Latino/Hispanic, Asian, Native American, and other races/ethnicities. The average
+In the American English validation study, the participants were 204 parents of children aged 15 to 36 months (*M* = `r round(mean(kept_demo$age_cat),2)`, *Mdn* = `r round(median(kept_demo$age_cat),2)`, SD = `r round(sd(kept_demo$age_cat),2)`). There were 103 girls in the sample (`r round(sum(kept_demo$sex_cat == "F")/count(kept_demo)*100,2)`%). The sample was ethnically diverse, including White, Black, Latino/Hispanic, Asian, Native American, and other races/ethnicities. None of the children were reported to hear other languages apart from English. <!-- as checked in kept_demo$other_languages --> The average
 number of years of education attained by the primary caregiver was `r round(mean(kept_demo$primary_education_cat),2)` (SD = `r round(sd(kept_demo$primary_education_cat),2)`).
 
 In the Polish validation study, the participants were 113 parents of children aged 18 to 34 months (*M* = `r round(mean(by_child_pl$age_CAT),2)`, *Mdn* = `r round(median(by_child_pl$age_CAT),2)`, SD = `r round(sd(by_child_pl$age_CAT),2)`). There were 49 girls in the sample (`r round(sum(by_child_pl$sex == "dziewczynka")/count(by_child_pl)*100,2)`%). The sample was White (reflecting the limited ethnic diversity within the Polish population). However, there were 28 children multilingual with Polish (as their home language) and some other (majority) language. [todo: add info on parental edu]
 
-```{r}
-kept_demo$primary_education_cat
-```
-
-
 
 ## Material
-(to paste from [google doc](https://docs.google.com/document/d/1MPInUTyY2Y81EtiiK0tUOo8vG3zowfqiXjpBF0p8Mzs/edit?tab=t.0))
+The data was gathered with CAT-CDIs in American English and Polish. The American English CAT-CDI was created from the items that were common to three CDIs: Words and Gestures, Words and Sentences and CDI-III. With these items, two CAT-CDIs were created, one for word production and another for word comprehension (see Kachergis et al. 2022 for more details). The Polish CAT-CDIs were created following a largely similar procedure as the ones in American English, but there was a separate CDI-CAT developed for each CDI version (CDI: Words and Gestures and CDI: Words and Sentences) and for each CDI:WG subscale (word production, word comprehension, gesture use) (Krajewski et al. in preparation). Here we show data from the validation study of American English CAT-CDI word production (i.e. 679 items) and Polish CAT-CDI version of WS: Words and Sentences (i.e. 666 items). There are 395 words that appear in both CDI-CAT language versions. 
 
 ## Procedure
-(to paste from [google doc](https://docs.google.com/document/d/1MPInUTyY2Y81EtiiK0tUOo8vG3zowfqiXjpBF0p8Mzs/edit?tab=t.0))
+Though in both validation studies the parents were asked to fill in both the full CDI and the CAT-CDI, the procedure differed between the two validation studies. In the validation of American English CDI-CAT, parents were given both CDIs in one sitting, but the order of the CDI versions was counterbalanced. In the Polish validation study, the order of the CDIs was fixed, with the full CDI always first, and then, after 1–30 days (*M* = `r round(mean(by_child_pl$days_between),2)`, *Mdn* = `r round(median(by_child_pl$days_between),2)`, SD = `r round(sd(by_child_pl$days_between),2)`) parents were asked to fill in the CAT-CDI. Both studies were done fully online and obtained the approval of adequate ethics committees.
+
 
 ## Data analysis
 
