@@ -12,7 +12,7 @@ author:
       - "Conceptualization"
       - "Writing - Original Draft Preparation"
       - "Writing - Review & Editing"
-  - name          : "XXX"
+  - name          : "To fill in later on"
     affiliation   : "2"
     role:
       - "Writing - Review & Editing"
@@ -22,7 +22,7 @@ affiliation:
   - id            : "1"
     institution   : "University of Warsaw, Faculty of Psychology"
   - id            : "2"
-    institution   : "Stanford University"
+    institution   : "To fill in later on"
 
 authornote: |
   Add complete departmental affiliations for each author here. Each new line herein must be indented, like this line.
@@ -84,11 +84,22 @@ source(here("data/english/data_ame_english.R"))
 ```
 
 # Methods
-(to paste from [google doc](https://docs.google.com/document/d/1MPInUTyY2Y81EtiiK0tUOo8vG3zowfqiXjpBF0p8Mzs/edit?tab=t.0))
+
+The data was gathered with CAT-CDIs in American English and Polish. The American English CAT-CDI was created from the items that were common to three CDIs: Words and Gestures, Words and Sentences and CDI-III. With these items, two CAT-CDIs were created, one for word production and another for word comprehension (see Kachergis et al. 2022 for more details). The Polish CAT-CDIs were created following a largely similar procedure as the ones in American English, but there was a separate CDI-CAT developed for each CDI version (CDI: Words and Gestures and CDI: Words and Sentences) and for each CDI:WG subscale (word production, word comprehension, gesture use) (Krajewski et al. in preparation). Here we show data from the validation study of American English CAT-CDI word production (i.e. 679 items) and Polish CAT-CDI version of WS: Words and Sentences (i.e. 666 items). There are 395 words that appear in both CDI-CAT language versions. 
+
 
 ## Participants
-(to paste from [google doc](https://docs.google.com/document/d/1MPInUTyY2Y81EtiiK0tUOo8vG3zowfqiXjpBF0p8Mzs/edit?tab=t.0))
-Mention the bilinguals and multilinguals
+
+In the American English validation study, the participants were 204 parents of children aged 15 to 36 months (*M* = `r round(mean(kept_demo$age_cat),2)`, *Mdn* = `r round(median(kept_demo$age_cat),2)`, SD = `r round(sd(kept_demo$age_cat),2)`). There were 103 girls in the sample (`r round(sum(kept_demo$sex_cat == "F")/count(kept_demo)*100,2)`%). The sample was ethnically diverse, including White, Black, Latino/Hispanic, Asian, Native American, and other races/ethnicities. The average
+number of years of education attained by the primary caregiver was `r round(mean(kept_demo$primary_education_cat),2)` (SD = `r round(sd(kept_demo$primary_education_cat),2)`).
+
+In the Polish validation study, the participants were 113 parents of children aged 18 to 34 months (*M* = `r round(mean(by_child_pl$age_CAT),2)`, *Mdn* = `r round(median(by_child_pl$age_CAT),2)`, SD = `r round(sd(by_child_pl$age_CAT),2)`). There were 49 girls in the sample (`r round(sum(by_child_pl$sex == "dziewczynka")/count(by_child_pl)*100,2)`%). The sample was White (reflecting the limited ethnic diversity within the Polish population). However, there were 28 children multilingual with Polish (as their home language) and some other (majority) language. [todo: add info on parental edu]
+
+```{r}
+kept_demo$primary_education_cat
+```
+
+
 
 ## Material
 (to paste from [google doc](https://docs.google.com/document/d/1MPInUTyY2Y81EtiiK0tUOo8vG3zowfqiXjpBF0p8Mzs/edit?tab=t.0))
@@ -266,7 +277,7 @@ We also re-calculated the mean squared error without the cases of extreme discre
 ## Item properties in the two CAT-CDIs
 Our second aim was to analyze similarities and differences in IRT item properties and item selection in CAT in English and Polish.
 
-There are 679 items in the English CAT-CDI and 666 items in the Polish CAT-CDI. For both sets of items, the items' difficulty and discrimination parameters were calculated using IRT 2 parameter model (these included separate samples, see Kachergis et al. 2022 and Krajewski et al. (in preparation)). An item’s difficulty indicates the ability level at which there is a 50% probability that a participant will respond correctly. <!-- is that still true of d, not b? --> It includes negative and positive values, with 0 indicating medium difficulty, thus reflecting the range of values of ability, i.e. theta. An item’s discrimination indicates how well it distinguishes between individuals with slightly different ability levels--especially those near that difficulty point. Of these two parameters, item difficulty is of greater interest to the present paper as it is directly linked to ability and as discrimination power is more about how good the item is at measuring, rather than what it is measuring.<!-- this could potentially go up, into Intro/Methods? -->
+There are 679 items in the English CAT-CDI and 666 items in the Polish CAT-CDI. For both sets of items, the items' difficulty and discrimination parameters were calculated using IRT 2 parameter model (these included separate samples, see Kachergis et al. 2022 and Krajewski et al. (in preparation)). An item’s difficulty indicates the ability level at which there is a 50% probability that a participant will respond correctly <!-- SEE ISSUE 1: https://github.com/karolina-m/catcdi_validation_eng_pl/issues/1 -->. It is on the same scale as ability with negative values indicating difficulty items, values around 0 indicating medium difficulty, and positive values indicating easy items. <!-- we should probably add a footnote here explaining that d is kind of inversely related to theta and so negative ability means low while positive ability means high. --> An item’s discrimination indicates how well it distinguishes between individuals with slightly different ability levels--especially those near that difficulty point. Of these two parameters, item difficulty is of greater interest to the present paper as it is directly linked to ability and as discrimination power is more about how good the item is at measuring, rather than what it is measuring.<!-- this could potentially go up, into Intro/Methods? -->
 
 ```{r diff_across_lgs}
 # item difficulty by language 
@@ -461,7 +472,7 @@ fig2
 
 It is to be expected that a CDI-CAT will not need to administer all the items in the item bank. In fact, in the validation study the English CAT-CDI used `r sum(items_run_en$n != 0)` items (`r round(sum(items_run_en$n != 0)/count(items_run_en)*100,2)`%) and similarly, the Polish CAT-CDI used `r sum(items_run_pl$n != 0)` items (`r round(sum(items_run_pl$n != 0)/count(items_run_pl)*100,2)`%).
 By design, a CDI-CAT selects items that are most informative for each participant. This means it draws from a subset of available items--typically those matched to the participant’s current ability estimate in terms of difficulty, and with high discrimination, meaning they effectively distinguish between individuals with abilities close to that estimate. Figure \@ref(fig:used-items-fig) plots the items by their difficulty and discrimination parameters and colors the items (points) by how often they were used in CAT-CDI administrations in English and Polish. A few findings are of note here. First, both CAT-CDIs used items of very low discrimination (i.e, items that do no discriminate well between ability levels). Often that was because for a given difficulty level there were not enough items and CAT-CDI had to use all the items available (this is particularly true of the items on the two ends of difficulty). However, more surprisingly, it is also true of items of medium difficulty, where items of higher discrimination were available (but were not chosen by the CAT algorithm).
-*[NOTE TO US: I emailed Phil Chalmers, the author of mirtcat and mirt packages in R to ask if he has any idea why this is so].*
+<!-- SEE ISSUE #2 https://github.com/karolina-m/catcdi_validation_eng_pl/issues/2. NOTE TO US: I emailed Phil Chalmers, the author of mirtcat and mirt packages in R to ask if he has any idea why this is so -->
 
 Finally, some items keep being shown in many CAT administrations. In English, 3 items appear in more than half of administrations - *"long"* in 64% of administrations, *"make"* in 54% of administrations, and *"last"* in 53% of administrations. They are also high discrimination items in their difficulty bins. "Long" is additionally one of the starting items, i.e. a first item shown to the parent, chosen so that there is high probability the parent can respond positively. In Polish, 3 items appear in more than half of administrations - *"szukać"* (to look for) appearing in 83% of administrations, *"znaleźć"* (to find) appearing in 61% of administrations, and *"babcia"* (grandmother) appearing in 60% of administrations. All three items show very high discrimination. "Szukać" (to look for) and "znaleźć" (to find) are also in top 5 discrimination items in general. "Babcia" (grandmother) is one of the starting items. 
 
@@ -477,7 +488,7 @@ c3 <- apa_print(cor.test(items_en_pl$items_perc_pl, items_en_pl$items_perc_en, p
 ```
 
 
-To check whether the CDI items common in both languages may show similar frequencies in CAT-CDI administrations, we ran Spearman's rank correlation and found that the items frequencies in administrations were weakly correlated, `r c3$full_result`. However, the two CAT-CDIs differed in their potential length, as the English CAT-CDI was set to administer 25--50 items and the Polish CAT-CDI could administer up to 75 items (no minimum was set, but in practice the minimum items administered were 13). As an item is more likely to appear in longer tests (simply due to test length), then frequency of the Polish items could be inflated. Therefore, we also recalculated item frequency not per total number of administrations, but per total number of items administered. For each item (in each language) we calculated its frequency per 1000 administered items.  
+To check whether the CDI items common in both languages may show similar frequencies in CAT-CDI administrations, we ran Spearman's rank correlation and found that the items frequencies in administrations were weakly correlated, `r c3$full_result`. However, the two CAT-CDIs differed in their potential length, as the English CAT-CDI was set to administer 25--50 items and the Polish CAT-CDI could administer up to 75 items (no minimum was set, but in practice the minimum items administered were 13). As an item is more likely to appear in longer tests (simply due to test length), then frequency of the Polish items could be inflated. <!-- Could it be that, as an item is more likely to appear in longer tests (simply due to test length), frequency of the Polish items could be inflated? Could it influence the item's rank? I could probably recalculate item frequency not per total number of administrations, but per total number of items administered? SEE ISSUE #3 https://github.com/karolina-m/catcdi_validation_eng_pl/issues/3  -->
 
 ```{r}
 
@@ -489,9 +500,11 @@ To check whether the CDI items common in both languages may show similar frequen
 
 
 # Discussion
-1. Correlations strong in both languages (overall and in age-bins; in PL: multi and mono correlations similar and strong).   
-2. MSE after removing cases with extreme discrepancies.  
-3. Extreme discrepancies - mixed results?
+
+1. CAT-CDIs are strongly correlated with the full CDI in both languages. That's a good sign for the overall CAT development. Also the correlations are high for both monolingual and multilingual sample, though it's a small sample in Polish and more research is needed (and planned).    
+2. CAT-CDIs showed diverged largely from full estimates only for a handful of children. We cannot yet rule out that CAT was to blame, but for large majority of them (with few exceptions) the ability estimate was reliable (acceptable SE). Could it be 
+4. Item properties - correlated (moderately!) across lgs, differences due to calibration samples? similarities across lgs per cdi semantic category
+5. 
 
 \newpage
 
