@@ -97,7 +97,43 @@ Our first aim was to examine whether CAT-CDIs in American English and Polish dem
 cor(by_child_pl$cat_theta, by_child_pl$score_full) # AmE:.86, PL: 0.86
 cor(by_child_pl$cat_theta, by_child_pl$full_theta) # AmE: .92, PL: .92
 cor(by_child_pl$full_theta, by_child_pl$score_full) # AmE: .95, PL: 0.94
+
 ```
+
+```{r}
+# vis
+library(ggpubr)
+c1 <- by_child_pl %>% 
+  ggplot(aes(x = score_full, y = cat_theta)) + geom_jitter(aes(color=sex), alpha = 0.7) +
+  geom_smooth(aes(color=sex), method = "lm", fill = "#a7a7a7", alpha = 0.2) +
+     xlim(0,700) + ylim(-3, 3) +
+  theme_light() +
+  stat_cor(cor.coef.name = "r", p.accuracy = 0.001, r.accuracy = 0.01, size = 5, show.legend = F) +
+  labs(x = "Score on full CDI", y = "Ability from CAT-CDI", title = "POLISH") + theme(legend.position = "bottom")
+
+c2 <- prod_s %>% 
+  ggplot(aes(x = production, y = catTheta)) + geom_jitter(aes(color=sex_full), alpha = 0.7) +
+  geom_smooth(aes(color=sex_full), method = "lm", fill = "#a7a7a7", alpha = 0.2) +
+     xlim(0,700) + ylim(-3, 3) +
+  theme_light() + theme(legend.title = element_blank()) +
+  # stat_cor(cor.coef.name = "r", p.accuracy = 0.001, r.accuracy = 0.01, size = 5, show.legend = F) +
+  annotate("text", x=200, y=2.65, label=paste("italic(r)==", "0.86*','~italic(p)<", "0.001"), size = 5, parse = T) + 
+  labs(x = "Score on full CDI", y = "Ability from CAT-CDI", title = "ENGLISH") + theme(legend.position = "bottom")
+
+cor_plot <- ggarrange(c2, c1, ncol = 2, common.legend = T, legend = "bottom")
+cor_plot
+```
+
+```{r}
+# density plot
+ggplot() + geom_density(data = by_child_pl, aes(x = cat_theta), color = "blue") +
+          geom_vline(xintercept = median(by_child_pl$cat_theta), color = "blue", alpha = 0.5) +
+     geom_density(data = prod_s, aes(x = catTheta), color = "green") +
+     geom_vline(xintercept = median(prod_s$catTheta), color = "green", alpha = 0.5) +
+     labs(x = "Ability from CAT", title = "Blue is Polish, Green is English") +
+     theme_light()
+```
+
 
 We found similarly strong correlations in the two languages between the abilities estimated from CDI-CAT and full CDI scores (American English and Polish: $r$ = .86), the abilities estimated from the CDI-CAT and abilities estimated from full CDI (American English and Polish: $r$ = .92), and the abilities estimated from the full CDI and the full CDI scores (American English: $r$ = .95, Polish: $r$ = `r cor(by_child_pl$full_theta, by_child_pl$score_full)`). The abilities estimated from the CDI-CAT and the full CDI scores were also strongly correlated within individual age groups (see Table \@ref(tab:corr-by-age)).
 
@@ -235,6 +271,55 @@ prod_s %>% ggplot(aes(y = duration_full, x = extreme_discrep)) + geom_jitter(alp
 
 ```
 
+```{r}
+
+c3 <- by_child_pl %>% 
+  ggplot(aes(x = full_theta, y = cat_theta)) + geom_jitter(aes(color=sex), alpha = 0.7) +
+  geom_smooth(aes(color=sex), method = "lm", fill = "#a7a7a7", alpha = 0.2) +
+     xlim(-3, 3) + ylim(-3, 3) +
+  theme_light() +
+  stat_cor(cor.coef.name = "r", p.accuracy = 0.001, r.accuracy = 0.01, size = 5, show.legend = F) +
+  labs(x = "Ability from full CDI", y = "Ability from CAT-CDI", title = "POLISH") + theme(legend.position = "bottom")
+
+c4 <- prod_s %>% 
+  ggplot(aes(x = fullTheta, y = catTheta)) + geom_jitter(aes(color=sex_full), alpha = 0.7) +
+  geom_smooth(aes(color=sex_full), method = "lm", fill = "#a7a7a7", alpha = 0.2) +
+     xlim(-3, 3) + ylim(-3, 3) +
+  theme_light() + theme(legend.title = element_blank()) +
+  # stat_cor(cor.coef.name = "r", p.accuracy = 0.001, r.accuracy = 0.01, size = 5, show.legend = F) +
+  annotate("text", x=-1.3, y=2.65, label=paste("italic(r)==", "0.92*','~italic(p)<", "0.001"), size = 5, parse = T) + 
+  labs(x = "Ability from full CDI", y = "Ability from CAT-CDI", title = "ENGLISH") + theme(legend.position = "bottom")
+
+cor_plot2 <- ggarrange(c4, c3, ncol = 2, common.legend = T, legend = "bottom")
+cor_plot2
+
+# mark extreme discrepancy cases
+c5 <- by_child_pl %>% 
+  ggplot(aes(x = full_theta, y = cat_theta)) + geom_jitter(aes(color=sex), alpha = 0.7) +
+  geom_smooth(aes(color=sex), method = "lm", fill = "#a7a7a7", alpha = 0.2) +
+  geom_jitter(data = subset(by_child_pl, extreme_discrep == "yes"), color = "red", size = 2, alpha = 0.9) +
+     xlim(-3, 3) + ylim(-3, 3) +
+  theme_light() +
+  stat_cor(cor.coef.name = "r", p.accuracy = 0.001, r.accuracy = 0.01, size = 5, show.legend = F) +
+  labs(x = "Ability from full CDI", y = "Ability from CAT-CDI", title = "POLISH") + theme(legend.position = "bottom")
+
+c6 <- prod_s %>% 
+  ggplot(aes(x = fullTheta, y = catTheta)) + geom_jitter(aes(color=sex_full), alpha = 0.7) +
+  geom_smooth(aes(color=sex_full), method = "lm", fill = "#a7a7a7", alpha = 0.2) +
+  geom_jitter(data = subset(prod_s, extreme_discrep == "yes"), color = "red", size = 2, alpha = 0.9) +
+     xlim(-3, 3) + ylim(-3, 3) +
+  theme_light() + theme(legend.title = element_blank()) +
+  # stat_cor(cor.coef.name = "r", p.accuracy = 0.001, r.accuracy = 0.01, size = 5, show.legend = F) +
+  annotate("text", x=-1.3, y=2.65, label=paste("italic(r)==", "0.92*','~italic(p)<", "0.001"), size = 5, parse = T) + 
+  labs(x = "Ability from full CDI", y = "Ability from CAT-CDI", title = "ENGLISH") + theme(legend.position = "bottom")
+
+cor_plot3 <- ggarrange(c6, c5, ncol = 2, common.legend = T, legend = "bottom")
+cor_plot3
+
+
+
+```
+
 We also looked at the mean squared error between the abilities as estimated by CAT-CDI and from the full CDI. The mean squared error in English was 0.55 (*Mdn* = 0.17, *SD* = 1), and in Polish it was `r mean(by_child_pl$sq_err)` (*Mdn* = `r median(by_child_pl$sq_err)`, *SD* = `r sd(by_child_pl$sq_err)`). We then zoomed in on children for whom the estimates from the CAT-CDI and full CDI diverged extremely, i.e. their difference between the errors was 1.5 SD from the mean. There were `r sum(prod_s$extreme_discrep == "yes")` such cases (`r round(sum(prod_s$extreme_discrep == "yes")/count(prod_s)*100,2)`%) in the English dataset and `r sum(by_child_pl$extreme_discrep == "yes")` cases (`r round(sum(by_child_pl$extreme_discrep == "yes")/count(prod_s)*100,2)`%) in the Polish dataset. All participants in both datasets showed higher ability estimates on the CDI-CAT compared to the full CDI. If the full CDI is considered the baseline, this suggests that parents may have overestimated their child’s vocabulary on the CDI-CAT, potentially responding “yes – produces” to more items than expected based on full CDI estimates (as suggested by Kachergis, et al. 2022). An alternative explanation is that, for these participants, the full CDI may have underestimated the child’s true ability. Notably, all Polish participants with large discrepancies completed the full CDI in unusually short times (their completion times were among the shortest 5% in the sample) suggesting their responses may have been rushed or less attentive. This could have led to lower ability estimates from the full CDI and larger discrepancies between estimates from full and CAT CDI. Supporting this interpretation, their CDI-CAT scores had acceptable measurement errors (below or equal to 0.1 for Polish), indicating reliable ability estimation by the CDI-CAT, in contrast to the full CDI. This was partially true for the American sample - though only 2 participants had similarly short full CDIs, all but two showed relatively low measurement errors (more on measurement error in Section XX).
 
 ```{r, include = F}
@@ -252,7 +337,7 @@ We also re-calculated the mean squared error without the cases of extreme discre
 ## Item properties in the two CAT-CDIs
 Our second aim was to analyze similarities and differences in IRT item properties and item selection in CAT in English and Polish.
 
-There are 679 items in the English CAT-CDI and 666 items in the Polish CAT-CDI. For both sets of items, the items' difficulty and discrimination parameters were calculated using IRT 2 parameter model (these included separate samples, see Kachergis et al. 2022 and Krajewski et al. (in preparation)). An item’s difficulty indicates the ability level at which there is a 50% probability that a participant will respond correctly <!-- SEE ISSUE 1: https://github.com/karolina-m/catcdi_validation_eng_pl/issues/1 -->. It is on the same scale as ability with negative values indicating difficulty items, values around 0 indicating medium difficulty, and positive values indicating easy items. <!-- we should probably add a footnote here explaining that d is kind of inversely related to theta and so negative ability means low while positive ability means high. --> An item’s discrimination indicates how well it distinguishes between individuals with slightly different ability levels--especially those near that difficulty point. Of these two parameters, item difficulty is of greater interest to the present paper as it is directly linked to ability and as discrimination power is more about how good the item is at measuring, rather than what it is measuring.<!-- this could potentially go up, into Intro/Methods? -->
+There are 679 items in the English CAT-CDI and 666 items in the Polish CAT-CDI. For both sets of items, the items' difficulty and discrimination parameters were calculated using IRT 2 parameter model (these included separate samples, see Kachergis et al. 2022 and Krajewski et al. (in preparation)). An item’s difficulty indicates the ability level at which there is a 50% probability that a participant will respond correctly <!-- SEE ISSUE 1: https://github.com/karolina-m/catcdi_validation_eng_pl/issues/1 -->. It is on the same scale as ability with negative values indicating difficult items, values around 0 indicating medium difficulty, and positive values indicating easy items. <!-- we should probably add a footnote here explaining that d is kind of inversely related to theta and so negative ability means low while positive ability means high. --> An item’s discrimination indicates how well it distinguishes between individuals with slightly different ability levels--especially those near that difficulty point. Of these two parameters, item difficulty is of greater interest to the present paper as it is directly linked to ability and as discrimination power is more about how good the item is at measuring, rather than what it is measuring.<!-- this could potentially go up, into Intro/Methods? -->
 
 ```{r diff_across_lgs}
 # item difficulty by language 
@@ -280,6 +365,11 @@ t2 <- apa_print(t.test(items_en_pl$d_en, items_en_pl$d_pl, paired = T))
 
 # visualise
 items_en_pl %>% select(uni_lemma, d_pl, d_en) %>% pivot_longer(cols = d_pl:d_en, names_to = "lang", values_to = "d") %>% ggplot(aes(x = lang, y = d, group = lang)) + geom_boxplot() + geom_jitter(alpha = 0.3)
+
+items_en_pl %>% select(uni_lemma, d_pl, d_en) %>% 
+     ggplot(aes(x = d_pl, y = d_en)) + geom_jitter(alpha = 0.3) + geom_smooth(method = "lm") +
+     stat_cor(cor.coef.name = "r", p.accuracy = 0.001, r.accuracy = 0.01, size = 5, show.legend = F) +
+     theme_light() + labs(x = "Item difficulty in Polish", y = "Item difficulty in English")
 
 # corr
 c <- apa_print(cor.test(items_en_pl$d_pl, items_en_pl$d_en)) # 0.65
