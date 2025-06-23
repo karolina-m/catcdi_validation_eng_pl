@@ -431,24 +431,63 @@ fig1
 ggsave("fig1.jpeg", dpi = 400, width = 300, height = 150, units = "mm")
 
 ```
+```{r d_by_cdi_category_tab, include = T}
+# correlations by lexical class on common words
+# spearman because ranked
 
-We also wanted to do check whether items in particular CDI semantic categories show related parameter values across the two languages. We performed a series of Spearman's rank correlations (on the items common to CDI-CATs in Polish and English) for each CDI semantic category (see Table \@ref(tab:d_by_cdi_category_tab)). The rank correlations coefficients vary by category, but for half of the categories the correlations are moderate to strong (0.52 to 0.91). Figure \@ref(fig:d-by-cdi-category-fig) shows the relative positioning of the items by semantic category (colored) plotted in the context of the full item pool (grey) in the two languages. It can be seen from the figure that many categories (e.g., sounds) show a similar distribution of items relative to the whole item pool across Polish and English.
+items_en_pl <- merge(items_cat_pl, items_cat_en, 
+                  all.x = T, all.y = T,
+                  suffixes = c("_pl","_en"),
+                  by = "uni_lemma") %>% filter(!is.na(item) & !is.na(definition))
+
+items_en_pl %>% group_by(lexical_class_en) %>% summarise(
+     rho = cor(d_pl, d_en, method = "spearman", use = "complete.obs"),
+     n = length(lexical_class_en)) %>% arrange(rho) -> corr_by_lex_class
+
+apa_table(corr_by_lex_class, placement = "H")
+```
+
+We also wanted to do check whether items in particular CDI semantic categories show related difficulty values across the two languages. We performed a series of Spearman's rank correlations (on the difficulty of items common to CDI-CATs in Polish and English) for each CDI semantic category (see Table \@ref(tab:d_by_cdi_category_tab)). The rank correlations coefficients vary by category, but for half of the categories the correlations are moderate to strong (0.52 to 0.91). Figure \@ref(fig:d-by-cdi-category-fig) shows the relative positioning of the items by semantic category (colored) plotted in the context of the full item pool (grey) in the two languages. It can be seen from the figure that many categories (e.g., sounds) show a similar distribution of items relative to the whole item pool across Polish and English.
+
+Last, we investigated whether particular lexical categories show related difficulty values across the two languages. Again, we performed a series of Spearman's rank correlations (on the difficulty of items common to CDI-CATs in Polish and English) for each lexical class (see Table ?). The lowest correlation was for function words (0.40), then verbs (0.47), adjectives (0.53), nouns (0.6), other, i.e. mostly sounds and words relating to routines (e.g. hello, yes, thank you) and time (e.g. tommorow, day) (0.75).
 
 ```{r}
+# lexical class
 
-items_cat_pl <- merge(items_cat_pl, items_full_pl[,c("item", "lexical_class")], all.x = T, 
-                      by.x = "item", by.y = "defininion") 
+# PL
+items_cat_pl <- merge(items_cat_pl, items_full_pl[,c("item_id", "lexical_class")], all.x = T, 
+                      by.x = "itemID", by.y = "item_id") 
 
-
-ggplot(aes(d, a1))  + 
-  geom_point(data = items_cat_pl %>%
-               select(-category), aes(x = d, y = a1), color = 'grey', size = 0.4) +
-  geom_point(aes(color=as.factor(category)), size = 0.4) +
-  facet_wrap(~category)  +
-  xlim(-8, 8) +
-  ylim(0,8) +
+# removing some lexical classes from PL that do not appear in EN
+lex_pl <- items_cat_pl %>%
+     filter(!lexical_class %in% c("adverbs", "conjunctions", "modal_adverbs", "prepositions")) %>%
+     ggplot(aes(d, a1))  + 
+     geom_point(data = items_cat_pl %>%
+               select(-lexical_class), aes(x = d, y = a1), color = 'grey', size = 0.4) +
+  geom_point(aes(color=as.factor(lexical_class)), size = 0.4) +
+  facet_wrap(~lexical_class)  +
+  xlim(-7, 7) +
+  ylim(0,7) +
   labs(x = "Item difficulty (d)", y = "Item discrimination (a1)", title = "(B) Polish") +
   theme(legend.position = "none")
+
+# EN
+items_full_en <- read.csv("data/english/eng_ws_items.csv")
+items_cat_en <- merge(items_cat_en, items_full_en[,c("definition", "lexical_class")], all.x = T, 
+                      by = "definition") 
+lex_en <- items_cat_en %>%
+ggplot(aes(d, a1))  + 
+  geom_point(data = items_cat_en %>%
+               select(-lexical_class), aes(x = d, y = a1), color = 'grey', size = 0.4) +
+  geom_point(aes(color=as.factor(lexical_class)), size = 0.4) +
+  facet_wrap(~lexical_class)  +
+  xlim(-7, 7) +
+  ylim(0,7) +
+  labs(x = "Item difficulty (d)", y = "Item discrimination (a1)", title = "(A) English") +
+  theme(legend.position = "none")
+
+lex <- ggarrange(lex_en, lex_pl)
+ggsave("lexical_classes.jpeg", dpi = 300, width = 200, height = 100, units = "mm")
 
 ```
 
