@@ -428,10 +428,30 @@ ggplot(aes(d, a1))  +
 
 fig1 <- ggarrange(fig1a, fig1b, ncol = 2, nrow = 1)
 fig1
+ggsave("fig1.jpeg", dpi = 400, width = 300, height = 150, units = "mm")
 
 ```
 
 We also wanted to do check whether items in particular CDI semantic categories show related parameter values across the two languages. We performed a series of Spearman's rank correlations (on the items common to CDI-CATs in Polish and English) for each CDI semantic category (see Table \@ref(tab:d_by_cdi_category_tab)). The rank correlations coefficients vary by category, but for half of the categories the correlations are moderate to strong (0.52 to 0.91). Figure \@ref(fig:d-by-cdi-category-fig) shows the relative positioning of the items by semantic category (colored) plotted in the context of the full item pool (grey) in the two languages. It can be seen from the figure that many categories (e.g., sounds) show a similar distribution of items relative to the whole item pool across Polish and English.
+
+```{r}
+
+items_cat_pl <- merge(items_cat_pl, items_full_pl[,c("item", "lexical_class")], all.x = T, 
+                      by.x = "item", by.y = "defininion") 
+
+
+ggplot(aes(d, a1))  + 
+  geom_point(data = items_cat_pl %>%
+               select(-category), aes(x = d, y = a1), color = 'grey', size = 0.4) +
+  geom_point(aes(color=as.factor(category)), size = 0.4) +
+  facet_wrap(~category)  +
+  xlim(-8, 8) +
+  ylim(0,8) +
+  labs(x = "Item difficulty (d)", y = "Item discrimination (a1)", title = "(B) Polish") +
+  theme(legend.position = "none")
+
+```
+
 
 ## Item selection in the two CAT-CDIs
 
@@ -533,7 +553,6 @@ fig2
   
 
 ```
-
 
 It is to be expected that a CDI-CAT will not need to administer all the items in the item bank. In fact, in the validation study the English CAT-CDI used `r sum(items_run_en$n != 0)` items (`r round(sum(items_run_en$n != 0)/count(items_run_en)*100,2)`%) and similarly, the Polish CAT-CDI used `r sum(items_run_pl$n != 0)` items (`r round(sum(items_run_pl$n != 0)/count(items_run_pl)*100,2)`%).
 By design, a CDI-CAT selects items that are most informative for each participant. This means it draws from a subset of available items--typically those matched to the participant’s current ability estimate in terms of difficulty, and with high discrimination, meaning they effectively distinguish between individuals with abilities close to that estimate. Figure \@ref(fig:used-items-fig) plots the items by their difficulty and discrimination parameters and colors the items (points) by how often they were used in CAT-CDI administrations in English and Polish. A few findings are of note here. First, both CAT-CDIs used items of very low discrimination (i.e, items that do no discriminate well between ability levels). Often that was because for a given difficulty level there were not enough items and CAT-CDI had to use all the items available (this is particularly true of the items on the two ends of difficulty). However, more surprisingly, it is also true of items of medium difficulty, where items of higher discrimination were available (but were not chosen by the CAT algorithm).
