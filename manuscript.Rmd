@@ -298,7 +298,7 @@ items_en_pl %>% group_by(category_pl) %>% summarise(
 apa_table(corr_by_category, placement = "H")
 ```
 
-```{r d-by-cdi-category-fig, fig.width = 10, fig.height = 5, fig.cap = "The relative positioning of the items by semantic category (colored) plotted in the context of the full item pool (grey): (A) English, (B) Polish.", fig.pos = '!h', include = T}
+```{r d-by-cdi-category-fig, fig.width = 10, fig.height = 10, fig.cap = "The relative positioning of the items by semantic category (colored) plotted in the context of the full item pool (grey): (A) English, (B) Polish.", fig.pos = '!h', include = T}
 
 # TODO: adjust order, put "helping_verbs" at the end
 
@@ -306,13 +306,13 @@ apa_table(corr_by_category, placement = "H")
 fig1a <- items_cat_en %>%
 ggplot(aes(d, a1))  + 
   geom_point(data = items_cat_en %>%
-               select(-category), aes(x = d, y = a1), color = 'grey', size = 0.4) +
+               select(-category), aes(x = d, y = a1), color = 'grey', size = 0.4, alpha = .5) +
   geom_point(aes(color=as.factor(category)), size = 0.4) +
   facet_wrap(~category) +
   xlim(-8, 8) +
   ylim(0,8) +
   labs(x = "Item difficulty (d)", y = "Item discrimination (a1)", title = "(A) English") +
-  theme(legend.position = "none")
+  scale_color_discrete(guide = "none") + theme_classic()
 
 # TODO: adjust order, put "modal_adverbs" and "prepositions" at the end
 
@@ -328,17 +328,16 @@ fig1b <- items_cat_pl %>%
   filter(!is.na(category)) %>% # tylko has category == NA
 ggplot(aes(d, a1))  + 
   geom_point(data = items_cat_pl %>%
-               select(-category), aes(x = d, y = a1), color = 'grey', size = 0.4) +
+               select(-category), aes(x = d, y = a1), color = 'grey', size = 0.4, alpha = .5) +
   geom_point(aes(color=as.factor(category)), size = 0.4) +
   facet_wrap(~category)  +
   xlim(-8, 8) +
   ylim(0,8) +
   labs(x = "Item difficulty (d)", y = "Item discrimination (a1)", title = "(B) Polish") +
-  theme(legend.position = "none")
+  scale_color_discrete(guide = "none") + theme_classic()
 
-fig1 <- ggarrange(fig1a, fig1b, ncol = 2, nrow = 1)
+fig1 <- ggarrange(fig1a, fig1b, ncol = 1, nrow = 2)
 fig1
-
 ```
 
 We also wanted to do check whether items in particular CDI semantic categories show related parameter values across the two languages. We performed a series of Spearman's rank correlations (on the items common to CDI-CATs in Polish and English) for each CDI semantic category (see Table \@ref(tab:d_by_cdi_category_tab)). The rank correlations coefficients vary by category, but for half of the categories the correlations are moderate to strong (0.52 to 0.91). Figure \@ref(fig:d-by-cdi-category-fig) shows the relative positioning of the items by semantic category (colored) plotted in the context of the full item pool (grey) in the two languages. It can be seen from the figure that many categories (e.g., sounds) show a similar distribution of items relative to the whole item pool across Polish and English.
