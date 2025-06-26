@@ -125,4 +125,18 @@ prod_s$catTheta_SE <- cat_thetas[,2]
 #t.test(prod_s$full_cat_diff) # CAT on average shows higher ability (mean=.52)
 #t.test(good$full_cat_diff) # mean=.40 even without the 18 outliers showing the largest error
 
+# PARENTAL CONSISTENCY
+# ENGLISH
+consistency_en <- resps %>% filter(response_cat != "no_test")
+consistency_en <- consistency_en %>% group_by(subject_id) %>%
+     mutate(consistent = case_when(
+          response_full == response_cat ~ "consistent",
+          .default = "not_consistent"
+     ))
+
+consistency_en_sum <- consistency_en %>% group_by(subject_id, consistent) %>% tally()
+consistency_en_sum <- consistency_en_sum[consistency_en_sum$subject_id %in% kept_demo$subject_id, ]
+consistency_en_sum <- consistency_en_sum %>% pivot_wider(id_cols = subject_id, names_from = consistent, values_from = n)
+consistency_en_sum <- consistency_en_sum %>% mutate(perc = consistent/sum(consistent, not_consistent))
+
 
