@@ -83,7 +83,9 @@ t_age <- apa_print(t.test(by_child_pl$age_CAT, kept_demo$age_cat))
 In the American English validation study, the participants were 204 parents of children aged 15 to 36 months (*M* = `r round(mean(kept_demo$age_cat),2)`, *Mdn* = `r round(median(kept_demo$age_cat),2)`, SD = `r round(sd(kept_demo$age_cat),2)`). There were 103 girls in the sample (`r round(sum(kept_demo$sex_cat == "F")/count(kept_demo)*100,2)`%). The sample was ethnically diverse, including White, Black, Latino/Hispanic, Asian, Native American, and other races/ethnicities. None of the children were reported to hear other languages apart from English. <!-- as checked in kept_demo$other_languages --> The average
 number of years of education attained by the primary caregiver was `r round(mean(kept_demo$primary_education_cat),2)` (SD = `r round(sd(kept_demo$primary_education_cat),2)`).
 
-In the Polish validation study, the participants were 113 parents of children aged 18 to 34 months (*M* = `r round(mean(by_child_pl$age_CAT),2)`, *Mdn* = `r round(median(by_child_pl$age_CAT),2)`, SD = `r round(sd(by_child_pl$age_CAT),2)`). There were 49 girls in the sample (`r round(sum(by_child_pl$sex == "dziewczynka")/count(by_child_pl)*100,2)`%). The sample was White (reflecting the limited ethnic diversity within the Polish population). However, there were 28 children multilingual with Polish (as their home language) and some other (majority) language. [todo: add info on parental edu]
+In the Polish validation study, the participants were 113 parents of children aged 18 to 34 months (*M* = `r round(mean(by_child_pl$age_CAT),2)`, *Mdn* = `r round(median(by_child_pl$age_CAT),2)`, SD = `r round(sd(by_child_pl$age_CAT),2)`). There were 49 girls in the sample (`r round(sum(by_child_pl$sex == "dziewczynka")/count(by_child_pl)*100,2)`%). The sample was White (reflecting the limited ethnic diversity within the Polish population). However, there were 28 children multilingual with Polish (as their home language) and some other (majority) language. [todo: add info on parental edu].
+
+Notably, the two validation samples differed slightly (but significantly) in mean age, `r t_age$full_result`, which may affect the outcomes of direct comparisons between them, as age could be a contributing factor. We present one such comparison--standard error of CAT ability--where this difference is explicitly indicated.
 
 
 ## Materials
@@ -354,27 +356,10 @@ fig1
 ggsave("fig1.jpeg", dpi = 400, width = 300, height = 150, units = "mm")
 
 ```
-```{r d_by_cdi_category_tab, include = T}
-# correlations by lexical class on common words
-# spearman because ranked
-
-items_en_pl <- merge(items_cat_pl, items_cat_en, 
-                  all.x = T, all.y = T,
-                  suffixes = c("_pl","_en"),
-                  by = "uni_lemma") %>% filter(!is.na(item) & !is.na(definition))
-
-items_en_pl %>% group_by(lexical_class_en) %>% summarise(
-     rho = cor(d_pl, d_en, method = "spearman", use = "complete.obs"),
-     n = length(lexical_class_en)) %>% arrange(rho) -> corr_by_lex_class
-
-apa_table(corr_by_lex_class, placement = "H")
-```
 
 We also wanted to do check whether items in particular CDI semantic categories show related difficulty values across the two languages. We performed a series of Spearman's rank correlations (on the difficulty of items common to CDI-CATs in Polish and English) for each CDI semantic category (see Table \@ref(tab:d_by_cdi_category_tab)). The rank correlations coefficients vary by category, but for half of the categories the correlations are moderate to strong (0.52 to 0.91). Figure \@ref(fig:d-by-cdi-category-fig) shows the relative positioning of the items by semantic category (colored) plotted in the context of the full item pool (grey) in the two languages. It can be seen from the figure that many categories (e.g., sounds) show a similar distribution of items relative to the whole item pool across Polish and English.
 
-Last, we investigated whether particular lexical categories show related difficulty values across the two languages. Again, we performed a series of Spearman's rank correlations (on the difficulty of items common to CDI-CATs in Polish and English) for each lexical class (see Table ?). The lowest correlation was for function words (0.40), then verbs (0.47), adjectives (0.53), nouns (0.6), other, i.e. mostly sounds and words relating to routines (e.g. hello, yes, thank you) and time (e.g. tommorow, day) (0.75).
-
-```{r}
+```{r d-by-lexical-class-fig, fig.width = 10, fig.height = 5, fig.cap = "The relative positioning of the items by lexical class (colored) plotted in the context of the full item pool (grey): (A) English, (B) Polish.", fig.pos = '!h', include = T}
 # lexical class
 
 # PL
@@ -414,7 +399,23 @@ lex
 # ggsave("lexical_classes.jpeg", dpi = 300, width = 200, height = 100, units = "mm")
 
 ```
+```{r d_by_lexical_class_tab, include = T}
+# correlations by lexical class on common words
+# spearman because ranked
 
+items_en_pl <- merge(items_cat_pl, items_cat_en, 
+                  all.x = T, all.y = T,
+                  suffixes = c("_pl","_en"),
+                  by = "uni_lemma") %>% filter(!is.na(item) & !is.na(definition))
+
+items_en_pl %>% group_by(lexical_class_en) %>% summarise(
+     rho = cor(d_pl, d_en, method = "spearman", use = "complete.obs"),
+     n = length(lexical_class_en)) %>% arrange(rho) -> corr_by_lex_class
+
+apa_table(corr_by_lex_class, placement = "H")
+```
+
+Last, we investigated whether particular lexical categories show related difficulty values across the two languages. Again, we performed a series of Spearman's rank correlations (on the difficulty of items common to CDI-CATs in Polish and English) for each lexical class (see Table \@ref(tab:d_by_lexical_class_tab), Figure \@ref(fig:d-by-lexical-class-fig)). The lowest correlation was for function words (0.40), then verbs (0.47), adjectives (0.53), nouns (0.6), other, i.e. mostly sounds and words relating to routines (e.g. "hello", "yes", "thank you") and time (e.g. "tommorow", "day") (0.75).
 
 ## Item selection in the two CAT-CDIs
 
@@ -422,8 +423,8 @@ lex
 # Data prep
 
 # POLISH
-items_run_pl <- responses_cat_pl %>% select(items) %>% group_by(items) %>% summarise(n = length(items))
-items_run_pl <- merge(items_cat_pl, items_run_pl, by.x = "item", by.y = "items", all.x = T)
+items_run_pl <- responses_cat_pl %>% select(definition) %>% group_by(definition) %>% summarise(n = length(definition))
+items_run_pl <- merge(items_cat_pl, items_run_pl, by.x = "item", by.y = "definition", all.x = T)
 items_run_pl[is.na(items_run_pl)] <- 0
 items_run_pl$never <- ifelse(items_run_pl$n == 0, "never", "at_least_once")
 
@@ -539,14 +540,14 @@ low_a1_items_pl <- items_run_pl %>% filter(n > 0) %>%
 
 # add information on item's place (nth item) in administration
 responses_cat_pl %>%
-     select(items, q_id) %>%
-     left_join(low_a1_items_pl, join_by(items == item)) %>% filter(!is.na(a1)) -> low_a1_items_pl
+     select(definition, q_id) %>%
+     left_join(low_a1_items_pl, join_by(definition == item)) %>% filter(!is.na(a1)) -> low_a1_items_pl
 
 # plot items' position in test by a1
 # merge to have item's a1, theta AND item position in test
 responses_cat_pl <- merge(responses_cat_pl, items_cat_pl[,c("item", "a1", "d")],
                           all.x = T,
-                          by.x = "items", by.y = "item")
+                          by.x = "definition", by.y = "item")
 
 # mark the low discrimination items
 responses_cat_pl <- responses_cat_pl %>%
@@ -556,13 +557,13 @@ responses_cat_pl <- responses_cat_pl %>%
      ))
 
 # there should be 12 unique items in the unlikely category
-responses_cat_pl %>% select(items, unlikely_item) %>% filter(unlikely_item == "yes") %>% unique() %>% summarise(n()) # 12 --> ok
+responses_cat_pl %>% select(definition, unlikely_item) %>% filter(unlikely_item == "yes") %>% unique() %>% summarise(n()) # 12 --> ok
 
 # plot only the ids where the unlikely items were shown 
 # idxs where unlikely_item == "yes"
 ids_with_unlikely <- responses_cat_pl %>%
   filter(unlikely_item == "yes") %>%
-  distinct(idx)
+  distinct(id)
 
 # theta and se are char --> numeric
 responses_cat_pl$theta <- as.numeric(responses_cat_pl$theta)
@@ -570,7 +571,7 @@ responses_cat_pl$se_theta <- as.numeric(responses_cat_pl$se_theta)
 
 # plot
 responses_cat_pl %>%
-  semi_join(ids_with_unlikely, by = "idx") %>% 
+  semi_join(ids_with_unlikely, by = "id") %>% 
   # mutate(se_color = ifelse(se_theta == 0.1, "green", "red")) %>% #none reach acceptable SEM
   ggplot() +
   geom_point(aes(x = q_id, y = a1), color = "blue", alpha = 0.3) +
@@ -583,7 +584,7 @@ responses_cat_pl %>%
     x = "item's position in test",
     title = "Polish data: blue marks item's a1, black marks theta estimate at this item; none reached acceptable SEM (0.1)"
   ) +
-  facet_wrap(~ idx, ncol = 2) +
+  facet_wrap(~ id, ncol = 2) +
   theme(axis.text.x = element_text(angle = 90, hjust = 1)) +
   scale_color_identity()
 
@@ -675,7 +676,7 @@ t2 <- apa_print(t.test(prod_s$catTheta_SE, by_child_pl$cat_theta_se)) # p < 0.00
 cor_age <- apa_print(cor.test(prod_s$catTheta_SE, prod_s$age_full)) # watch out, SE is weakly but significantly correlated with age, and the English validation sample is slightly (but significantly) younger than the Polish one. This differece in SEM between the samples can be partially pulled by age.
 ```
 
-The two CAT-CDIs differed in their settings as to when to finish the administration. Specifically, the Polish CAT-CDI was set so that the SEM as low as 0.1 be reached (with as few items as possible), and if the SEM could not be lowered to or below 0.1, the CAT-CDI stopped after administering a maximum of 75 items. The English CAT-CDI on the other hand was set to administer a maximum of 50 items, but the administration could be stopped earlier if the SEM of 0.15 or lower was reached. In other words, the Polish CAT-CDI prioritized as low SEM as possible, while the English CAT-CDI prioritized shorter test length. This difference resulted in slightly lower mean SEM in Polish CAT-CDI, compared to English CAT-CDI `r t2$full_result` but comparable mean number of items administered, `r t1$full_result`. However, it should be noted that the Polish and American validation samples differed slightly in age `r t_age$full_result`, and as age is weakly correlated with SEM (`r cor_age$full_result`), this slight difference in age could feed the SEM difference in the two validation samples.
+The two CAT-CDIs differed in their settings as to when to finish the administration. Specifically, the Polish CAT-CDI was set so that the SEM as low as 0.1 be reached (with as few items as possible), and if the SEM could not be lowered to or below 0.1, the CAT-CDI stopped after administering a maximum of 75 items. The English CAT-CDI on the other hand was set to administer a maximum of 50 items, but the administration could be stopped earlier if the SEM of 0.15 or lower was reached. In other words, the Polish CAT-CDI prioritized as low SEM as possible, while the English CAT-CDI prioritized shorter test length. This difference resulted in slightly lower mean SEM in Polish CAT-CDI, compared to English CAT-CDI `r t2$full_result` but comparable mean number of items administered, `r t1$full_result`. However, it should be noted that the Polish and American validation samples differed slightly in age `r t_age$full_result`, and as age is weakly correlated with SEM (`r cor_age$full_result`), this slight difference in age could feed the SEM difference in the two validation samples. <!-- we could consider matching kids from the two samples one-to-one on age, to even out this potential effect of age difference on SEM-->
 
 ```{r}
 # SEM percentiles
@@ -697,14 +698,15 @@ round(sum(prod_s$catTheta_SE < 0.2)/count(prod_s)*100,1) # 92.6%
 
 ```
 
-In both CAT-CDIs, we have been able to reliably estimate lexical ability for majority of children. For 93% of the American participants, the SEM was lower than 0.2 and for 93% of Polish participants, the SEM was below 0.15 and for `r sum(by_child_pl$above_max_se_cat == "no")` participants (`r round(sum(by_child_pl$above_max_se_cat == "no")/count(by_child_pl)*100,2)`%) the Polish CAT-CDI SEM was 0.1 or lower. The remaining particiapants, i.e. those with higher standard errors of measurement (in other words, lower reliability of ability estimates) were typically those at the extremes of the ability scale--children with either relatively low or relatively high lexical skills (see Figure \@ref(fig:se-fig)).
+In both CAT-CDIs, we have been able to reliably estimate lexical ability for majority of children. Taking as the cut-off Makransky's suggestion to consider a SEM below 0.2 as acceptable, so defined reliable CAT estimate was gathered for `r round(sum(by_child_pl$cat_theta_se < 0.2)/count(by_child_pl)*100,1)` of the American participants, and `r round(sum(prod_s$catTheta_SE < 0.2)/count(prod_s)*100,1)` of the Polish participants. The remaining participants, i.e. those with higher standard errors of measurement (in other words, lower reliability of ability estimates) were typically those at the extremes of the ability scale--children with either relatively low or relatively high lexical skills (see Figure \@ref(fig:se-fig)).
 
 
-```{r se-fig, fig.width = 10, fig.height = 5, fig.cap = "Standard Error of Measurement (SEM) by ability estimate in (A) English and (B) Polish.", fig.pos = '!h', include = T}
+```{r se-fig, fig.width = 10, fig.height = 5, fig.cap = "Standard Error of Measurement (SEM) by ability estimate in (A) English and (B) Polish. The red line marks the SE of 0.2.", fig.pos = '!h', include = T}
 
 # PL
 fig3b <- by_child_pl %>%
   ggplot(aes(x = cat_theta, y = se_theta)) + geom_point(color = "#00416d", alpha = 0.5) +
+     geom_hline(aes(yintercept = 0.2), color = "red") +
   labs(title = "(B) Polish", x = "Ability level", y = "Standard error (SEM)") +
   ylim(0, 0.4) +
   theme_light() +  theme(legend.position = "none")
@@ -717,7 +719,7 @@ prod_s <- prod_s %>%
   ))
 
 fig3a <- prod_s %>%
-  ggplot(aes(x = catTheta, y = catTheta_SE)) + geom_point(color = "#00416d", alpha = 0.5) +
+  ggplot(aes(x = catTheta, y = catTheta_SE)) + geom_point(color = "#00416d", alpha = 0.5) + geom_hline(aes(yintercept = 0.2), color = "red") +
   labs(title = "(A) English", x = "Ability level", y = "Standard error (SEM)") +
   ylim(0, 0.4) +
   theme_light() +  theme(legend.position = "none")
@@ -727,11 +729,99 @@ fig3
 
 ```
 
+## Parental consistency in responses
+
+```{r}
+# PL
+consistency_pl_sum %>% ungroup()%>% dplyr::summarise(mean = mean(perc, na.rm = T),
+                                    median = median(perc, na.rm = T),
+                                    max = max(perc, na.rm = T),
+                                    min = min(perc, na.rm = T))
+
+# EN
+consistency_en_sum %>% ungroup()%>% dplyr::summarise(mean = mean(perc, na.rm = T),
+                                    median = median(perc, na.rm = T),
+                                    max = max(perc, na.rm = T),
+                                    min = min(perc, na.rm = T))
+
+# MERGE
+consistency_en_sum$lang <- "ENGLISH"
+consistency_pl_sum$lang <- "POLISH"
+
+consistency_en_sum <- consistency_en_sum %>% rename(id = subject_id)
+
+consistency <- consistency_en_sum %>% select(id, perc, lang)
+consistency_pl_sum %>% select(id, perc, lang) %>% rbind(consistency) -> consistency
+consistency <- consistency %>% mutate(perc = perc*100)
+```
+
+```{r parental-consistency-perc-fig, fig.width = 10, fig.height = 5, fig.cap = "Percentage of parents' consistency in responding to items in the two CDI versions in the same way (in the English and in the Polish dataset).", fig.pos = '!h', include = T}
+consistency %>% ggplot(aes(x = lang, y = perc)) + 
+     geom_boxplot(width = 0.5) + geom_jitter(alpha = 0.3, width = 0.3) +
+     labs(y = "Parental consistency in %", x = "") + theme_light() + ylim(0,100)
+```
 
 
-Next:
-- Parental (in)consistency.   
+We compared the parental consistency in their responses in the full and CAT version of CDI in two ways - using a percentage of agreement and by calculating Cohen's Kappa, which additionally factors in chance agreement. When calculating the percentage agreement, for each parent we calculated the number of items to which they responded in the same way in both CDI versions against the whole number of items asked in both CDI versions. We found though the Median consistency was relatively high: `r round((median(consistency_en_sum$perc, na.rm = T)*100),2)`% for English and `r round((median(consistency_pl_sum$perc, na.rm = T)*100),2)`% for Polish, it varied largely across parents in both samples (see Figure \@ref(fig:parental-consistency-perc-fig)).
 
+```{r}
+# Cohen's kappa
+# An overall Cohen's kappa wouldn't work here, because each parent saw a (partially) different subset of items in their CAT administration. So what I calculate a Cohen's kappa for each parent and then I take an average/median across the participants.
+
+library(irr)
+
+# PL
+kappa_pl <- consistency_pl %>% select(id, definition, answer_full, answer_cat)
+
+# Function to compute kappa for one parent
+compute_kappa <- function(data) {
+  if (nrow(data) < 5) {
+    return(NA)  # Too few items — return NA or percent agreement instead
+  } else {
+    ratings <- data %>%
+      select(answer_full, answer_cat)
+    return(kappa2(ratings)$value)
+  }
+}
+
+# Compute kappa per parent
+kappa_results_pl <- kappa_pl %>%
+  group_by(id) %>%
+  group_modify(~ tibble(kappa = compute_kappa(.x))) %>%
+  ungroup()
+
+round(mean(kappa_results_pl$kappa, na.rm = T),2) #0.39
+round(median(kappa_results_pl$kappa, na.rm = T),2) #0.38
+
+# EN
+kappa_en <- consistency_en %>% select(subject_id, definition, response_full, response_cat)
+
+# Function to compute kappa for one parent
+compute_kappa <- function(data) {
+  if (nrow(data) < 5) {
+    return(NA)  # Too few items — return NA or percent agreement instead
+  } else {
+    ratings <- data %>%
+      select(response_full, response_cat)
+    return(kappa2(ratings)$value)
+  }
+}
+
+# Compute kappa per parent
+kappa_results_en <- kappa_en %>%
+  group_by(subject_id) %>%
+  group_modify(~ tibble(kappa = compute_kappa(.x))) %>%
+  ungroup()
+
+# en
+round(mean(kappa_results_en$kappa, na.rm = T),2) #0.4
+round(median(kappa_results_en$kappa, na.rm = T),2) #0.39
+
+
+```
+
+
+We also calculated Cohen's kappa per each parent, considering their observed agreement (between responses to the same items in full and CAT CDI) and expected agreement by chance. The kappa values indicated fair (or close to fair) agreement: English *M* =  `r round(mean(kappa_results_en$kappa, na.rm = T),2) #0.4`, *Mdn* = `r round(median(kappa_results_en$kappa, na.rm = T),2)`, Polish *M* =  `r round(mean(kappa_results_pl$kappa, na.rm = T),2) #0.4`, *Mdn* = `r round(median(kappa_results_pl$kappa, na.rm = T),2)`.
 
 
 # Discussion
