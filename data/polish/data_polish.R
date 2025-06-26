@@ -366,6 +366,45 @@ rm(x, output)
 ws_itemized <- ws_itemized %>%
      select(-c(item_392, item_398, item_417, item_652))
 
+# PARENTAL CONSISTENCY
+
+# POLISH
+# WS
+consistency_pl <- cdi_itemise_oneCheckboxGroup(responses_full_pl, "word", items_full_pl)
+
+responses_cat_pl <- responses_cat_pl %>% rename(
+     id = idx, definition = items)
+
+#responses_cat_pl <- responses_cat_pl %>% rename(id = idx, definition = items)
+consistency_pl <- merge(consistency_pl, responses_cat_pl[,c("id", "definition", "answers")], by = c("id", "definition"), all.x = T)
+
+consistency_pl <- consistency_pl %>%
+     rename(answer_full = response, answer_cat = answers) %>%
+     filter(!is.na(answer_full)) %>%
+     filter(!is.na(answer_cat))%>%
+     relocate(answer_full, .before = answer_cat)
+
+consistency_pl <- consistency_pl %>% group_by(id) %>%
+     mutate(consistent = case_when(
+          answer_full == answer_cat ~ "consistent",
+          .default = "not_consistent"
+     ))
+
+consistency_pl_sum <- consistency_pl %>% group_by(id, consistent) %>% tally()
+consistency_pl_sum <- consistency_pl_sum %>% pivot_wider(id_cols = id, names_from = consistent, values_from = n)
+consistency_pl_sum <- consistency_pl_sum %>% mutate(perc = consistent/sum(consistent, not_consistent))
+consistency_pl_sum %>% dplyr::summarise(mean = mean(perc, na.rm = T),
+                                    median = median(perc, na.rm = T),
+                                    max = max(perc, na.rm = T),
+                                    min = min(perc, na.rm = T))
+
+median(consistency_pl_sum$perc, na.rm = T)
+mean(consistency_pl_sum$perc, na.rm = T)
+
+consistency_pl_sum <- merge(consistency_pl_sum, by_child_pl[,c("id", "days_between", "score_full", "duration_cat", "duration_full", "lang_group")], by = "id", all.x = T)
+consistency_pl_sum <- unique(consistency_pl_sum)
+
+
 # ---- ability estimate from full ------
 
 # Calculate thetas from the full CDIs in validation
