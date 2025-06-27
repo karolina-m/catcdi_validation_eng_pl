@@ -85,11 +85,12 @@ number of years of education attained by the primary caregiver was `r round(mean
 
 In the Polish validation study, the participants were 113 parents of children aged 18 to 34 months (*M* = `r round(mean(by_child_pl$age_CAT),2)`, *Mdn* = `r round(median(by_child_pl$age_CAT),2)`, SD = `r round(sd(by_child_pl$age_CAT),2)`). There were 49 girls in the sample (`r round(sum(by_child_pl$sex == "dziewczynka")/count(by_child_pl)*100,2)`%). The sample was White (reflecting the limited ethnic diversity within the Polish population). However, there were 28 children multilingual with Polish (as their home language) and some other (majority) language. [todo: add info on parental edu].
 
-Notably, the two validation samples differed slightly (but significantly) in mean age, `r t_age$full_result`, which may affect the outcomes of direct comparisons between them, as age could be a contributing factor. We present one such comparison--standard error of CAT ability--where this difference is explicitly indicated.
+Notably, the two validation samples differed slightly (but significantly) in mean age, `r t_age$full_result`, which may affect the outcomes of direct comparisons between them, as age could be a contributing factor. We present one such comparison--standard error of CAT ability--where this difference is explicitly indicated. *NOTE*: You can also view/comment on this on GitHub [Issue #7 linked here](https://github.com/karolina-m/catcdi_validation_eng_pl/issues/7).
 
 
 ## Materials
 The data was gathered with CAT-CDIs in American English and Polish. The American English CAT-CDI was created from the items that were common to three CDIs: Words and Gestures, Words and Sentences and CDI-III. With these items, two CAT-CDIs were created, one for word production and another for word comprehension (see Kachergis et al. 2022 for more details). The Polish CAT-CDIs were created following a largely similar procedure as the ones in American English, but there was a separate CDI-CAT developed for each CDI version (CDI: Words and Gestures and CDI: Words and Sentences) and for each CDI:WG subscale (word production, word comprehension, gesture use) (Krajewski et al. in preparation). Here we show data from the validation study of American English CAT-CDI word production (i.e. 679 items) and Polish CAT-CDI version of WS: Words and Sentences (i.e. 666 items). There are 395 words that appear in both CDI-CAT language versions. 
+<!-- I think it would be good to explain here in 3-4 sentences how a CAT CDI works: how we obtain the initial theta estimate, show the parent one item at a time, when do we stop the test and that in the end, we get a theta and theta's error. Something to allow the reader to imagine the process of CAT-CDI testing. -->
 
 ## Procedure
 Though in both validation studies the parents were asked to fill in both the full CDI and the CAT-CDI, the procedure differed between the two validation studies. In the validation of American English CDI-CAT, parents were given both CDIs in one sitting, but the order of the CDI versions was counterbalanced. In the Polish validation study, the order of the CDIs was fixed, with the full CDI always first, and then, after 1–30 days (*M* = `r round(mean(by_child_pl$days_between),2)`, *Mdn* = `r round(median(by_child_pl$days_between),2)`, SD = `r round(sd(by_child_pl$days_between),2)`) parents were asked to fill in the CAT-CDI. Both studies were done fully online and obtained the approval of adequate ethics committees.
@@ -116,6 +117,7 @@ We found similarly strong correlations in the two languages between the abilitie
 # TODO:
 # 1. merge both tables?
 # 2. can we specify place in text where the tables should be placed (rn it seems random)
+# ^ See Issue https://github.com/karolina-m/catcdi_validation_eng_pl/issues/5
 
 # English
 valid_tab <- prod_s %>% 
@@ -142,7 +144,7 @@ row.names(age_cor_table_wide) = c('r ability CAT vs full CDI', 'N')
 apa_table(age_cor_table_wide, caption = "Polish: Correlations between ability estimated by CAT-CDI and ability estimated from full CDI by children's age", placement = "H")
 ```
 
-The Polish validation study included `r sum(by_child_pl$lang_group == "multilingual")` data from bi- and multilingual families. Though it is a small group, we decided to explore their correlation coefficients (non-parametric Spearman's rho) and found these were similar to those found for Polish monolingual children (see Table \@ref(tab:corr-by-langgroup) in Supplementary Materials). 
+The Polish validation study included `r sum(by_child_pl$lang_group == "multilingual")` data from bi- and multilingual families. Though it is a small group, we decided to explore their correlation coefficients (non-parametric Spearman's rho) and found these were similar to those found for Polish monolingual children (see Table \@ref(tab:corr-by-langgroup) in Supplementary Materials). *NOTE*: [Here is an Issue for commenting on Supplementary Materials](https://github.com/karolina-m/catcdi_validation_eng_pl/issues/5).
 
 ```{r corr-by-langgroup, include = T}
 
@@ -174,7 +176,7 @@ apa_table(lang_cor_table, caption = "Supplementary Material: Table S1 - Spearman
 
 ```{r mse}
 # TODO
-# 1. Eng values shifted slightly? 
+# 1. Eng values shifted slightly (compared to Kachergis et al. 2022)? 
 
 # Polish
 by_child_pl <- by_child_pl %>% mutate(sq_err = (full_theta - cat_theta)^2,
@@ -262,7 +264,7 @@ We also re-calculated the mean squared error without the cases of extreme discre
 ## Item properties in the two CAT-CDIs
 Our second aim was to analyze similarities and differences in IRT item properties and item selection in CAT in English and Polish.
 
-There are 679 items in the English CAT-CDI and 666 items in the Polish CAT-CDI. For both sets of items, the items' difficulty and discrimination parameters were calculated using IRT 2 parameter model (these included separate samples, see Kachergis et al. 2022 and Krajewski et al. (in preparation)). An item’s difficulty indicates the ability level at which there is a 50% probability that a participant will respond correctly <!-- SEE ISSUE 1: https://github.com/karolina-m/catcdi_validation_eng_pl/issues/1 -->. It is on the same scale as ability with negative values indicating difficult items, values around 0 indicating medium difficulty, and positive values indicating easy items. <!-- we should probably add a footnote here explaining that d is kind of inversely related to theta and so negative ability means low while positive ability means high. --> An item’s discrimination indicates how well it distinguishes between individuals with slightly different ability levels--especially those near that difficulty point. Of these two parameters, item difficulty is of greater interest to the present paper as it is directly linked to ability and as discrimination power is more about how good the item is at measuring, rather than what it is measuring.<!-- this could potentially go up, into Intro/Methods? -->
+There are 679 items in the English CAT-CDI and 666 items in the Polish CAT-CDI. For both sets of items, the items' difficulty and discrimination parameters were calculated using IRT 2 parameter model (these included separate samples, see Kachergis et al. 2022 and Krajewski et al. (in preparation)). An item’s difficulty indicates the ability level at which there is a 50% probability that a participant will respond correctly. *NOTE*: [See GitHub Issue 1](https://github.com/karolina-m/catcdi_validation_eng_pl/issues/1). It is on the same scale as ability with negative values indicating difficult items, values around 0 indicating medium difficulty, and positive values indicating easy items. <!-- we should probably add a footnote here explaining that d is kind of inversely related to theta and so negative ability means low while positive ability means high. --> An item’s discrimination indicates how well it distinguishes between individuals with slightly different ability levels--especially those near that difficulty point. Of these two parameters, item difficulty is of greater interest to the present paper as it is directly linked to ability and as discrimination power is more about how good the item is at measuring, rather than what it is measuring.<!-- this could potentially go up, into Intro/Methods? -->
 
 ```{r diff_across_lgs}
 # item difficulty by language 
@@ -520,9 +522,13 @@ ggsave("fig2.jpeg", dpi = 400, width = 250, height = 100, units = "mm")
 
 ```
 
+```{r}
+low_disc <- items_run_en %>% filter(a1 <2 & d > -1.5 & d < 1.5)
+```
+
+
 It is to be expected that a CDI-CAT will not need to administer all the items in the item bank. In fact, in the validation study the English CAT-CDI used `r sum(items_run_en$n != 0)` items (`r round(sum(items_run_en$n != 0)/count(items_run_en)*100,2)`%) and similarly, the Polish CAT-CDI used `r sum(items_run_pl$n != 0)` items (`r round(sum(items_run_pl$n != 0)/count(items_run_pl)*100,2)`%).
-By design, a CDI-CAT selects items that are most informative for each participant. This means it draws from a subset of available items--typically those matched to the participant’s current ability estimate in terms of difficulty, and with high discrimination, meaning they effectively distinguish between individuals with abilities close to that estimate. Figure \@ref(fig:used-items-fig) plots the items by their difficulty and discrimination parameters and colors the items (points) by how often they were used in CAT-CDI administrations in English and Polish. A few findings are of note here. First, both CAT-CDIs used items of very low discrimination (i.e, items that do no discriminate well between ability levels). Often that was because for a given difficulty level there were not enough items and CAT-CDI had to use all the items available (this is particularly true of the items on the two ends of difficulty). However, more surprisingly, it is also true of items of medium difficulty, where items of higher discrimination were available (but were not chosen by the CAT algorithm).
-<!-- SEE ISSUE #2 https://github.com/karolina-m/catcdi_validation_eng_pl/issues/2. NOTE TO US: I emailed Phil Chalmers, the author of mirtcat and mirt packages in R to ask if he has any idea why this is so -->
+By design, a CDI-CAT selects items that are most informative for each participant. This means it draws from a subset of available items--typically those matched to the participant’s current ability estimate in terms of difficulty, and with high discrimination, meaning they effectively distinguish between individuals with abilities close to that estimate. Figure \@ref(fig:used-items-fig) plots the items by their difficulty and discrimination parameters and colors the items (points) by how often they were used in CAT-CDI administrations in English and Polish. A few findings are of note here. First, both CAT-CDIs used items of very low discrimination (i.e, items that do no discriminate well between ability levels). Often that was because for a given difficulty level there were not enough items and CAT-CDI had to use all the items available (this is particularly true of the items on the two ends of difficulty). However, more surprisingly, it is also true of items of medium difficulty, where items of higher discrimination were available (but were not chosen by the CAT algorithm). *NOTE*: [See Issue 2 here](https://github.com/karolina-m/catcdi_validation_eng_pl/issues/2).
 
 ```{r}
 # ISSUE #2
@@ -599,6 +605,12 @@ low_a1_items_en <- items_run_en %>% filter(n > 0) %>%
 # is there anywhere to find this? need a more detailed "resps" df
 # not here: resps_more <- read.csv("data/english/EngWS_16to36mos_cleaned.csv")
 
+```
+
+```{r}
+# Phil Chalmers' response to ^
+# "High slope items are administered in CATs primarily because they create higher item information peaks around specific theta locations, but do not do so everywhere. It also depends on the difficulty of the item as well, which is a function of the intercept parameter(s). It may be better to look at the Fisher information functions instead as that function is one of the driving forces for item selection. From this perspective I would agree that the CAT is running out of items to pick so it starts selecting the most informative items around the current theta estimate, which may provide more information that items that have more peaked information curves but are concentrated around theta values that are much further away."
+
 
 ```
 
@@ -617,7 +629,7 @@ c3 <- apa_print(cor.test(items_en_pl$items_perc_pl, items_en_pl$items_perc_en, p
 ```
 
 
-To check whether the CDI items common in both languages may show similar frequencies in CAT-CDI administrations, we ran Spearman's rank correlation and found that the items frequencies in administrations were weakly correlated, `r c3$full_result`. However, the two CAT-CDIs differed in their potential length, as the English CAT-CDI was set to administer 25--50 items and the Polish CAT-CDI could administer up to 75 items (no minimum was set, but in practice the minimum items administered were 13). As an item is more likely to appear in longer tests (simply due to test length), then frequency of the Polish items could be inflated. <!-- Could it be that, as an item is more likely to appear in longer tests (simply due to test length), frequency of the Polish items could be inflated? Could it influence the item's rank? I could probably recalculate item frequency not per total number of administrations, but per total number of items administered? SEE ISSUE #3 https://github.com/karolina-m/catcdi_validation_eng_pl/issues/3  -->
+To check whether the CDI items common in both languages may show similar frequencies in CAT-CDI administrations, we ran Spearman's rank correlation and found that the items frequencies in administrations were weakly correlated, `r c3$full_result`. However, the two CAT-CDIs differed in their potential length, as the English CAT-CDI was set to administer 25--50 items and the Polish CAT-CDI could administer up to 75 items (no minimum was set, but in practice the minimum items administered were 13). As an item is more likely to appear in longer tests (simply due to test length), then frequency of the Polish items could be inflated. *NOTE*:Could it be that, as an item is more likely to appear in longer tests (simply due to test length), frequency of the Polish items could be inflated? Could it influence the item's rank? I could probably recalculate item frequency not per total number of administrations, but per total number of items administered? [SEE ISSUE #3](https://github.com/karolina-m/catcdi_validation_eng_pl/issues/3)
 
 ```{r}
 
@@ -676,7 +688,7 @@ t2 <- apa_print(t.test(prod_s$catTheta_SE, by_child_pl$cat_theta_se)) # p < 0.00
 cor_age <- apa_print(cor.test(prod_s$catTheta_SE, prod_s$age_full)) # watch out, SE is weakly but significantly correlated with age, and the English validation sample is slightly (but significantly) younger than the Polish one. This differece in SEM between the samples can be partially pulled by age.
 ```
 
-The two CAT-CDIs differed in their settings as to when to finish the administration. Specifically, the Polish CAT-CDI was set so that the SEM as low as 0.1 be reached (with as few items as possible), and if the SEM could not be lowered to or below 0.1, the CAT-CDI stopped after administering a maximum of 75 items. The English CAT-CDI on the other hand was set to administer a maximum of 50 items, but the administration could be stopped earlier if the SEM of 0.15 or lower was reached. In other words, the Polish CAT-CDI prioritized as low SEM as possible, while the English CAT-CDI prioritized shorter test length. This difference resulted in slightly lower mean SEM in Polish CAT-CDI, compared to English CAT-CDI `r t2$full_result` but comparable mean number of items administered, `r t1$full_result`. However, it should be noted that the Polish and American validation samples differed slightly in age `r t_age$full_result`, and as age is weakly correlated with SEM (`r cor_age$full_result`), this slight difference in age could feed the SEM difference in the two validation samples. <!-- we could consider matching kids from the two samples one-to-one on age, to even out this potential effect of age difference on SEM-->
+The two CAT-CDIs differed in their settings as to when to finish the administration. Specifically, the Polish CAT-CDI was set so that the SEM as low as 0.1 be reached (with as few items as possible), and if the SEM could not be lowered to or below 0.1, the CAT-CDI stopped after administering a maximum of 75 items. The English CAT-CDI on the other hand was set to administer a maximum of 50 items, but the administration could be stopped earlier if the SEM of 0.15 or lower was reached. In other words, the Polish CAT-CDI prioritized as low SEM as possible, while the English CAT-CDI prioritized shorter test length. This difference resulted in slightly lower mean SEM in Polish CAT-CDI, compared to English CAT-CDI `r t2$full_result` but comparable mean number of items administered, `r t1$full_result`. However, it should be noted that the Polish and American validation samples differed slightly in age `r t_age$full_result`, and as age is weakly correlated with SEM (`r cor_age$full_result`), this slight difference in age could feed the SEM difference in the two validation samples. *NOTE*: We could consider matching kids from the two samples one-to-one on age, to even out this potential effect of age difference on SEM, [see Issue #8](https://github.com/karolina-m/catcdi_validation_eng_pl/issues/8).
 
 ```{r}
 # SEM percentiles
@@ -762,11 +774,12 @@ consistency %>% ggplot(aes(x = lang, y = perc)) +
 ```
 
 
-We compared the parental consistency in their responses in the full and CAT version of CDI in two ways - using a percentage of agreement and by calculating Cohen's Kappa, which additionally factors in chance agreement. When calculating the percentage agreement, for each parent we calculated the number of items to which they responded in the same way in both CDI versions against the whole number of items asked in both CDI versions. We found though the Median consistency was relatively high: `r round((median(consistency_en_sum$perc, na.rm = T)*100),2)`% for English and `r round((median(consistency_pl_sum$perc, na.rm = T)*100),2)`% for Polish, it varied largely across parents in both samples (see Figure \@ref(fig:parental-consistency-perc-fig)).
+We compared the parental consistency in their responses in the full and CAT version of CDI in two ways - using a percentage of agreement and by calculating Cohen's Kappa, which additionally factors in chance agreement. When calculating the percentage agreement, for each parent we calculated the number of items to which they responded in the same way in both CDI versions against the whole number of items asked in both CDI versions. We found though the Median consistency was relatively high: `r round((median(consistency_en_sum$perc, na.rm = T)*100),2)`% for English and `r round((median(consistency_pl_sum$perc, na.rm = T)*100),2)`% for Polish, it varied largely across parents in both samples (see Figure \@ref(fig:parental-consistency-perc-fig)). 
 
 ```{r}
 # Cohen's kappa
 # An overall Cohen's kappa wouldn't work here, because each parent saw a (partially) different subset of items in their CAT administration. So what I calculate a Cohen's kappa for each parent and then I take an average/median across the participants.
+# I'm open to ideas: https://github.com/karolina-m/catcdi_validation_eng_pl/issues/6 
 
 library(irr)
 
@@ -821,7 +834,7 @@ round(median(kappa_results_en$kappa, na.rm = T),2) #0.39
 ```
 
 
-We also calculated Cohen's kappa per each parent, considering their observed agreement (between responses to the same items in full and CAT CDI) and expected agreement by chance. The kappa values indicated fair (or close to fair) agreement: English *M* =  `r round(mean(kappa_results_en$kappa, na.rm = T),2) #0.4`, *Mdn* = `r round(median(kappa_results_en$kappa, na.rm = T),2)`, Polish *M* =  `r round(mean(kappa_results_pl$kappa, na.rm = T),2) #0.4`, *Mdn* = `r round(median(kappa_results_pl$kappa, na.rm = T),2)`.
+We also calculated Cohen's kappa per each parent, considering their observed agreement (between responses to the same items in full and CAT CDI) and expected agreement by chance. The kappa values indicated fair (or close to fair) agreement: English *M* =  `r round(mean(kappa_results_en$kappa, na.rm = T),2) #0.4`, *Mdn* = `r round(median(kappa_results_en$kappa, na.rm = T),2)`, Polish *M* =  `r round(mean(kappa_results_pl$kappa, na.rm = T),2) #0.4`, *Mdn* = `r round(median(kappa_results_pl$kappa, na.rm = T),2)`. *NOTE*: [There's an Issue for that here](https://github.com/karolina-m/catcdi_validation_eng_pl/issues/6)
 
 
 # Discussion
