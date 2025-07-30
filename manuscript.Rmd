@@ -109,10 +109,10 @@ cor(by_child_pl$full_theta, by_child_pl$score_full) # AmE: .95, PL: 0.94
 
 ```
 
-We found similarly strong correlations in the two languages between the abilities estimated from CDI-CAT and full CDI scores (American English and Polish: $r$ = .86), the abilities estimated from the CDI-CAT and abilities estimated from full CDI (American English and Polish: $r$ = .92), and the abilities estimated from the full CDI and the full CDI scores (American English: $r$ = .95, Polish: $r$ = `r cor(by_child_pl$full_theta, by_child_pl$score_full)`). The abilities estimated from the CDI-CAT and the full CDI scores were also strongly correlated within individual age groups (see Table \@ref(tab:corr-by-age)).
+We found similarly strong correlations in the two languages between the abilities estimated from CDI-CAT and full CDI scores (American English and Polish: $r$ = .86), the abilities estimated from the CDI-CAT and abilities estimated from full CDI (American English and Polish: $r$ = .92), and the abilities estimated from the full CDI and the full CDI scores (American English: $r$ = .95, Polish: $r$ = `r printnum(cor(by_child_pl$full_theta, by_child_pl$score_full), gt1 = FALSE)`). The abilities estimated from the CDI-CAT and the full CDI scores were also strongly correlated within individual age groups (see Table\ \@ref(tab:corr-by-age-eng) and Table\ \@ref(tab:corr-by-age-pl)).
 
 
-```{r corr-by-age, include = T}
+```{r corr-by-age-eng, include = T}
 
 # TODO:
 # 1. merge both tables?
@@ -130,7 +130,9 @@ colnames(valid_tab_wide) = as.character(valid_tab$age_group)
 row.names(valid_tab_wide) = c('r ability CAT vs full CDI', 'N')
 
 apa_table(valid_tab_wide, caption="American English: Correlations between ability estimated by CAT-CDI and ability estimated from full CDI by children's age", placement = "H") 
+```
 
+```{r corr-by-age-pl, include = T}
 # Polish
 age_cor_table <- by_child_pl %>% 
   mutate(age_group = cut(age_CAT, breaks=seq(12,36,3), right=F, include.lowest = T)) %>%
