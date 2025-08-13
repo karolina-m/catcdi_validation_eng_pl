@@ -243,6 +243,7 @@ To explore the first of these possibilities, we identified children for whom the
 
 ```{r}
 # Difference between abilities: full ability minus CAT ability
+# Note, this yields mostly negative values (CAT > full) but some positive values as well (CAT < full)
 
 # EN - all
 t1 <- apa_print(t.test(prod_s$catTheta, prod_s$fullTheta, paired = T))
@@ -275,13 +276,23 @@ Next, we examined a possible bias in our two ability estimates. We found that th
 # EN
 c1 <- apa_print(cor.test(prod_s$fullTheta, prod_s$full_cat_diff, paired = T))
 
+# full - CAT
 prod_s %>% filter(extreme_discrep == "no") %>% 
      ggplot(aes(x = fullTheta, y = (full_cat_diff))) + 
                  geom_point() + 
                  geom_smooth(method = "lm") + 
           geom_hline(yintercept = 0, color = "red", linetype = "dashed") +
      ylim(-2,2) + xlim(-4,4) + 
-     labs(title = "ENGLISH")
+     labs(title = "ENGLISH: <<correlation treats neg values as small diff>>", y = "full - CAT")
+
+# abs(full - CAT)
+prod_s %>% filter(extreme_discrep == "no") %>% 
+     ggplot(aes(x = fullTheta, y = (abs(full_cat_diff)))) + 
+                 geom_point() + 
+                 geom_smooth(method = "loess") + 
+          geom_hline(yintercept = 0, color = "red", linetype = "dashed") +
+     ylim(-2,2) + xlim(-4,4) + 
+     labs(title = "ENGLISH: biggest diffs in thetas for low abilites", y = "abs(full - CAT)")
 
 # PL
 c2 <- apa_print(cor.test(by_child_pl$full_theta, by_child_pl$full_cat_diff, paired = T))
@@ -294,6 +305,14 @@ by_child_pl %>% filter(extreme_discrep == "no") %>%
      ylim(-2, 2) + xlim(-4,4) + 
      labs(title = "POLISH")
 
+by_child_pl %>% filter(extreme_discrep == "no") %>% 
+     ggplot(aes(x = full_theta, y = (abs(full_cat_diff)))) + 
+                 geom_point() + 
+                 geom_smooth(method = "loess") + 
+     geom_hline(yintercept = 0, color = "red", linetype = "dashed") +
+     ylim(-2, 2) + xlim(-4,4) + 
+     labs(title = "POLISH", y = "abs(full - CAT)")
+
 ```
 
 ```{r}
@@ -304,16 +323,14 @@ prod_s %>%
   ggplot() +
   geom_point(aes(x = fullTheta, y = fullTheta_SE)) +
   geom_point(aes(x = catTheta, y = catTheta_SE), color = "red") +
-  geom_segment(aes(x = fullTheta, y = fullTheta_SE, xend = catTheta, yend = catTheta_SE, group = subject_id), color = "black") +
-     ylab("SE") + xlab("Theta")
+  geom_segment(aes(x = fullTheta, y = fullTheta_SE, xend = catTheta, yend = catTheta_SE, group = subject_id), color = "black") + labs(y = "SE", x = "Theta", title = "(English)") + ylim(0, 0.5)
 
 # PL
 by_child_pl %>%
   ggplot() +
   geom_point(aes(x = full_theta, y = full_theta_se)) +
   geom_point(aes(x = cat_theta, y = cat_theta_se), color = "red") +
-  geom_segment(aes(x = full_theta, y = full_theta_se, xend = cat_theta, yend = cat_theta_se, group = id), color = "black") +
-     ylab("SE") + xlab("Theta")
+  geom_segment(aes(x = full_theta, y = full_theta_se, xend = cat_theta, yend = cat_theta_se, group = id), color = "black") + labs(y = "SE", x = "Theta", title = "(Polish)") + ylim(0, 0.5)
 
 
 by_child_pl <- by_child_pl %>%
@@ -334,38 +351,33 @@ by_child_pl %>%
   ), show.legend = FALSE) +
   scale_color_manual(
     values = c("TRUE" = "black", "FALSE" = "grey70")
-  ) +
-     ylab("SE") + xlab("Theta")
+  ) + labs(y = "SE", x = "Theta", title = "Cases when SE in CAT was lower than SE in full (Polish)") + ylim(0, 0.5)
 
+
+by_child_pl <- by_child_pl %>%
+  mutate(
+    theta_diff = abs(full_theta - cat_theta),
+    high_se = rank(-theta_diff) <= 10   # top 10 highest theta differences
+  )
+
+by_child_pl %>%
+  ggplot() +
+  # full_theta points: black if highlighted, grey if not
+  geom_point(aes(x = full_theta, y = full_theta_se, color = high_se), show.legend = FALSE) +
+  # cat_theta points: red if highlighted, pink if not
+  geom_point(data = filter(by_child_pl, !high_se), aes(x = cat_theta, y = cat_theta_se), color = "pink") +
+  geom_point(data = filter(by_child_pl, high_se), aes(x = cat_theta, y = cat_theta_se), color = "red") +
+  # segments: black if highlighted, grey otherwise
+  geom_segment(aes(
+    x = full_theta, y = full_theta_se,
+    xend = cat_theta, yend = cat_theta_se,
+    group = id,
+    color = high_se
+  ), show.legend = FALSE) +
+  scale_color_manual(
+    values = c("FALSE" = "grey70", "TRUE" = "black")
+  ) + labs(y = "SE", x = "Theta", title = "Biggest differences between thetas (Polish)") + ylim(0, 0.5)
 ```
-```{r}
-# which words get "yes" in CAT and are not marked in full?
-# I call them flips
-
-consistency_pl %>% filter(answer_cat == 1 & answer_full == 0) %>%
-     group_by(lexical_class) %>% count()
-
-n_admin <- consistency_pl %>%
-     group_by(definition) %>% count() %>% rename(n_admin = n)
-
-n_flips <- consistency_pl %>% filter(answer_cat == 1 & answer_full == 0) %>%
-     group_by(definition) %>% count() %>% rename(n_flipped = n)
-
-flips_pl <- merge(n_admin, n_flips, by = "definition", all.x = T)
-rm(n_admin, n_flips)
-flips_pl[is.na(flips_pl)] <- 0
-flips_pl <- flips_pl %>% rename(item = definition)
-flips_pl <- merge(flips_pl, items_cat_pl)
-
-# which items are flipped more frequently than others?
-flips_pl %>% ggplot(aes(x = d, y = n_flipped)) + geom_jitter(alpha = 0.3)
-flips_pl %>% ggplot(aes(x = itemID, y = n_flipped)) + geom_jitter(alpha = 0.3)
-# and half of administered are verbs, half of flipped are verbs
-
-
-
-```
-
 
 
 The question that remains is whether this consistent difference between the two estimates of abilities comes from CAT over-estimating child's lexical ability or from the full CDI underestimating child's ability. For one, it may be that in CAT-CDI parents answer "yes, my child produces this word" to more items that would be expected, and as a result, CAT-CDI may overestimate the child's true ability. On the other hand, it could be that as the full CDI is very long, parents may omit marking some items that their child produces (e.g. Łuniewska et al., 2025), which can result in the full CDI underestimating the child's true ability. This question is difficult to answer without direct assessment of child's lexical ability. However, if parents are prone to omitting items in the full CDI, this would be most visible in the case of children with large vocabularies (the more words the child knows, the more CDI items can be omitted). Indeed, we see that as a child's ability grows (as estimated from the full CDI), the size of the discrepancy between the ability estimate from full CDI and the CAT CDI grows as well, English: `r c1$full_result`, Polish: `r c2$full_result`.
@@ -396,6 +408,60 @@ The question that remains is whether this consistent difference between the two 
 # by_child_pl %>% filter(extreme_discrep == "no") %>% 
 #      ggplot(aes(x = full_theta, y = abs(sq_err))) + geom_point() + geom_smooth(method = "loess") + 
 #      labs(title = "POLISH", y = "Squared Error (CAT vs full ability) (abs)")
+
+
+
+
+# which words get "yes" in CAT and are not marked in full?
+# I call them flips
+
+consistency_pl %>% filter(answer_cat == 1 & answer_full == 0) %>%
+     group_by(lexical_class) %>% count()
+
+n_admin <- consistency_pl %>%
+     group_by(definition) %>% count() %>% rename(n_admin = n)
+
+n_flips <- consistency_pl %>% filter(answer_cat == 1 & answer_full == 0) %>%
+     group_by(definition) %>% count() %>% rename(n_flipped = n)
+
+flips_pl <- merge(n_admin, n_flips, by = "definition", all.x = T)
+rm(n_admin, n_flips)
+flips_pl[is.na(flips_pl)] <- 0
+flips_pl <- flips_pl %>% rename(item = definition)
+flips_pl <- merge(flips_pl, items_cat_pl)
+
+# which items are flipped more frequently than others?
+flips_pl %>% ggplot(aes(x = d, y = n_flipped)) + geom_jitter(alpha = 0.3) + 
+     labs(title = "YES in CAT & NO in full", y = "count")
+flips_pl %>% ggplot(aes(x = itemID, y = n_flipped)) + geom_jitter(alpha = 0.3)
+# and half of administered are verbs, half of flipped are verbs
+
+```
+
+```{r}
+
+# FLIPS BY ID
+# do some parents flip more or is it similar across parents?
+
+flip_parents <- consistency_pl %>% filter(answer_cat == 1 & answer_full == 0) %>%
+     group_by(id) %>% count()
+flip_parents <- merge(flip_parents, by_child_pl)
+flip_parents <- flip_parents %>% mutate(flip_perc = n/no_items)
+
+flip_parents %>% ggplot(aes(x = age_CAT, y = flip_perc)) + geom_jitter() + labs(title = "child's age does not relate to amount of flips by parent (PL)", y = "flips (% of all items administered)") + ylim(0,1)
+
+flip_parents %>% filter(duration_cat < 2500) %>% ggplot(aes(x = duration_cat, y = flip_perc)) + geom_jitter() + labs(title = "duration of CAT (in secs) does not relate to amount of flips by parent  (PL)", y = "count of flips") + ylim(0,1)
+
+flip_parents  %>% filter(duration_full < 25000) %>% ggplot(aes(x = duration_full, y = flip_perc)) + geom_jitter() + labs(title = "duration of full (in secs) does not relate to amount of flips by parent  (PL)",  y = "flips (% of all items administered)") + ylim(0,1)
+
+flip_parents  %>% ggplot(aes(x = score_full, y = flip_perc)) + geom_jitter() + labs(title = "full score does not relate to amount of flips by parent  (PL)", y = "flips (% of all items administered)") + ylim(0,1)
+
+flip_parents  %>% ggplot(aes(x = abs(full_cat_diff), y = flip_perc)) + geom_jitter() + labs(title = "full-CAT diff relates to amount of flips by parent? (PL)",  y = "flips (% of all items administered)") + ylim(0,1)
+
+flip_parents <- flip_parents %>% mutate(abs_full_cat_diff = abs(full_cat_diff))
+cor.test(flip_parents$abs_full_cat_diff, flip_parents$flip_perc)
+
+
 
 ```
 
