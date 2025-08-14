@@ -1,0 +1,26 @@
+\begin{table*}[hbt]
+\ifnextchar[{\eatarg}{}
+[H]
+
+\begin{center}
+\begin{threeparttable}
+
+\caption{\label{tab:corr-by-langgroup}Supplementary Material: Table S1 - Spearman's correlations for monolingual and multilingual children in the Polish dataset}
+
+\begin{tabular}{llll}
+\toprule
+lang\_group & \multicolumn{1}{c}{r} & \multicolumn{1}{c}{n} & \multicolumn{1}{c}{correlation}\\
+\midrule
+monolingual & 0.92 & 85 & Ability from CDI-CAT \textasciitilde{} full CDI score\\
+multilingual & 0.90 & 28 & Ability from CDI-CAT \textasciitilde{} full CDI score\\
+monolingual & 0.92 & 85 & Ability from CDI-CAT \textasciitilde{} ability from full CDI\\
+multilingual & 0.90 & 28 & Ability from CDI-CAT \textasciitilde{} ability from full CDI\\
+monolingual & 1.00 & 85 & Ability from full CDI \textasciitilde{} full CDI score\\
+multilingual & 1.00 & 28 & Ability from full CDI \textasciitilde{} full CDI score\\
+\bottomrule
+\end{tabular}
+
+\end{threeparttable}
+\end{center}
+
+\end{table*}

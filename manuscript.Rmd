@@ -137,18 +137,12 @@ apa_table(valid_tab_wide, caption="English: Correlations between ability estimat
 
 
 ```{r corr-by-age-pl, include = T}
-# Polish
-# age_cor_table <- by_child_pl %>% 
-#   mutate(age_group = cut(age_CAT, breaks=seq(12,36,3), right=F, include.lowest = T)) %>%
-#   group_by(age_group) %>%
-#   summarise(r = cor(full_theta, cat_theta), n=n())
 
 age_cor_table <- by_child_pl %>% 
   mutate(age_group = cut(age_CAT, breaks = seq(12, 36, 3), right = FALSE, include.lowest = TRUE)) %>%
   group_by(age_group) %>%
   summarise(r = cor(full_theta, cat_theta), n = n(), .groups = "drop") %>%
-  
-  # add a row for [15,18) with NA values
+  # adding a row for [15,18) age range - present in Kachergis et al. data, absent in Polish
   bind_rows(
     tibble(
       age_group = factor("[15,18)", levels = levels(.$age_group)), # keep factor consistency
@@ -156,8 +150,6 @@ age_cor_table <- by_child_pl %>%
       n = NA_integer_
     )
   ) %>%
-  
-  # optional: sort by age_group levels so [15,18) falls in right spot
   arrange(age_group)
 
 age_cor_table_wide = rbind(round(age_cor_table$r, 2), as.character(age_cor_table$n))
