@@ -112,7 +112,7 @@ cor(by_child_pl$full_theta, by_child_pl$score_full) # AmE: .95, PL: 0.94
 ```
 
 
-We found similarly strong correlations in the two languages between the abilities estimated from CDI-CAT and full CDI scores (English and Polish: $r$ = .86). The abilities estimated from the CDI-CAT and the full CDI scores were also strongly correlated within individual age groups (see Table \@ref(tab:corr-by-age)). We also obtained ability estimates from the full CDIs, which is a robust measure of ability because it is based on all available item responses, maximizing precision. Such ability from the full test version is often considered a baseline for comparisons with ability estimated from a short (adaptive) version. We correlated the abilities estimated from the CDI-CAT and abilities estimated from full CDI and again found strong correlations in both languages, English and Polish: $r$ = .92. Finally, we also correlated the abilities estimated from the full CDI and the full CDI scores, i.e. two measures obtained from the same data. This way we examine consistency between model-based abilities and traditional scores. Again, we found strong correlations in both languages (English: $r$ = .95, Polish: $r$ = `r cor(by_child_pl$full_theta, by_child_pl$score_full)`), confirming that both measures reflect the same underlying ability. 
+We found similarly strong correlations in the two languages between the abilities estimated from CDI-CAT and full CDI scores (English and Polish: $r$ = .86). The correlations were also strong within individual age groups (see Tables \@ref(tab:corr-by-age-eng) and \@ref(tab:corr-by-age-pl)). We also obtained ability estimates from the full CDIs, which is a robust measure of ability because it is based on all available item responses, maximizing precision. Such ability from the full test version is often considered a baseline for comparisons with ability estimated from a short (adaptive) version. We correlated the abilities estimated from the CDI-CAT and abilities estimated from full CDI and again found strong correlations in both languages, English and Polish: $r$ = .92. Finally, we also correlated the abilities estimated from the full CDI and the full CDI scores, i.e. two measures obtained from the same data. This way we examine consistency between model-based abilities and traditional scores. Again, we found strong correlations in both languages (English: $r$ = .95, Polish: $r$ = `r cor(by_child_pl$full_theta, by_child_pl$score_full)`), confirming that both measures reflect the same underlying ability. 
 
 
 ```{r corr-by-age-eng, include = T}
@@ -138,10 +138,27 @@ apa_table(valid_tab_wide, caption="English: Correlations between ability estimat
 
 ```{r corr-by-age-pl, include = T}
 # Polish
+# age_cor_table <- by_child_pl %>% 
+#   mutate(age_group = cut(age_CAT, breaks=seq(12,36,3), right=F, include.lowest = T)) %>%
+#   group_by(age_group) %>%
+#   summarise(r = cor(full_theta, cat_theta), n=n())
+
 age_cor_table <- by_child_pl %>% 
-  mutate(age_group = cut(age_CAT, breaks=seq(12,36,3), right=F, include.lowest = T)) %>%
+  mutate(age_group = cut(age_CAT, breaks = seq(12, 36, 3), right = FALSE, include.lowest = TRUE)) %>%
   group_by(age_group) %>%
-  summarise(r = cor(full_theta, cat_theta), n=n())
+  summarise(r = cor(full_theta, cat_theta), n = n(), .groups = "drop") %>%
+  
+  # add a row for [15,18) with NA values
+  bind_rows(
+    tibble(
+      age_group = factor("[15,18)", levels = levels(.$age_group)), # keep factor consistency
+      r = NA_real_,
+      n = NA_integer_
+    )
+  ) %>%
+  
+  # optional: sort by age_group levels so [15,18) falls in right spot
+  arrange(age_group)
 
 age_cor_table_wide = rbind(round(age_cor_table$r, 2), as.character(age_cor_table$n))
 colnames(age_cor_table_wide) = as.character(age_cor_table$age_group)
