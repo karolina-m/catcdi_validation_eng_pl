@@ -42,7 +42,7 @@ knitr::opts_chunk$set(cache.extra = knitr::rand_seed, echo = F, include = F, war
 source(here("data/polish/data_polish.R"))
 ```
 
-The Polish validation study included `r sum(by_child_pl$lang_group == "multilingual")` data from bi- and multilingual families. Though it is a small group, we decided to explore their correlation coefficients (non-parametric Spearman's rho) and found these were similar to those found for Polish monolingual children (see Table \@ref(tab:corr-by-langgroup) in Supplementary Materials). *NOTE*: [Here is an Issue for commenting on Supplementary Materials](https://github.com/karolina-m/catcdi_validation_eng_pl/issues/5). Since the correlation coefficients were similar in both groups, and as the bi- and multilingual group was was too small to warrant a separate analysis, we decided to include them in the Polish dataset alongside the Polish monolinguals.
+The Polish validation study included `r sum(by_child_pl$lang_group == "multilingual")` data from bi- and multilingual families. Though it is a small group, we decided to explore their correlation coefficients (non-parametric Spearman's rho) and found these were similar to those found for Polish monolingual children (see Table \@ref(tab:corr-by-langgroup)). Since the correlation coefficients were similar in both groups, and as the bi- and multilingual group was was too small to warrant a separate analysis, we decided to include them in the Polish dataset alongside the Polish monolinguals.
 
 ```{r corr-by-langgroup, include = T}
 
