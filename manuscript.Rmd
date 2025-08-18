@@ -245,217 +245,76 @@ cohens_d(good_pl$cat_theta, good_pl$full_theta, paired = T)
 
 Next, we examined a possible bias in our two ability estimates. We found that the mean CAT ability estimates were consistently higher than the full CDI ability estimates. That was true both in English, `r t1$full_result` (large effect size: Cohen's $d$ = 1.06, 95% CI $[0.89, 1.23]$), and in Polish, `r t2$full_result` (medium effect size: Cohen's $d$ = 0.73, 95% CI $[0.52, 0.93]$).
 
-```{r}
-# Hypo1: CDI full underestimates true ability
-# The larger child's vocab size (full theta), the larger the difference between full and CAT (possibly due to parents failing to mark words in full CDI).
+
+The question that remains is whether this consistent difference between the two estimates of abilities comes from CAT over-estimating child's lexical ability or from the full CDI underestimating child's ability. For one, it may be that in CAT-CDI parents answer "yes, my child produces this word" to more items that would be expected (Kachergis et al. 2022), and as a result, CAT-CDI may overestimate the child's true ability. On the other hand, it could be that as the full CDI is very long, parents may omit marking some items that their child produces (see e.g., Łuniewska et al., 2025 for parental inconsistencies in reporting vocabulary of older children). This could result in the full CDI underestimating the child's true ability. It is possible that either or both are true and the question is difficult to answer without direct assessment of child's lexical ability. Our tentative exploration shows that the difference between the full and CAT-CDI estimates depends on the child's ability level (see Figure \@ref(fig:diff-fig)), especially in English: for low abilities, CAT-CDI estimates tend to be higher than the full scores (i.e. the difference between the full estimates and CAT estimates is negative). For high abilities, CAT-CDI estimates tend to be lower than the full scores (i.e. the difference is positive). In Polish, though many negative differences are present, the CAT-CDI estimates align more closely with the full CDI estimates across the whole range of abilities. Thus, Polish CAT-CDI performs more consistently across the ability spectrum with less systematic bias than in English.
+
+```{r diff-fig, out.width="75%", fig.cap = "The relation between ability (estimated from full CDI) and the direction and size of  discrepancy between the estimates from full CDI and CAT-CDI: (A) English, (B) Polish. The red dashed line at 0 indicates null difference between the two estimates. Negative values indicate that CAT estimate was higher than the full estimate. Postive values indicate that CAT estimate was lower than the full estimate.", include = T}
 
 # EN
-c1 <- apa_print(cor.test(prod_s$fullTheta, prod_s$full_cat_diff, paired = T))
 
 # full - CAT
-prod_s %>% filter(extreme_discrep == "no") %>% 
+p1 <- prod_s %>% filter(extreme_discrep == "no") %>% 
      ggplot(aes(x = fullTheta, y = (full_cat_diff))) + 
                  geom_point() + 
                  geom_smooth(method = "lm") + 
           geom_hline(yintercept = 0, color = "red", linetype = "dashed") +
-     ylim(-2,2) + xlim(-4,4) + 
-     labs(title = "ENGLISH", y = "full - CAT")
+     ylim(-1.5,1.5) + xlim(-3,3) + 
+     labs(title = "A: ENGLISH", x = "Full CDI theta", y = "Difference (full CDI theta - CAT-CDI theta)") +
+     theme_light()
 
 # PL
-c2 <- apa_print(cor.test(by_child_pl$full_theta, by_child_pl$full_cat_diff, paired = T))
 
 # full - CAT
-by_child_pl %>% filter(extreme_discrep == "no") %>% 
+p2 <- by_child_pl %>% filter(extreme_discrep == "no") %>% 
      ggplot(aes(x = full_theta, y = (full_cat_diff))) + 
                  geom_point() + 
                  geom_smooth(method = "lm") + 
      geom_hline(yintercept = 0, color = "red", linetype = "dashed") +
-     ylim(-2, 2) + xlim(-4,4) + 
-     labs(title = "POLISH")
+     ylim(-1.5,1.5) + xlim(-3,3) + 
+     labs(title = "B: POLISH", x = "Full CDI theta", y = "Difference (full CDI theta - CAT-CDI theta)") +
+     theme_light()
+
+ggarrange(p1, p2, ncol = 2, common.legend = T)
 
 
 ```
 
-```{r}
+# <!-- SE -->
+
+We also looked at the precision of the full and CAT-CDI estimates and how that precision (measured by standard error of the theta) relates to the ability levels. In both languages, the characteristic U-shaped curves indicate that measurement precision is highest around the middle of the ability range and declines at the extremes (very low or very high ability). 
+
+```{r se-by-theta-fig, out.width="75%", fig.cap = "The relation between ability estimaes from full CDI (black) and CAT-CDI (red) and the standard error of that estimate: (A) English, (B) Polish.", include = T}
+
 # Theta by SE - comparing CAT and full
+colors <- c("full CDI" = "black", "CAT-CDI" = "red")
 
 # EN
-prod_s %>%
-  ggplot() +
-  geom_point(aes(x = fullTheta, y = fullTheta_SE)) +
-  geom_point(aes(x = catTheta, y = catTheta_SE), color = "red") +
-  geom_segment(aes(x = fullTheta, y = fullTheta_SE, xend = catTheta, yend = catTheta_SE, group = subject_id), color = "black") + labs(y = "SE", x = "Theta", title = "(English)") + ylim(0, 0.5)
 
-
-prod_s %>%
+p3 <- prod_s %>%
   ggplot() +
-  geom_smooth(aes(x = fullTheta, y = fullTheta_SE), se = T, method = "loess", span = 0.8, color = "black") +
-  geom_smooth(aes(x = catTheta, y = catTheta_SE), se = T, method = "loess", span = 0.8, color = "red") +
-  labs(y = "SE", x = "Theta", title = "(English)") + ylim(0, 0.5)
+  geom_smooth(aes(x = fullTheta, y = fullTheta_SE, color = "full CDI"), se = F, method = "loess", span = 1) +
+  geom_smooth(aes(x = catTheta, y = catTheta_SE, color = "CAT-CDI"), se = F, method = "loess", span = 1) +
+  labs(y = "SE", x = "Theta", title = "A: ENGLISH") + ylim(0, 0.5) + xlim(-3, 3) +
+    scale_color_manual(values = colors) + theme_light() + theme(legend.title=element_blank())
 
 # PL
-by_child_pl %>%
+
+p4 <- by_child_pl %>%
   ggplot() +
-  geom_point(aes(x = full_theta, y = full_theta_se)) +
-  geom_point(aes(x = cat_theta, y = cat_theta_se), color = "red") +
-  geom_segment(aes(x = full_theta, y = full_theta_se, xend = cat_theta, yend = cat_theta_se, group = id), color = "black") + labs(y = "SE", x = "Theta", title = "(Polish)") + ylim(0, 0.5)
+  geom_smooth(aes(x = full_theta, y = full_theta_se, color = "full CDI"), se = F, method = "loess", span = 1) +
+  geom_smooth(aes(x = cat_theta, y = cat_theta_se, color = "CAT-CDI"), se = F, method = "loess", span = 1) +
+  labs(y = "SE", x = "Theta", title = "B: POLISH") + ylim(0, 0.5) + xlim(-3, 3) +
+    scale_color_manual(values = colors) + theme_light() + theme(legend.title=element_blank())
 
-by_child_pl %>%
-  ggplot() +
-  geom_smooth(aes(x = full_theta, y = full_theta_se), se = T, method = "loess", span = 1, color = "black") +
-  geom_smooth(aes(x = cat_theta, y = cat_theta_se), se = T, method = "loess", span = 1 , color = "red") +
-  labs(y = "SE", x = "Theta", title = "(Polish)") + ylim(0, 0.5)
-
-
-by_child_pl <- by_child_pl %>%
-  mutate(high_se = full_theta_se > cat_theta_se)
-by_child_pl %>%
-  ggplot() +
-  # full_theta points: black if highlighted, grey if not
-  geom_point(aes(x = full_theta, y = full_theta_se, color = high_se), show.legend = FALSE) +
-  # cat_theta points: red if highlighted, pink if not
-  geom_point(data = filter(by_child_pl, high_se == TRUE), aes(x = cat_theta, y = cat_theta_se), color = "red") +
-  geom_point(data = filter(by_child_pl, high_se == FALSE), aes(x = cat_theta, y = cat_theta_se), color = "pink") +
-  # segments: black if highlighted, grey otherwise
-  geom_segment(aes(
-    x = full_theta, y = full_theta_se,
-    xend = cat_theta, yend = cat_theta_se,
-    group = id,
-    color = high_se
-  ), show.legend = FALSE) +
-  scale_color_manual(
-    values = c("TRUE" = "black", "FALSE" = "grey70")
-  ) + labs(y = "SE", x = "Theta", title = "Cases when SE in CAT was lower than SE in full (Polish)") + ylim(0, 0.5)
-
-
-by_child_pl <- by_child_pl %>%
-  mutate(
-    theta_diff = abs(full_theta - cat_theta),
-    high_se = rank(-theta_diff) <= 10   # top 10 highest theta differences
-  )
-
-by_child_pl %>%
-  ggplot() +
-  # full_theta points: black if highlighted, grey if not
-  geom_point(aes(x = full_theta, y = full_theta_se, color = high_se), show.legend = FALSE) +
-  # cat_theta points: red if highlighted, pink if not
-  geom_point(data = filter(by_child_pl, !high_se), aes(x = cat_theta, y = cat_theta_se), color = "pink") +
-  geom_point(data = filter(by_child_pl, high_se), aes(x = cat_theta, y = cat_theta_se), color = "red") +
-  # segments: black if highlighted, grey otherwise
-  geom_segment(aes(
-    x = full_theta, y = full_theta_se,
-    xend = cat_theta, yend = cat_theta_se,
-    group = id,
-    color = high_se
-  ), show.legend = FALSE) +
-  scale_color_manual(
-    values = c("FALSE" = "grey70", "TRUE" = "black")
-  ) + labs(y = "SE", x = "Theta", title = "Biggest differences between thetas (Polish)") + ylim(0, 0.5)
-
-
+se_by_theta_fig <- ggarrange(p3, p4, ncol = 2, common.legend = T)
+se_by_theta_fig
+ggsave("fig_se_by_theta.jpeg", dpi = 300, width = 200, height = 150, units = "mm")
 
 ```
 
+In both CAT-CDIs, we have been able to reliably estimate lexical ability for majority of children. Taking as the cut-off Makransky's suggestion to consider an SE below 0.2 as acceptable, such precision of the CAT-CDI estimate was was obtained for `r round(sum(prod_s$catTheta_SE < 0.2)/count(prod_s)*100,1)` of the American participants, and `r round(sum(by_child_pl$cat_theta_se < 0.2)/count(by_child_pl)*100,1)` of the Polish participants. The remaining participants, i.e. those with lower precision (i.e., higher SE) were typically those at the extremes of the ability scale--children with either relatively low or relatively high lexical skills (see Figure \@ref(fig:se-by-theta-fig)). The ability estimates from the Polish CAT-CDI generally fall well below an SE of 0.2, except for the highest-ability observations, where precision is worse. Because the Polish CAT-CDI was designed to stop once an SE of 0.1 was reached, the precision of Polish estimates never went below this threshold. Overall, the Polish CAT-CDI appears to provide precision comparable to the full CDI, particularly for children with relatively low abilities. This suggests the CAT-CDI is selecting items that are more informative at those lower ability levels.
 
-The question that remains is whether this consistent difference between the two estimates of abilities comes from CAT over-estimating child's lexical ability or from the full CDI underestimating child's ability. For one, it may be that in CAT-CDI parents answer "yes, my child produces this word" to more items that would be expected (Kachergis et al. 2022), and as a result, CAT-CDI may overestimate the child's true ability. On the other hand, it could be that as the full CDI is very long, parents may omit marking some items that their child produces (see e.g., Łuniewska et al., 2025 for parental inconsistencies in reporting vocabulary of older children). This could result in the full CDI underestimating the child's true ability. It is possible that either or both are true and the question is difficult to answer without direct assessment of child's lexical ability. However, we will attempt to tentatively address this question here. If parents are prone to omitting items in the full CDI, this would be most visible in the case of children with large vocabularies (the more words the child knows, the more CDI items can be omitted). If that is the case, then we may expect to see that as a child's ability grows (as estimated from the full CDI), the size of the discrepancy between the ability estimate from full CDI and the CAT CDI grows as well. English: `r c1$full_result`, Polish: `r c2$full_result`.
-
-[Here not finished, thinking of ways of testing out that CAT overestimates the ability] However, if CAT-CDI invites parents to respond "yes" more often than expected, we should be seeing... more "yes" responses the more items are being shown? or maybe simply many participants with more than half of their responses being yeses? or maybe we can get some THIRD value (not from the validation study) that we could compare these two validation ability estimates to?
-
-
-```{r}
-# Hypo 2: CAT overestimates child's true ability
-# Are parents more likely to respond “yes” when the item is asked in CAT compared to when it’s asked in the full CDI?
-
-
-
-
-# # EN
-# prod_s %>% filter(extreme_discrep == "no") %>% 
-#      ggplot(aes(x = n_asked, y = (full_cat_diff))) + 
-#                  geom_point() + 
-#                  geom_smooth(method = "lm")
-# 
-# # PL
-# by_child_pl %>% filter(extreme_discrep == "no") %>% 
-#      ggplot(aes(x = no_items, y = (full_cat_diff))) + 
-#                  geom_point() + 
-#                  geom_smooth(method = "lm")
-# 
-# # PL
-# by_child_pl %>% filter(extreme_discrep == "no") %>% 
-#      ggplot(aes(x = full_theta, y = abs(sq_err))) + geom_point() + geom_smooth(method = "loess") + 
-#      labs(title = "POLISH", y = "Squared Error (CAT vs full ability) (abs)")
-
-
-
-
-# which words get "yes" in CAT and are not marked in full?
-# I call them flips
-
-consistency_pl %>% filter(answer_cat == 1 & answer_full == 0) %>%
-     group_by(lexical_class) %>% count()
-
-n_admin <- consistency_pl %>%
-     group_by(definition) %>% count() %>% rename(n_admin = n)
-
-n_flips <- consistency_pl %>% filter(answer_cat == 1 & answer_full == 0) %>%
-     group_by(definition) %>% count() %>% rename(n_flipped = n)
-
-flips_pl <- merge(n_admin, n_flips, by = "definition", all.x = T)
-rm(n_admin, n_flips)
-flips_pl[is.na(flips_pl)] <- 0
-flips_pl <- flips_pl %>% rename(item = definition)
-flips_pl <- merge(flips_pl, items_cat_pl)
-
-# which items are flipped more frequently than others?
-flips_pl %>% ggplot(aes(x = d, y = n_flipped)) + geom_jitter(alpha = 0.3) + 
-     labs(title = "YES in CAT & NO in full", y = "count")
-flips_pl %>% ggplot(aes(x = itemID, y = n_flipped)) + geom_jitter(alpha = 0.3)
-# and half of administered are verbs, half of flipped are verbs
-
-```
-
-```{r}
-
-# FLIPS BY ID
-# do some parents flip more or is it similar across parents?
-
-flip_parents <- consistency_pl %>% filter(answer_cat == 1 & answer_full == 0) %>%
-     group_by(id) %>% count()
-flip_parents <- merge(flip_parents, by_child_pl)
-flip_parents <- flip_parents %>% mutate(flip_perc = n/no_items)
-
-flip_parents %>% ggplot(aes(x = age_CAT, y = flip_perc)) + geom_jitter() + labs(title = "child's age does not relate to amount of flips by parent (PL)", y = "flips (% of all items administered)") + ylim(0,1)
-
-flip_parents %>% filter(duration_cat < 2500) %>% ggplot(aes(x = duration_cat, y = flip_perc)) + geom_jitter() + labs(title = "duration of CAT (in secs) does not relate to amount of flips by parent  (PL)", y = "count of flips") + ylim(0,1)
-
-flip_parents  %>% filter(duration_full < 25000) %>% ggplot(aes(x = duration_full, y = flip_perc)) + geom_jitter() + labs(title = "duration of full (in secs) does not relate to amount of flips by parent  (PL)",  y = "flips (% of all items administered)") + ylim(0,1)
-
-flip_parents  %>% ggplot(aes(x = score_full, y = flip_perc)) + geom_jitter() + labs(title = "full score does not relate to amount of flips by parent  (PL)", y = "flips (% of all items administered)") + ylim(0,1)
-
-flip_parents  %>% ggplot(aes(x = abs(full_cat_diff), y = flip_perc)) + geom_jitter() + labs(title = "full-CAT diff relates to amount of flips by parent? (PL)",  y = "flips (% of all items administered)") + ylim(0,1)
-
-flip_parents <- flip_parents %>% mutate(abs_full_cat_diff = abs(full_cat_diff))
-cor.test(flip_parents$abs_full_cat_diff, flip_parents$flip_perc)
-
-
-
-```
-
-
-
-```{r}
-# Difference between ability from full vs ability from CAT - is non-linear fit is better than linear?
-# no
-lin <- lm(catTheta ~ fullTheta, data = prod_s)
-lin %>% ggplot(aes(x = fullTheta, y = residuals(lin))) + geom_point() + geom_smooth(method = "lm")
-
-nonlin <- lm(catTheta ~ poly(fullTheta, 2), data = prod_s)
-
-AIC(lin, nonlin)
-anova(lin, nonlin)
-
-```
+Taken together, the results reported so far show that for the English CAT-CDI, the CAT-CDI estimates correlate strongly with both full CDI scores and estimates obtained from the full CDI. The CAT-CDI estimates are consistently higher than the full CDI and show slightly worse precision than the full CDI, however, for the large majority of children, the obtained CAT-CDI estimates were below the precision cut-off point of 0.2. In Polish, the CAT-CDI estimates also correlate strongly with both full CDI scores and estimates obtained from the full CDI. The CAT-CDI estimates are consistently higher than the full CDI, but this discrepancy is smaller than in English. The Polish CAT-CDI also yielded ability estimates with more similar precision as the full CDI, and importantly, for children with lower abilities, CAT-CDI was able to provide an estimate with the same precision as the full CDI. This might potentially suggest that for lower abilities, CAT does not over-estimate children's true abilities, however, more research needs to be done.
 
 
 ## Item properties in the two CAT-CDIs
@@ -885,7 +744,7 @@ t2 <- apa_print(t.test(prod_s$catTheta_SE, by_child_pl$cat_theta_se)) # p < 0.00
 cor_age <- apa_print(cor.test(prod_s$catTheta_SE, prod_s$age_full)) # watch out, SE is weakly but significantly correlated with age, and the English validation sample is slightly (but significantly) younger than the Polish one. This differece in SEM between the samples can be partially pulled by age.
 ```
 
-The two CAT-CDIs differed in their settings as to when to finish the administration. Specifically, the Polish CAT-CDI was set so that the SEM as low as 0.1 be reached (with as few items as possible), and if the SEM could not be lowered to or below 0.1, the CAT-CDI stopped after administering a maximum of 75 items. The English CAT-CDI on the other hand was set to administer a maximum of 50 items, but the administration could be stopped earlier if the SEM of 0.15 or lower was reached. In other words, the Polish CAT-CDI prioritized as low SEM as possible, while the English CAT-CDI prioritized shorter test length. This difference resulted in slightly lower mean SEM in Polish CAT-CDI, compared to English CAT-CDI `r t2$full_result` but comparable mean number of items administered, `r t1$full_result`. However, it should be noted that the Polish and American validation samples differed slightly in age `r t_age$full_result`, and as age is weakly correlated with SEM (`r cor_age$full_result`), this slight difference in age could feed the SEM difference in the two validation samples. *NOTE*: We could consider matching kids from the two samples one-to-one on age, to even out this potential effect of age difference on SEM, [see Issue #8](https://github.com/karolina-m/catcdi_validation_eng_pl/issues/8).
+The two CAT-CDIs differed in their settings as to when to finish the administration. Specifically, the Polish CAT-CDI was set so that the SEM as low as 0.1 be reached (with as few items as possible), and if the SEM could not be lowered to or below 0.1, the CAT-CDI stopped after administering a maximum of 75 items. The English CAT-CDI on the other hand was set to administer a maximum of 50 items, but the administration could be stopped earlier if the SEM of 0.15 or lower was reached. In other words, the Polish CAT-CDI prioritized as low SEM as possible, while the English CAT-CDI prioritized shorter test length. This difference resulted in slightly lower mean SEM in Polish CAT-CDI, compared to English CAT-CDI `r t2$full_result` but comparable mean number of items administered, `r t1$full_result`. 
 
 ```{r}
 # SEM percentiles
@@ -907,36 +766,6 @@ round(sum(prod_s$catTheta_SE < 0.2)/count(prod_s)*100,1) # 92.6%
 
 ```
 
-In both CAT-CDIs, we have been able to reliably estimate lexical ability for majority of children. Taking as the cut-off Makransky's suggestion to consider a SEM below 0.2 as acceptable, so defined reliable CAT estimate was gathered for `r round(sum(by_child_pl$cat_theta_se < 0.2)/count(by_child_pl)*100,1)` of the American participants, and `r round(sum(prod_s$catTheta_SE < 0.2)/count(prod_s)*100,1)` of the Polish participants. The remaining participants, i.e. those with higher standard errors of measurement (in other words, lower reliability of ability estimates) were typically those at the extremes of the ability scale--children with either relatively low or relatively high lexical skills (see Figure \@ref(fig:se-fig)).
-
-
-```{r se-fig, fig.width = 10, fig.height = 5, fig.cap = "Standard Error of Measurement (SEM) by ability estimate in (A) English and (B) Polish. The red line marks the SE of 0.2.", fig.pos = '!h', include = T}
-
-# PL
-fig3b <- by_child_pl %>%
-  ggplot(aes(x = cat_theta, y = se_theta)) + geom_point(color = "#00416d", alpha = 0.5) +
-     geom_hline(aes(yintercept = 0.2), color = "red") +
-  labs(title = "(B) Polish", x = "Ability level", y = "Standard error (SEM)") +
-  ylim(0, 0.4) +
-  theme_light() +  theme(legend.position = "none")
-
-# EN
-prod_s <- prod_s %>% 
-  mutate(above_max_se_cat = case_when(
-    catTheta_SE > 0.15 ~ "yes",
-    .default = "no"
-  ))
-
-fig3a <- prod_s %>%
-  ggplot(aes(x = catTheta, y = catTheta_SE)) + geom_point(color = "#00416d", alpha = 0.5) + geom_hline(aes(yintercept = 0.2), color = "red") +
-  labs(title = "(A) English", x = "Ability level", y = "Standard error (SEM)") +
-  ylim(0, 0.4) +
-  theme_light() +  theme(legend.position = "none")
-
-fig3 <- ggarrange(fig3a, fig3b, ncol = 2)
-fig3
-
-```
 
 ## Parental consistency in responses
 
