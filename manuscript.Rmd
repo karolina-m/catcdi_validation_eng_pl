@@ -100,7 +100,7 @@ Though in both American and Polish validation studies the parents were asked to 
 ## Psychometric properties of the two CAT-CDIs
 
 # <!-- CORRELATIONS -->
-Our first aim was to examine whether CAT-CDIs in American English and Polish demonstrate comparable psychometric properties. To that end, we revisit the psychometric properties reported for the American English CAT-CDI (word production) in Kachergis et al. (2022) and compare those to the data from Polish CAT-CDI (Words and Sentences).
+Our first aim was to examine whether CAT-CDIs in American English and Polish demonstrate comparable psychometric properties. To that end, we revisit the psychometric properties reported for the American English CAT-CDI (word production) in Kachergis et al. (2022) and compare those to the data from Polish CAT-CDI:Words and Sentences.
 
 <!-- AmE r values copied from Kachergis et al. 2022 -->
 ```{r}
@@ -112,7 +112,7 @@ cor(by_child_pl$full_theta, by_child_pl$score_full) # AmE: .95, PL: 0.94
 ```
 
 
-We found similarly strong correlations in the two languages between the abilities estimated from CDI-CAT and full CDI scores (English and Polish: $r$ = .86). The correlations were also strong within individual age groups (see Tables \@ref(tab:corr-by-age-eng) and \@ref(tab:corr-by-age-pl)). We also obtained ability estimates from the full CDIs, which is a robust measure of ability because it is based on all available item responses, maximizing precision. Such ability from the full test version is often considered a baseline for comparisons with ability estimated from a short (adaptive) version. We correlated the abilities estimated from the CDI-CAT and abilities estimated from full CDI and again found strong correlations in both languages, English and Polish: $r$ = .92. Finally, we also correlated the abilities estimated from the full CDI and the full CDI scores, i.e. two measures obtained from the same data. This way we examine consistency between model-based abilities and traditional scores. Again, we found strong correlations in both languages (English: $r$ = .95, Polish: $r$ = `r cor(by_child_pl$full_theta, by_child_pl$score_full)`), confirming that both measures reflect the same underlying ability. 
+We found similarly strong correlations in the two languages between the abilities estimated from CDI-CAT and full CDI scores (English and Polish: $r$ = .86). The correlations were also strong within individual age groups (see Tables \@ref(tab:corr-by-age-eng) and \@ref(tab:corr-by-age-pl)). We also obtained IRT ability estimates from the full CDI using the same 2-PL model. Because these estimates draw on responses to all available items in the full CDI, they incorporate more information about each child’s performance, reducing random error and increasing precision. The 2-PL model further adjusts for item difficulty and discrimination, making these ability scores robust and comparable across individuals. Such ability from the full test version is often considered a baseline for comparisons with ability estimated from a short (adaptive) version. We correlated the abilities estimated from the CDI-CAT and abilities estimated from full CDI and again found strong correlations in both languages, English and Polish: $r$ = .92. Finally, we also correlated the abilities estimated from the full CDI and the full CDI scores, i.e. two measures obtained from the same data. This way we examine consistency between model-based abilities and traditional scores. Again, we found strong correlations in both languages (English: $r$ = .95, Polish: $r$ = `r cor(by_child_pl$full_theta, by_child_pl$score_full)`), confirming that both measures reflect the same underlying ability. 
 
 
 ```{r corr-by-age-eng, include = T}
@@ -147,9 +147,7 @@ age_cor_table <- by_child_pl %>%
     tibble(
       age_group = factor("[15,18)", levels = levels(.$age_group)), # keep factor consistency
       r = NA_real_,
-      n = NA_integer_
-    )
-  ) %>%
+      n = NA_integer_)) %>%
   arrange(age_group)
 
 age_cor_table_wide = rbind(round(age_cor_table$r, 2), as.character(age_cor_table$n))
@@ -157,36 +155,6 @@ colnames(age_cor_table_wide) = as.character(age_cor_table$age_group)
 row.names(age_cor_table_wide) = c('r ability CAT vs full CDI', 'N')
 
 apa_table(age_cor_table_wide, caption = "Polish: Correlations between ability estimated by CAT-CDI and ability estimated from full CDI by children's age.", placement = "H")
-```
-
-The Polish validation study included `r sum(by_child_pl$lang_group == "multilingual")` data from bi- and multilingual families. Though it is a small group, we decided to explore their correlation coefficients (non-parametric Spearman's rho) and found these were similar to those found for Polish monolingual children (see Table \@ref(tab:corr-by-langgroup) in Supplementary Materials). *NOTE*: [Here is an Issue for commenting on Supplementary Materials](https://github.com/karolina-m/catcdi_validation_eng_pl/issues/5). Since the correlation coefficients were similar in both groups, and as the bi- and multilingual group was was too small to warrant a separate analysis, we decided to include them in the Polish dataset alongside the Polish monolinguals.
-
-```{r corr-by-langgroup, include = T}
-
-# TODO: 
-# 1. the table could use some re-styling (lgs as columns?)
-# 2. move to Supplementary (separate .Rmd?)
-
-cor1 <- by_child_pl %>%
-  group_by(lang_group) %>%
-  summarise(r = cor(cat_theta, score_full, method = "spearman"), n = n()) %>%
-  mutate(correlation = "Ability from CDI-CAT ~ full CDI score")
-
-cor2 <- by_child_pl %>%
-  group_by(lang_group) %>%
-  summarise(r = cor(cat_theta, full_theta, method = "spearman"), n = n()) %>%
-  mutate(correlation = "Ability from CDI-CAT ~ ability from full CDI")
-
-cor3 <- by_child_pl %>%
-  group_by(lang_group) %>%
-  summarise(r = cor(full_theta, score_full, method = "spearman"), n = n()) %>%
-  mutate(correlation = "Ability from full CDI ~ full CDI score")
-
-lang_cor_table <- bind_rows(cor1, cor2, cor3)
-rm(cor1, cor2, cor3)
-
-apa_table(lang_cor_table, caption = "Supplementary Material: Table S1 - Spearman's correlations for monolingual and multilingual children in the Polish dataset", placement = "H")
-
 ```
 
 
@@ -239,16 +207,15 @@ table(prod_s$extreme_discrep)
 
 ```
 
-
-We also looked at the mean squared error (MSE) which quantifies the differences between the abilities as estimated by CAT-CDI and from the full CDI (the error is squared to eliminate negative values). The mean squared error in English was 0.55 (*Mdn* = 0.17, *SD* = 1), and in Polish it was `r mean(by_child_pl$sq_err)` (*Mdn* = `r median(by_child_pl$sq_err)`, *SD* = `r sd(by_child_pl$sq_err)`). The mean squared error was relatively high in English (compared to Polish), suggesting a relatively larger discrepancy between CAT-CDI ability estimates and full CDI ability estimates in English. This occurred despite strong correlations between the two measures. This difference may be explained by at least two reasons. First, a number of participants with extreme discrepancies between the CAT-CDI and full CDI estimates may be inflating the MSE. Second, there might be a systematic bias, with one estimate consistently higher than the other. 
+Next, we looked at the mean squared error (MSE) which quantifies the differences between the abilities as estimated by CAT-CDI and from the full CDI (the differences are squared to eliminate negative values). The mean squared error in English was `r mean(prod_s$sq_err)` (*Mdn* = `r median(prod_s$sq_err)`, *SD* = `r sd(prod_s$sq_err)`), and in Polish it was `r mean(by_child_pl$sq_err)` (*Mdn* = `r median(by_child_pl$sq_err)`, *SD* = `r sd(by_child_pl$sq_err)`). The mean squared error was relatively high in English (compared to Polish), suggesting a relatively larger discrepancy between CAT-CDI ability estimates and full CDI ability estimates in English. This occurred despite strong correlations between the two measures. This difference between the full and CAT-CDI estimates may be explained by at least two reasons. First, a number of participants with extreme discrepancies between the CAT-CDI and full CDI estimates may be inflating the MSE. Second, there might be a systematic bias, with one estimate consistently higher than the other. 
 
 ```{r}
-# re-calculating MSE after exlcuding extreme cases
-prod_s %>% filter(extreme_discrep == "no") %>% summarise(mean(sq_err)) # 0.44, was 0.55
+# re-calculating MSE after excluding extreme cases
+prod_s %>% filter(extreme_discrep == "no") %>% summarise(mean(sq_err)) # 0.44, was 0.57
 by_child_pl %>% filter(extreme_discrep == "no") %>% summarise(mean(sq_err)) # 0.12, was 0.19
 ```
 
-To explore the first of these possibilities, we identified children for whom the estimates from the CAT-CDI and full CDI diverged extremely, i.e. their errors was removed by 1.5 SD from the mean. There were `r sum(prod_s$extreme_discrep == "yes")` such cases (`r round(sum(prod_s$extreme_discrep == "yes")/count(prod_s)*100,2)`%) in the English dataset and `r sum(by_child_pl$extreme_discrep == "yes")` cases (`r round(sum(by_child_pl$extreme_discrep == "yes")/count(prod_s)*100,2)`%) in the Polish dataset. We then re-calculated the mean squared error without the cases of extreme discrepancy, which yielded a MSE of `r round(prod_s %>% filter(extreme_discrep == "no") %>% summarise(mean(sq_err)),2)` (*Mdn* = `r round(prod_s %>% filter(extreme_discrep == "no") %>% summarise(median(sq_err)),2)`, *SD* = `r round(prod_s %>% filter(extreme_discrep == "no") %>% summarise(sd(sq_err)),2)`) in English and MSE of `r round(by_child_pl %>% filter(extreme_discrep == "no") %>% summarise(mean(sq_err)),2)` (*Mdn* = `r round(by_child_pl %>% filter(extreme_discrep == "no") %>% summarise(median(sq_err)),2)`, *SD* = `r round(by_child_pl %>% filter(extreme_discrep == "no") %>% summarise(sd(sq_err)),2)`) in Polish. The slightly reduced MSE values indicate that extreme discrepancies had only a modest impact on the overall error and do not fully explain the MSE values and the differences observed between ability estimates from full CDI and CAT-CDI.
+To explore the first of these possibilities, we identified children for whom the estimates from the CAT-CDI and full CDI showed extreme discrepancies, i.e. the difference between the two estimates was removed by 1.5 SD from the mean (measured in MSE). There were `r sum(prod_s$extreme_discrep == "yes")` such cases (`r round(sum(prod_s$extreme_discrep == "yes")/count(prod_s)*100,2)`%) in the English dataset and `r sum(by_child_pl$extreme_discrep == "yes")` cases (`r round(sum(by_child_pl$extreme_discrep == "yes")/count(prod_s)*100,2)`%) in the Polish dataset. We then re-calculated the mean squared error without these cases, which yielded an MSE of `r round(prod_s %>% filter(extreme_discrep == "no") %>% summarise(mean(sq_err)),2)` (*Mdn* = `r round(prod_s %>% filter(extreme_discrep == "no") %>% summarise(median(sq_err)),2)`, *SD* = `r round(prod_s %>% filter(extreme_discrep == "no") %>% summarise(sd(sq_err)),2)`) in English and `r round(by_child_pl %>% filter(extreme_discrep == "no") %>% summarise(mean(sq_err)),2)` (*Mdn* = `r round(by_child_pl %>% filter(extreme_discrep == "no") %>% summarise(median(sq_err)),2)`, *SD* = `r round(by_child_pl %>% filter(extreme_discrep == "no") %>% summarise(sd(sq_err)),2)`) in Polish. The slightly reduced MSE values indicate that cases of extreme discrepancy had only a modest impact on the overall error and do not fully explain the differences observed between ability estimates from full CDI and CAT-CDI in the two languages.
 
 ```{r}
 # Difference between abilities: full ability minus CAT ability
@@ -292,20 +259,12 @@ prod_s %>% filter(extreme_discrep == "no") %>%
                  geom_smooth(method = "lm") + 
           geom_hline(yintercept = 0, color = "red", linetype = "dashed") +
      ylim(-2,2) + xlim(-4,4) + 
-     labs(title = "ENGLISH: <<correlation treats neg values as small diff>>", y = "full - CAT")
-
-# abs(full - CAT)
-prod_s %>% filter(extreme_discrep == "no") %>% 
-     ggplot(aes(x = fullTheta, y = (abs(full_cat_diff)))) + 
-                 geom_point() + 
-                 geom_smooth(method = "loess") + 
-          geom_hline(yintercept = 0, color = "red", linetype = "dashed") +
-     ylim(-2,2) + xlim(-4,4) + 
-     labs(title = "ENGLISH: biggest diffs in thetas for low abilites", y = "abs(full - CAT)")
+     labs(title = "ENGLISH", y = "full - CAT")
 
 # PL
 c2 <- apa_print(cor.test(by_child_pl$full_theta, by_child_pl$full_cat_diff, paired = T))
 
+# full - CAT
 by_child_pl %>% filter(extreme_discrep == "no") %>% 
      ggplot(aes(x = full_theta, y = (full_cat_diff))) + 
                  geom_point() + 
@@ -314,13 +273,6 @@ by_child_pl %>% filter(extreme_discrep == "no") %>%
      ylim(-2, 2) + xlim(-4,4) + 
      labs(title = "POLISH")
 
-by_child_pl %>% filter(extreme_discrep == "no") %>% 
-     ggplot(aes(x = full_theta, y = (abs(full_cat_diff)))) + 
-                 geom_point() + 
-                 geom_smooth(method = "loess") + 
-     geom_hline(yintercept = 0, color = "red", linetype = "dashed") +
-     ylim(-2, 2) + xlim(-4,4) + 
-     labs(title = "POLISH", y = "abs(full - CAT)")
 
 ```
 
@@ -334,12 +286,25 @@ prod_s %>%
   geom_point(aes(x = catTheta, y = catTheta_SE), color = "red") +
   geom_segment(aes(x = fullTheta, y = fullTheta_SE, xend = catTheta, yend = catTheta_SE, group = subject_id), color = "black") + labs(y = "SE", x = "Theta", title = "(English)") + ylim(0, 0.5)
 
+
+prod_s %>%
+  ggplot() +
+  geom_smooth(aes(x = fullTheta, y = fullTheta_SE), se = T, method = "loess", span = 0.8, color = "black") +
+  geom_smooth(aes(x = catTheta, y = catTheta_SE), se = T, method = "loess", span = 0.8, color = "red") +
+  labs(y = "SE", x = "Theta", title = "(English)") + ylim(0, 0.5)
+
 # PL
 by_child_pl %>%
   ggplot() +
   geom_point(aes(x = full_theta, y = full_theta_se)) +
   geom_point(aes(x = cat_theta, y = cat_theta_se), color = "red") +
   geom_segment(aes(x = full_theta, y = full_theta_se, xend = cat_theta, yend = cat_theta_se, group = id), color = "black") + labs(y = "SE", x = "Theta", title = "(Polish)") + ylim(0, 0.5)
+
+by_child_pl %>%
+  ggplot() +
+  geom_smooth(aes(x = full_theta, y = full_theta_se), se = T, method = "loess", span = 1, color = "black") +
+  geom_smooth(aes(x = cat_theta, y = cat_theta_se), se = T, method = "loess", span = 1 , color = "red") +
+  labs(y = "SE", x = "Theta", title = "(Polish)") + ylim(0, 0.5)
 
 
 by_child_pl <- by_child_pl %>%
@@ -386,10 +351,13 @@ by_child_pl %>%
   scale_color_manual(
     values = c("FALSE" = "grey70", "TRUE" = "black")
   ) + labs(y = "SE", x = "Theta", title = "Biggest differences between thetas (Polish)") + ylim(0, 0.5)
+
+
+
 ```
 
 
-The question that remains is whether this consistent difference between the two estimates of abilities comes from CAT over-estimating child's lexical ability or from the full CDI underestimating child's ability. For one, it may be that in CAT-CDI parents answer "yes, my child produces this word" to more items that would be expected, and as a result, CAT-CDI may overestimate the child's true ability. On the other hand, it could be that as the full CDI is very long, parents may omit marking some items that their child produces (e.g. Łuniewska et al., 2025), which can result in the full CDI underestimating the child's true ability. This question is difficult to answer without direct assessment of child's lexical ability. However, if parents are prone to omitting items in the full CDI, this would be most visible in the case of children with large vocabularies (the more words the child knows, the more CDI items can be omitted). Indeed, we see that as a child's ability grows (as estimated from the full CDI), the size of the discrepancy between the ability estimate from full CDI and the CAT CDI grows as well, English: `r c1$full_result`, Polish: `r c2$full_result`.
+The question that remains is whether this consistent difference between the two estimates of abilities comes from CAT over-estimating child's lexical ability or from the full CDI underestimating child's ability. For one, it may be that in CAT-CDI parents answer "yes, my child produces this word" to more items that would be expected (Kachergis et al. 2022), and as a result, CAT-CDI may overestimate the child's true ability. On the other hand, it could be that as the full CDI is very long, parents may omit marking some items that their child produces (see e.g., Łuniewska et al., 2025 for parental inconsistencies in reporting vocabulary of older children). This could result in the full CDI underestimating the child's true ability. It is possible that either or both are true and the question is difficult to answer without direct assessment of child's lexical ability. However, we will attempt to tentatively address this question here. If parents are prone to omitting items in the full CDI, this would be most visible in the case of children with large vocabularies (the more words the child knows, the more CDI items can be omitted). If that is the case, then we may expect to see that as a child's ability grows (as estimated from the full CDI), the size of the discrepancy between the ability estimate from full CDI and the CAT CDI grows as well. English: `r c1$full_result`, Polish: `r c2$full_result`.
 
 [Here not finished, thinking of ways of testing out that CAT overestimates the ability] However, if CAT-CDI invites parents to respond "yes" more often than expected, we should be seeing... more "yes" responses the more items are being shown? or maybe simply many participants with more than half of their responses being yeses? or maybe we can get some THIRD value (not from the validation study) that we could compare these two validation ability estimates to?
 
