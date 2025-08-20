@@ -487,6 +487,49 @@ low_disc <- items_run_en %>% filter(a1 <2 & d > -1.5 & d < 1.5)
 It is to be expected that a CAT-CDI will not need to administer all the items in the item bank. In fact, in all the task administrations in the validation study the English CAT-CDI used `r sum(items_run_en$n != 0)` items (`r round(sum(items_run_en$n != 0)/count(items_run_en)*100,2)`%) and the Polish CAT-CDI used `r sum(items_run_pl$n != 0)` items (`r round(sum(items_run_pl$n != 0)/count(items_run_pl)*100,2)`%).
 By design, a CAT-CDI selects the items that provide the most information for each participant. In practice, this means it draws from a subset of items that both match the participant’s current ability estimate in difficulty and show high discrimination, allowing clear distinctions between individuals with similar ability levels. A potential concern, however, is that the CAT-CDI might repeatedly rely on the same subset of optimal items. Its usefulness in research—particularly in longitudinal studies—lies in the possibility of administering the CDI frequently without parents becoming overly familiar with specific, frequently repeated items. This advantage holds only if the CAT-CDI does not consistently present the same items across administrations. Therefore, we investigated whether the two CAT-CDIs repeatedly selected the same items too frequently. In English, 3 items appeared in more than half of administrations - *"long"* in 64% of administrations, *"make"* in 54% of administrations, and *"last"* in 53% of administrations. They are also high discrimination items in their difficulty bins. "Long" is additionally one of the starting items, i.e. a first item shown to the parent, chosen so that there is high probability the parent can respond positively. In Polish, 3 items appeared in more than half of administrations - *"szukać"* (to look for) appearing in 83% of administrations, *"znaleźć"* (to find) appearing in 61% of administrations, and *"babcia"* (grandmother) appearing in 60% of administrations. All three items show very high discrimination. *"Szukać"* (to look for) and *"znaleźć"* (to find) are also in top 5 discrimination items in general. *"Babcia"* (grandmother) is one of the starting items. 
 
+```{r}
+# tutaj przypadkiem podczas rozmów z naszym przyjacielem ;) natknęłam się na pomysł, żeby wyliczyć expected probability (tu "probability") tego, czy dane dziecko zna dany item (na podstawie parametrów itemu i thety dziecka). Poszłam za ciosem i dodałam do tego jeszcze observed odpowiedź w CATcie i w fullu. Możnaby jeszcze (?) wyliczyć błąd, np. observed prob = 1, a exp_prob = 0.8, to błąd jest 1-0.8 = 0.2. Natomiast jeśli rodzic zaznaczył (obs = 1), a było małe prawdopodobieństwo, że dziecko zna ten item, to błąd będzie wysoki i będzie na plusie.
+# może być też błąd na minusie, gdy rodzic nie zaznaczył słowa, a exp_prob było wyższe niż 0.
+# minus tych wyliczeń jest teoretycznie taki, że to exp_prob ("probability") wylicza się na podstawie thety z CATa, a jeśli rodzic zaznaczał więcej itemów niż powienien, to cat_theta jest zawyżona i może podbijać exp_prob dla danego itemu. (Można alternatywnie na podst. thety z fulla, ale tym razem MOŻE full_theta będzie zaniżać exp_prob?)
+
+
+# GET PROBABILITIES OF KNOWING A WORD (GIVEN THETA) FOR EACH PARTICIPANT AND EACH WORD (based on validation data)
+theta_valid <- by_child_pl %>% select(id, cat_theta)
+items_cat_pl_check <- items_cat_pl %>% select(itemID, a1, d)
+theta_values <- theta_valid$cat_theta
+person_ids <- theta_valid$id
+
+# Compute probability matrix (persons x items)
+prob_matrix <- 1 / (1 + exp(-outer(theta_values, items_cat_pl_check$a1, "*") + items_cat_pl_check$d))
+
+# convert to long data frame
+prob_df <- data.frame(
+  personID = rep(person_ids, times = nrow(items_cat_pl_check)),
+  itemID = rep(items_cat_pl_check$itemID, each = length(theta_values)),
+  probability = as.vector(prob_matrix)
+)
+
+prob_df <- prob_df %>% rename("id" = "personID")
+
+# ADD answer_cat AND answer_full
+responses_cat_pl <- merge(responses_cat_pl, items_cat_pl[,c("item", "itemID")], by.x = "definition", by.y = "item", a..x = T)
+
+prob_df <- merge(prob_df, responses_cat_pl[,c("id", "itemID", "definition", "answers")], by = c("id", "itemID"), all.x = T)
+prob_df <- prob_df %>% filter(!is.na(answers))
+prob_df <- prob_df %>% rename("answer_cat" = "answers")
+
+# answer_full
+ws_itemized_long <- ws_itemized %>% pivot_longer(item1:item670, names_to = "item_id", values_to = "answer_full")
+ws_itemized_long$itemID <- gsub("item", "item_", ws_itemized_long$item_id)
+
+prob_df_t <- merge(prob_df, ws_itemized_long[,c("id", "itemID", "answer_full")], by = c("id", "itemID"), all.x = T)
+
+prob_df$error <- prob_df$answers - prob_df$probability
+
+```
+
+
+
 
 
 ```{r}
