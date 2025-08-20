@@ -322,9 +322,9 @@ Taken together, the results reported so far show that for the English CAT-CDI, t
 
 
 ## Item properties in the two CAT-CDIs
-Our second aim was to analyze similarities and differences in IRT item properties and item selection in CAT in English and Polish.
+Our second aim was to analyze similarities and differences in IRT item properties in CAT in English and Polish.
 
-There are 679 items in the English CAT-CDI and 666 items in the Polish CAT-CDI. In both languages, the items' difficulty and discrimination parameters were calculated using IRT 2 parameter model (these included separate samples, see Kachergis et al. 2022 and Krajewski et al. (in preparation)). An item’s difficulty indicates the ability level at which there is a 50% probability that a participant will respond correctly. It is on the same scale as theta (measured ability) with negative values indicating difficult items, values around 0 indicating medium difficulty, and positive values indicating easy items (note that difficulty is inversely related to theta and so negative theta means low ability while positive theta means high ability). An item’s discrimination indicates how well it distinguishes between individuals with slightly different ability levels. Of these two parameters, item difficulty is of greater interest to the present paper as it is directly linked to ability and as discrimination power is more about how good the item is at measuring, rather than what it is measuring.
+There are 679 items in the English CAT-CDI and 666 items in the Polish CAT-CDI. In both languages, the items' difficulty and discrimination parameters were calculated using IRT 2 parameter model (these included separate samples, see Kachergis et al. 2022 and Krajewski et al., in preparation). An item’s difficulty indicates the ability level at which there is a 50% probability that a participant will respond correctly (here: that a child will know a word). Difficulty is expressed on the same scale as theta (measured ability): negative values correspond to harder items, values near zero to items of moderate difficulty, and positive values to easier items (note that difficulty is inversely related to theta and so negative theta means low ability while positive theta means high ability). An item’s discrimination shows how well it can distinguish between individuals whose abilities are close. In this paper, we focus mainly on item difficulty, as it is directly tied to the ability being measured, whereas discrimination reflects more the quality of the item as a measurement tool.
 
 ```{r diff_across_lgs}
 # item difficulty by language 
@@ -372,22 +372,34 @@ We also examined whether CDI semantic categories show comparable difficulty valu
 
 items_en_pl %>% 
      mutate(category_pl = 
-                            fct_recode(category_pl,
+                 fct_recode(category_pl,
                     "descriptive_words" = "descriptive_words (adverbs)")) %>%
      mutate(category_pl = 
-                            fct_recode(category_pl,
+                 fct_recode(category_pl,
                     "descriptive_words" = "descriptive_words (adjectives)")) %>%
      group_by(category_pl) %>% summarise(
      rho = cor(d_pl, d_en, method = "spearman", use = "complete.obs"),
-     n = length(category_pl)) %>% arrange(rho) -> corr_by_category
+     n = length(category_pl)) %>% arrange(rho) %>%
+     rename("CDI category" = "category_pl") -> corr_by_category
 
-apa_table(corr_by_category, placement = "H")
+apa_table(corr_by_category, caption="Cross-linguistic correlations of item difficulty within each CDI semantic category (Spearman's rank correlations).", placement = "H")
 ```
 
 
-```{r d_by_lexical_class_tab, include = T}
+Last, we investigated whether particular lexical categories show related difficulty values across the two languages. We considered the following lexical classes: verbs, nouns, adjectives, function words and other, i.e. mostly sounds and words relating to routines (e.g. "hello", "yes", "thank you") and time (e.g. "tommorow", "day"). Again, we performed a series of Spearman's rank correlations (on the difficulty of items common to CDI-CATs in Polish and English) for each lexical class (see Table \@ref(tab:d-by-lexical-class-tab). The weakest correlation was for function words (0.40), then verbs (0.47), adjectives (0.53), nouns (0.6), other (0.75). Notably, function words include many of the CDI semantic categories which showed the lowest correlations in Table \@ref(tab:d-by-cdi-category-tab), i.e., quantifiers, connecting words, locations, and pronouns. Interestingly, many English function words map onto multiple Polish equivalents - for example, "which" corresponds to "jaki" (when asking about type, kind, or quality) and "który" (when selecting from a limited set of options). These cross-linguistic differences may partly explain the weaker correlation for function words. But also, because function words are structurally tied to grammar (which is highly language-specific) they naturally vary in frequency in child-directed speech and in their communicative salience, which can affect how well children know them across languages. By contrast, the relatively high correlations for nouns reflect their consistent easiness/difficulty across languages: words like "mum", "eye", and "ball" are acquired early, aligning with findings that nouns are strongly and consistently over-represented in early vocabularies across many languages (e.g., Frank et al., 2021).
+
+```{r d-by-lexical-class-tab, include = T}
 # correlations by lexical class on common words
 # spearman because ranked
+
+# PL
+items_cat_pl <- merge(items_cat_pl, items_full_pl[,c("item_id", "lexical_class")], all.x = T, 
+                      by.x = "itemID", by.y = "item_id") 
+
+items_full_en <- read.csv("data/english/eng_ws_items.csv")
+items_cat_en <- merge(items_cat_en, items_full_en[,c("definition", "lexical_class")], all.x = T, 
+                      by = "definition") 
+
 
 items_en_pl <- merge(items_cat_pl, items_cat_en, 
                   all.x = T, all.y = T,
@@ -399,11 +411,14 @@ items_en_pl %>% group_by(lexical_class_en) %>% summarise(
      n = length(lexical_class_en)) %>% arrange(rho) -> corr_by_lex_class
 
 apa_table(corr_by_lex_class, placement = "H")
+
+# add d_diff = differences in item difficulty between PL and ENG:
+items_en_pl <- items_en_pl %>% mutate(d_diff = abs(d_en - d_pl))
+
 ```
 
-Last, we investigated whether particular lexical categories show related difficulty values across the two languages. Again, we performed a series of Spearman's rank correlations (on the difficulty of items common to CDI-CATs in Polish and English) for each lexical class (see Table \@ref(tab:d_by_lexical_class_tab), Figure \@ref(fig:d-by-lexical-class-fig)). The lowest correlation was for function words (0.40), then verbs (0.47), adjectives (0.53), nouns (0.6), other, i.e. mostly sounds and words relating to routines (e.g. "hello", "yes", "thank you") and time (e.g. "tommorow", "day") (0.75).
-
 ## Item selection in the two CAT-CDIs
+
 
 ```{r}
 # Data prep
