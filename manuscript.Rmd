@@ -243,78 +243,144 @@ cohens_d(good_pl$cat_theta, good_pl$full_theta, paired = T)
 
 ```
 
-Next, we examined a possible bias in our two ability estimates. We found that the mean CAT ability estimates were higher than the full CDI ability estimates. That was true both in English, `r t1$full_result` (large effect size: Cohen's $d$ = 1.06, 95% CI $[0.89, 1.23]$), and in Polish, `r t2$full_result` (medium effect size: Cohen's $d$ = 0.73, 95% CI $[0.52, 0.93]$).
+Next, we examined a possible bias in our two ability estimates. We found that the mean CAT ability estimates were higher than the full CDI ability estimates. That was true both in English, `r t1$full_result` (large effect size: Cohen's $d$ = 1.06, 95% CI $[0.89, 1.23]$), and in Polish, `r t2$full_result` (medium effect size: Cohen's $d$ = 0.73, 95% CI $[0.52, 0.93]$). A closer look showed that the difference between the full and CAT-CDI estimates depended on the child's ability level (see Figure \@ref(fig:diff-fig)). For low ability, the English CAT-CDI estimates tended to be higher than the full scores. For the highest ability, the estimates from the two CDIs seemed most aligned. In Polish, the CAT-CDI estimates generally aligned more closely with the full CDI estimates across the whole range of ability. Still, a similar trend has emerged as in English, though weaker: for the lowest ability levels, the CAT-CDI estimates were mostly higher than the full CDI estimates. However, for the highest ability levels, the CAT-CDI estimates were in fact lower than the full CDI estimates. 
 
 
-```{r diff-fig, out.width="75%", fig.cap = "The relation between ability (estimated from full CDI) and the direction and size of  discrepancy between the estimates from full CDI and CAT-CDI: (A) English, (B) Polish. The red dashed line at 0 indicates null difference between the two estimates. Negative values indicate that CAT estimate was higher than the full estimate. Postive values indicate that CAT estimate was lower than the full estimate.", include = T}
+```{r diff-fig, out.width="100%", fig.cap = "The relation between ability (estimated from full CDI) and the size of  discrepancy between the estimates from full CDI and CAT-CDI: (A) English, (B) Polish.", include = T}
 
 # EN
+diff_en <- prod_s %>%
+  select(subject_id, catTheta, catTheta_SE, fullTheta, fullTheta_SE) %>%
+  rename(
+    cat_se = catTheta_SE,
+    full_se = fullTheta_SE,
+    cat_theta = catTheta,
+    full_theta = fullTheta) %>%
+     mutate(full_theta_bin = cut(full_theta, 
+                         breaks = c(-3, -1.5, 0, 1.5, 3.1), 
+                         labels = c("[-3,-1.5]", "(-1.5,0]", "(0,1.5]", "(1.5,3]"),
+                         include.lowest = TRUE)) %>%
+  pivot_longer(
+    cols = c(full_theta, full_se, cat_theta, cat_se),
+    names_to = c("method", ".value"),
+    names_pattern = "(full|cat)_(theta|se)") 
 
-# full - CAT
-p1 <- prod_s %>% filter(extreme_discrep == "no") %>% 
-     ggplot(aes(x = fullTheta, y = (full_cat_diff))) + 
-                 geom_point() + 
-                 geom_smooth(method = "lm") + 
-          geom_hline(yintercept = 0, color = "red", linetype = "dashed") +
-     ylim(-1.5,1.5) + xlim(-3,3) + 
-     labs(title = "A: ENGLISH", x = "Full CDI theta", y = "Difference (full CDI theta - CAT-CDI theta)") +
-     theme_light()
+p1 <- diff_en  %>% group_by(full_theta_bin) %>% ggplot(aes(x = full_theta_bin, y = theta, fill = method, color = method)) + geom_boxplot(alpha = 0.5) +
+     labs(x = "Theta from Full CDI (binned)", y = "Theta from each CDI version", title = "A: English") +
+     theme_light() + 
+     theme(legend.position = "bottom", legend.title = element_blank()) +
+     ylim(-3.5,3.5)
+
 
 # PL
 
-# full - CAT
-p2 <- by_child_pl %>% filter(extreme_discrep == "no") %>% 
-     ggplot(aes(x = full_theta, y = (full_cat_diff))) + 
-                 geom_point() + 
-                 geom_smooth(method = "lm") + 
-     geom_hline(yintercept = 0, color = "red", linetype = "dashed") +
-     ylim(-1.5,1.5) + xlim(-3,3) + 
-     labs(title = "B: POLISH", x = "Full CDI theta", y = "Difference (full CDI theta - CAT-CDI theta)") +
-     theme_light()
+diff_pl <- by_child_pl %>%
+  select(child_id, cat_theta, cat_theta_se, full_theta, full_theta_se) %>%
+  rename(
+    cat_se = cat_theta_se,
+    full_se = full_theta_se) %>%
+     mutate(full_theta_bin = cut(full_theta, 
+                         breaks = c(-3, -1.5, 0, 1.5, 3), 
+                         labels = c("[-3,-1.5]", "(-1.5,0]", "(0,1.5]", "(1.5,3]"),
+                         include.lowest = TRUE)) %>%
+  pivot_longer(
+    cols = c(full_theta, full_se, cat_theta, cat_se),
+    names_to = c("method", ".value"),
+    names_pattern = "(full|cat)_(theta|se)")
 
-fig_theta <- ggarrange(p1, p2, ncol = 2, common.legend = T)
+p2 <- diff_pl  %>% group_by(full_theta_bin) %>% ggplot(aes(x = full_theta_bin, y = theta, fill = method, color = method)) + geom_boxplot(alpha = 0.5) +
+     labs(x = "Theta from Full CDI (binned)", y = "Theta from each CDI version", title = "B: Polish") +
+     theme_light() + 
+     theme(legend.position = "bottom", legend.title = element_blank()) +
+     ylim(-3.5,3.5)
+
+
+fig_theta <- ggarrange(p1, p2, ncol = 2, common.legend = T, legend = "bottom")
 fig_theta
 ggsave("fig_theta.jpeg", dpi = 300, width = 200, height = 150, units = "mm")
 
+
+
 ```
 
+The question that remains is whether the differences between the two estimates of abilities come from CAT over-estimating child's true lexical ability or from the full CDI underestimating child's ability. For one, it may be that in CAT-CDI parents answer "yes, my child produces this word" to more items that would be expected (Kachergis et al. 2022), and as a result, CAT-CDI may overestimate the child's true ability. On the other hand, it could be that as the full CDI is very long, parents may omit marking some items that their child produces (see e.g., Łuniewska et al., 2025 for parental inconsistencies in reporting vocabulary of older children). This could result in the full CDI underestimating the child's true ability. It is possible that both are true and the question is difficult to answer without direct assessment of child's lexical ability. With the existing data, we can at least compare the precision of the two estimates to assess which measure is likely more reliable.
 
-The question that remains is whether this consistent difference between the two estimates of abilities comes from CAT over-estimating child's true lexical ability or from the full CDI underestimating child's ability. For one, it may be that in CAT-CDI parents answer "yes, my child produces this word" to more items that would be expected (Kachergis et al. 2022), and as a result, CAT-CDI may overestimate the child's true ability. On the other hand, it could be that as the full CDI is very long, parents may omit marking some items that their child produces (see e.g., Łuniewska et al., 2025 for parental inconsistencies in reporting vocabulary of older children). This could result in the full CDI underestimating the child's true ability. It is possible that either or both are true and the question is difficult to answer without direct assessment of child's lexical ability. What the data tentatively suggest is that the difference between the full and CAT-CDI estimates depends on the child's ability level (see Figure \@ref(fig:diff-fig)), especially in English. For low abilities, the English CAT-CDI estimates tend to be higher than the full scores (i.e. the difference between the full estimates and CAT estimates is negative). For higher ability, the estimates from the two CDIs seem most aligned with the difference being close to zero for many of the participants. In Polish, though many negative differences are present (i.e. CAT-CDI estimate > full CDI estimate), the CAT-CDI estimates generally align more closely with the full CDI estimates across the whole range of ability. 
-
-\textcolor{red}{KM's comment: These large difference between estimates visible at lowest end of ability (especially for English) may come from the fact that the difficulty of the English CDI items was calibrated on children outside the WS range (including younger kids). So if a child didn't know these "difficult" (from CAT perspective) items, the CAT estimate of their ability went higher because failing hard items implies a higher theta than failing easy ones. But the same words weren't considered "that difficult" by the full CDI, so not knowing them in full CDI indicated a relatively lower ability?}
 
 # <!-- SE -->
 
-We also looked at the precision of the full and CAT-CDI estimates and how that precision (measured by standard error of the theta) relates to the ability levels. In both languages, the characteristic U-shaped curves indicate that measurement precision is highest around the middle of the ability range and declines at the extremes (very low or very high ability) (see Figure \@ref(fig:se-by-theta-fig)). 
+We looked at how precision of the estimate, measured by standard error of the theta (SE), related to the ability levels. In both languages, the characteristic U-shaped curves indicate that measurement precision is the highest around the middle of the ability range (i.e., showing lowest SE) and decline at the extremes (very low or very high ability the SE values are the highest) (see Figure \@ref(fig:fig-se-by-theta)). This U-shape is observed for both the CAT-CDI and the full CDI, indicating that even the full CDI provides relatively less precise estimates at the extreme ends of ability. Note that in Polish (Figure \@ref(fig:fig-se-by-theta), panel B) the CAT estimates show slightly lower median SE than the full CDI, suggesting that at lowest ability levels, CAT might be similarly or slightly more precise than the full CDI.
 
-```{r se-by-theta-fig, out.width="75%", fig.cap = "The relation between ability estimaes from full CDI (black) and CAT-CDI (red) and the standard error of that estimate: (A) English, (B) Polish.", include = T}
-
-# Theta by SE - comparing CAT and full
-colors <- c("full CDI" = "black", "CAT-CDI" = "red")
+```{r fig-se-by-theta, out.width="100%", fig.cap = "The relation between ability estimaes from full CDI and CAT-CDI and the standard error of that estimate: (A) English, (B) Polish.", include = T}
 
 # EN
+se_en <- prod_s %>%
+  select(subject_id, catTheta, catTheta_SE, fullTheta, fullTheta_SE) %>%
+  rename(
+    cat_se = catTheta_SE,
+    full_se = fullTheta_SE,
+    cat_theta = catTheta,
+    full_theta = fullTheta) %>%
+  pivot_longer(
+    cols = c(full_theta, full_se, cat_theta, cat_se),
+    names_to = c("method", ".value"),
+    names_pattern = "(full|cat)_(theta|se)") %>%
+     mutate(theta_bin = cut(theta, 
+                         breaks = c(-3, -1.5, 0, 1.5, 3.1), 
+                         labels = c("[-3,-1.5]", "(-1.5,0]", "(0,1.5]", "(1.5,3]"),
+                         include.lowest = TRUE))
 
-p3 <- prod_s %>%
-  ggplot() +
-  geom_smooth(aes(x = fullTheta, y = fullTheta_SE, color = "full CDI"), se = F, method = "loess", span = 1) +
-  geom_smooth(aes(x = catTheta, y = catTheta_SE, color = "CAT-CDI"), se = F, method = "loess", span = 1) +
-  labs(y = "SE", x = "Theta", title = "A: ENGLISH") + ylim(0, 0.5) + xlim(-3, 3) +
-    scale_color_manual(values = colors) + theme_light() + theme(legend.title=element_blank())
+p3_alt <- se_en %>%
+  ggplot(aes(x = theta, y = se, color = method, fill = method)) + 
+  geom_smooth(se = FALSE, method = "loess", span = 0.5, size = 1.2) +
+  geom_boxplot(
+  aes(group = interaction(theta_bin, method)), 
+  alpha = 0.2, size = 0.1,
+  width = 0.3) +   # fixed width, all equal
+  scale_x_continuous(
+    breaks = c(-2.5, -1, 1, 2.5),
+    labels = c("[-3,-1.5]", "(-1.5,0]", "(0,1.5]", "(1.5,3]")) +
+labs(y = "SE", x = "Theta", title = "A: ENGLISH") +
+     ylim(0, 0.5) +
+  theme_light() + theme(legend.title = element_blank())
+
 
 # PL
+se_pl <- by_child_pl %>%
+  select(child_id, cat_theta, cat_theta_se, full_theta, full_theta_se) %>%
+  rename(
+    cat_se = cat_theta_se,
+    full_se = full_theta_se) %>%
+  pivot_longer(
+    cols = c(full_theta, full_se, cat_theta, cat_se),
+    names_to = c("method", ".value"),
+    names_pattern = "(full|cat)_(theta|se)") %>%
+     mutate(theta_bin = cut(theta, breaks = seq(-3, 3, by = 1.5), include.lowest = TRUE))
 
-p4 <- by_child_pl %>%
-  ggplot() +
-  geom_smooth(aes(x = full_theta, y = full_theta_se, color = "full CDI"), se = F, method = "loess", span = 1) +
-  geom_smooth(aes(x = cat_theta, y = cat_theta_se, color = "CAT-CDI"), se = F, method = "loess", span = 1) +
-  labs(y = "SE", x = "Theta", title = "B: POLISH") + ylim(0, 0.5) + xlim(-3, 3) +
-    scale_color_manual(values = colors) + theme_light() + theme(legend.title=element_blank())
+p4_alt <- se_pl %>%
+  ggplot(aes(x = theta, y = se, color = method, fill = method)) + 
+  geom_smooth(se = FALSE, method = "loess", span = 0.5, size = 1.2) +
+  geom_boxplot(
+  aes(group = interaction(theta_bin, method)), 
+  alpha = 0.2, size = 0.1,
+  width = 0.3) +   # fixed width, all equal
+  scale_x_continuous(
+    breaks = c(-2.5, -1, 1, 2.5),
+    labels = c("[-3,-1.5]", "(-1.5,0]", "(0,1.5]", "(1.5,3]")) +
+labs(y = "SE", x = "Theta", title = "B: POLISH") +
+     ylim(0, 0.5) +
+  theme_light() + theme(legend.title = element_blank())
 
-se_by_theta_fig <- ggarrange(p3, p4, ncol = 2, common.legend = T)
-se_by_theta_fig
-ggsave("fig_se_by_theta.jpeg", dpi = 300, width = 200, height = 150, units = "mm")
+fig_se_by_theta_alt <- ggarrange(p3_alt, p4_alt, ncol = 2, common.legend = T, legend = "bottom") %>%
+     annotate_figure(fig.lab = NULL,
+                     bottom = text_grob("Note that in English there is only one case where CAT estimate was smaller than -1.5,\n therefore no CAT boxplot is plotted in that bin.", hjust = 0, x = 0, face = "italic", size = 10))
+     
+fig_se_by_theta_alt
+ggsave("fig_se_by_theta_alt.jpeg", dpi = 300, width = 200, height = 150, units = "mm")
+
 
 ```
+
+
 
 In both CAT-CDIs, we have been able to reliably estimate lexical ability for majority of children. Taking as the cut-off Makransky's suggestion to consider an SE below 0.2 as acceptable, such precision of the CAT-CDI estimate was was obtained for `r round(sum(prod_s$catTheta_SE < 0.2)/count(prod_s)*100,1)`% of the American participants, and `r round(sum(by_child_pl$cat_theta_se < 0.2)/count(by_child_pl)*100,1)`% of the Polish participants. The remaining participants were at the extremes of the ability scale--children with either relatively low or relatively high lexical skills (see Figure \@ref(fig:se-by-theta-fig)). The ability estimates from the Polish CAT-CDI generally fell well below an SE of 0.2, except for the highest-ability observations, where precision was worse, but still similar to the precision of the full CDI. Because the Polish CAT-CDI was designed to stop once an SE of 0.1 was reached, the precision of Polish estimates never went below this threshold. Overall, the Polish CAT-CDI appears to provide precision comparable to the full CDI, particularly for children with relatively low abilities. This suggests the CAT-CDI is selecting items that are more informative at those lower ability levels.
 
@@ -324,7 +390,7 @@ Taken together, the results reported so far show that for the English CAT-CDI, t
 ## Item properties in the two CAT-CDIs
 Our second aim was to analyze similarities and differences in IRT item properties in CAT in English and Polish.
 
-There are 679 items in the English CAT-CDI and 666 items in the Polish CAT-CDI. In both languages, the items' difficulty and discrimination parameters were calculated using IRT 2 parameter model (these included separate samples, see Kachergis et al. 2022 and Krajewski et al., in preparation). An item’s difficulty indicates the ability level at which there is a 50% probability that a participant will respond correctly (here: that a child will know a word). Difficulty is expressed on the same scale as theta (measured ability): negative values correspond to harder items, values near zero to items of moderate difficulty, and positive values to easier items (note that difficulty is inversely related to theta and so negative theta means low ability while positive theta means high ability). An item’s discrimination shows how well it can distinguish between individuals whose abilities are close. In this paper, we focus mainly on item difficulty, as it is directly tied to the ability being measured, whereas discrimination reflects more the quality of the item as a measurement tool.
+There are 679 items in the English CAT-CDI and 666 items in the Polish CAT-CDI. In both languages, the items' difficulty and discrimination parameters were calculated using IRT 2 parameter model (these included separate samples, see Kachergis et al. 2022 and Krajewski et al., in preparation). An item’s difficulty indicates the ability level at which there is a 50% probability that a participant will respond correctly (here: that a child will know a word). Difficulty is expressed on the same scale as theta (measured ability): negative values correspond to harder items, values near zero to items of moderate difficulty, and positive values to easier items (note that difficulty is inversely related to theta and so, negative theta means low ability while positive theta means high ability). An item’s discrimination shows how well it can distinguish between individuals whose abilities are close. In this paper, we focus mainly on item difficulty, as it is directly tied to the ability being measured, whereas discrimination reflects more the quality of the item as a measurement tool.
 
 ```{r diff_across_lgs}
 # item difficulty by language 
@@ -362,9 +428,15 @@ items_en_pl %>% select(uni_lemma, d_pl, d_en) %>%
 c <- apa_print(cor.test(items_en_pl$d_pl, items_en_pl$d_en)) # 0.65
 ```
 
-English items were in general more difficult than the Polish items, `r t1$full_result` (English: min = `r round(min(items_cat_en$d),2)`, max = `r round(max(items_cat_en$d),2)`, *M* = `r round(mean(items_cat_en$d),2)`, *Mdn* = `r round(median(items_cat_en$d),2)`, *SD* = `r round(sd(items_cat_en$d),2)`; Polish: min = `r round(min(items_cat_pl$d),2)`, max = `r round(max(items_cat_pl$d),2)`, *M* = `r round(mean(items_cat_pl$d),2)`, *Mdn* = `r round(median(items_cat_pl$d),2)`, *SD* = `r round(sd(items_cat_pl$d),2)`). This was true also for a subset of `r count(items_en_pl)` items common to both languages - English items still proved to be more difficult than the Polish ones: `r t2$full_result`. This is a result of the characteristics of the samples used to estimate the item parameters. In English, item difficulty was calculated based on a broader sample of children aged 12–36 months (spanning the CDI:WG, CDI:WS, and CDI-III), whereas the Polish data came from a sample of narrower age range of 18–36 months, corresponding to the CDI:WS. As a result, item difficulty in English was estimated using a relatively younger sample, for whom certain items may have been more challenging—thus appearing more difficult—compared to the older Polish sample. Still the item difficulty for common items in the two languages was positively and moderately correlated: `r c$full_result`.
+English items were in general more difficult than the Polish items, `r t1$full_result` (English: min = `r round(min(items_cat_en$d),2)`, max = `r round(max(items_cat_en$d),2)`, *M* = `r round(mean(items_cat_en$d),2)`, *Mdn* = `r round(median(items_cat_en$d),2)`, *SD* = `r round(sd(items_cat_en$d),2)`; Polish: min = `r round(min(items_cat_pl$d),2)`, max = `r round(max(items_cat_pl$d),2)`, *M* = `r round(mean(items_cat_pl$d),2)`, *Mdn* = `r round(median(items_cat_pl$d),2)`, *SD* = `r round(sd(items_cat_pl$d),2)`). This was true also for a subset of `r count(items_en_pl)` items common to both languages - English items still proved to be more difficult than the Polish ones: `r t2$full_result`. This is a result of the characteristics of the samples used to estimate the item parameters. In English, item difficulty was calculated based on a broader sample of children aged 12–36 months, spanning the CDI:WG, CDI:WS, and CDI-III (reflecting the idea of having one CAT-CDI for all the age versions), whereas the Polish data came from a sample of narrower age range of 18–36 months, corresponding to the CDI:WS. As a result, item difficulty in English was estimated using a relatively younger sample, for whom certain items may have been more challenging -- thus appearing more difficult -- compared to the older Polish sample. Still the item difficulty for common items in the two languages was positively and moderately correlated: `r c$full_result`.
 
 We also examined whether CDI semantic categories show comparable difficulty values across the two languages. To this end, we conducted a series of Spearman’s rank correlations on item difficulty within each semantic category (we considered only items common to both the Polish and English CDIs) (see Table \@ref(tab:d-by-cdi-category-tab)). The rank correlations coefficients varied by category, but for half of the categories the correlations were moderate to strong (0.52 to 0.91). 
+
+The least correlated semantic category was Quantifiers. The discrepancy may be partially to the fact that many English quantifiers map onto multiple Polish equivalents - for example, "some" maps to two Polish CDI items, "jeszcze" (with a similar difficulty value as the English "some") and "więcej" (more difficult than "jeszcze" and "some"). These two Polish items are used in different contexts, i.e., "jeszcze" would be used more often in child directed speech than "więcej" also because it can be used to refer to both quantity and repetitive actions (meaning "again"). "Więcej" implies a quantitative comparison of some sorts, as in "more than before" or "more than two".
+
+Interestingly, the second least correlated semantic category were Clothes. Here, some divergence may be explained by one-to-multiple mapping (e.g., "hat" is either "czapka" or "kapelusz" in Polish), but also words characteristics, e.g., "bib" in Polish is a much more complex word, "śliniaczek"; English "underpants" are more morphologically complex (and maybe less frequent) than Polish "majtki".
+
+Taken together, these two semantic categories reflect the existing cross-linguistic differences in lexical mapping as well as item-specific factors such as frequency, morphological complexity, and contextual usage that .
 
 ```{r d-by-cdi-category-tab, include = T}
 # correlations by cdi semantic category on common words
@@ -386,7 +458,7 @@ apa_table(corr_by_category, caption="Cross-linguistic correlations of item diffi
 ```
 
 
-Last, we investigated whether particular lexical categories show related difficulty values across the two languages. We considered the following lexical classes: verbs, nouns, adjectives, function words and other, i.e. mostly sounds and words relating to routines (e.g. "hello", "yes", "thank you") and time (e.g. "tommorow", "day"). Again, we performed a series of Spearman's rank correlations (on the difficulty of items common to CDI-CATs in Polish and English) for each lexical class (see Table \@ref(tab:d-by-lexical-class-tab). The weakest correlation was for function words (0.40), then verbs (0.47), adjectives (0.53), nouns (0.6), other (0.75). Notably, function words include many of the CDI semantic categories which showed the lowest correlations in Table \@ref(tab:d-by-cdi-category-tab), i.e., quantifiers, connecting words, locations, and pronouns. Interestingly, many English function words map onto multiple Polish equivalents - for example, "which" corresponds to "jaki" (when asking about type, kind, or quality) and "który" (when selecting from a limited set of options). These cross-linguistic differences may partly explain the weaker correlation for function words. But also, because function words are structurally tied to grammar (which is highly language-specific) they naturally vary in frequency in child-directed speech and in their communicative salience, which can affect how well children know them across languages. By contrast, the relatively high correlations for nouns reflect their consistent easiness/difficulty across languages: words like "mum", "eye", and "ball" are acquired early, aligning with findings that nouns are strongly and consistently over-represented in early vocabularies across many languages (e.g., Frank et al., 2021).
+Last, we investigated whether particular lexical categories show related difficulty values across the two languages. We considered the following lexical classes: verbs, nouns, adjectives, function words and other, i.e. mostly sounds and words relating to routines (e.g. "hello", "yes", "thank you") and time (e.g. "tommorow", "day"). Again, we performed a series of Spearman's rank correlations (on the difficulty of items common to CDI-CATs in Polish and English) for each lexical class (see Table \@ref(tab:d-by-lexical-class-tab). The weakest correlation was for function words (0.40), then verbs (0.47), adjectives (0.53), nouns (0.6), other (0.75). Notably, function words include many of the CDI semantic categories which showed the lowest correlations in Table \@ref(tab:d-by-cdi-category-tab), i.e., quantifiers, connecting words, locations, and pronouns. Again, many English function words map onto multiple Polish equivalents, e.g., "which" corresponds to "jaki" (when asking about type, kind, or quality) and "który" (when selecting from a limited set of options). These cross-linguistic differences partially explain the weaker correlation for function words. What is more, because function words are structurally tied to grammar (which is highly language-specific) they naturally vary in frequency in child-directed speech and in their communicative salience, which can affect how well children know them across languages. By contrast, the relatively high correlations for nouns, sounds and words relating to routines (grouped together as "other") reflect their consistent easiness/difficulty across languages: words such as "mum", "ball", "hi", "woof woof" are acquired early, aligning with findings that nouns are strongly and consistently over-represented in early vocabularies across many languages (e.g., Frank et al., 2021). 
 
 ```{r d-by-lexical-class-tab, include = T}
 # correlations by lexical class on common words
@@ -417,7 +489,17 @@ items_en_pl <- items_en_pl %>% mutate(d_diff = abs(d_en - d_pl))
 
 ```
 
-## Item selection in the two CAT-CDIs
+## CAT-CDIs' usefullness in research and practice
+
+We assume that, for a CAT-CDI to be useful in the contexts of research and practice (e.g., for screening or diagnosis), it should meet the following criteria:   
+1.	Provide estimates with equal or lower standard error compared to the full CDI.   
+2.	Maintain high precision (i.e., low standard error) across relevant levels of ability.   
+3.	Require less administration time than the full CDI.   
+4.	Avoid overuse of the same subset of items—particularly important in repeated measures with the same participants (e.g., in longitudinal studies).
+
+In the following section we will explore the two CAT-CDI's performance on each of those criteria.
+
+### Item selection in the two CAT-CDIs
 
 
 ```{r}
@@ -485,52 +567,7 @@ low_disc <- items_run_en %>% filter(a1 <2 & d > -1.5 & d < 1.5)
 ```
 
 It is to be expected that a CAT-CDI will not need to administer all the items in the item bank. In fact, in all the task administrations in the validation study the English CAT-CDI used `r sum(items_run_en$n != 0)` items (`r round(sum(items_run_en$n != 0)/count(items_run_en)*100,2)`%) and the Polish CAT-CDI used `r sum(items_run_pl$n != 0)` items (`r round(sum(items_run_pl$n != 0)/count(items_run_pl)*100,2)`%).
-By design, a CAT-CDI selects the items that provide the most information for each participant. In practice, this means it draws from a subset of items that both match the participant’s current ability estimate in difficulty and show high discrimination, allowing clear distinctions between individuals with similar ability levels. A potential concern, however, is that the CAT-CDI might repeatedly rely on the same subset of optimal items. Its usefulness in research—particularly in longitudinal studies—lies in the possibility of administering the CDI frequently without parents becoming overly familiar with specific, frequently repeated items. This advantage holds only if the CAT-CDI does not consistently present the same items across administrations. Therefore, we investigated whether the two CAT-CDIs repeatedly selected the same items too frequently. In English, 3 items appeared in more than half of administrations - *"long"* in 64% of administrations, *"make"* in 54% of administrations, and *"last"* in 53% of administrations. They are also high discrimination items in their difficulty bins. "Long" is additionally one of the starting items, i.e. a first item shown to the parent, chosen so that there is high probability the parent can respond positively. In Polish, 3 items appeared in more than half of administrations - *"szukać"* (to look for) appearing in 83% of administrations, *"znaleźć"* (to find) appearing in 61% of administrations, and *"babcia"* (grandmother) appearing in 60% of administrations. All three items show very high discrimination. *"Szukać"* (to look for) and *"znaleźć"* (to find) are also in top 5 discrimination items in general. *"Babcia"* (grandmother) is one of the starting items. 
-
-```{r}
-# tutaj przypadkiem podczas rozmów z naszym przyjacielem ;) natknęłam się na pomysł, żeby wyliczyć expected probability (tu "probability") tego, czy dane dziecko zna dany item (na podstawie parametrów itemu i thety dziecka). Poszłam za ciosem i dodałam do tego jeszcze observed odpowiedź w CATcie i w fullu. Możnaby jeszcze (?) wyliczyć błąd, np. observed prob = 1, a exp_prob = 0.8, to błąd jest 1-0.8 = 0.2. Natomiast jeśli rodzic zaznaczył (obs = 1), a było małe prawdopodobieństwo, że dziecko zna ten item, to błąd będzie wysoki i będzie na plusie.
-# może być też błąd na minusie, gdy rodzic nie zaznaczył słowa, a exp_prob było wyższe niż 0.
-# minus tych wyliczeń jest teoretycznie taki, że to exp_prob ("probability") wylicza się na podstawie thety z CATa, a jeśli rodzic zaznaczał więcej itemów niż powienien, to cat_theta jest zawyżona i może podbijać exp_prob dla danego itemu. (Można alternatywnie na podst. thety z fulla, ale tym razem MOŻE full_theta będzie zaniżać exp_prob?)
-
-
-# GET PROBABILITIES OF KNOWING A WORD (GIVEN THETA) FOR EACH PARTICIPANT AND EACH WORD (based on validation data)
-theta_valid <- by_child_pl %>% select(id, cat_theta)
-items_cat_pl_check <- items_cat_pl %>% select(itemID, a1, d)
-theta_values <- theta_valid$cat_theta
-person_ids <- theta_valid$id
-
-# Compute probability matrix (persons x items)
-prob_matrix <- 1 / (1 + exp(-outer(theta_values, items_cat_pl_check$a1, "*") + items_cat_pl_check$d))
-
-# convert to long data frame
-prob_df <- data.frame(
-  personID = rep(person_ids, times = nrow(items_cat_pl_check)),
-  itemID = rep(items_cat_pl_check$itemID, each = length(theta_values)),
-  probability = as.vector(prob_matrix)
-)
-
-prob_df <- prob_df %>% rename("id" = "personID")
-
-# ADD answer_cat AND answer_full
-responses_cat_pl <- merge(responses_cat_pl, items_cat_pl[,c("item", "itemID")], by.x = "definition", by.y = "item", a..x = T)
-
-prob_df <- merge(prob_df, responses_cat_pl[,c("id", "itemID", "definition", "answers")], by = c("id", "itemID"), all.x = T)
-prob_df <- prob_df %>% filter(!is.na(answers))
-prob_df <- prob_df %>% rename("answer_cat" = "answers")
-
-# answer_full
-ws_itemized_long <- ws_itemized %>% pivot_longer(item1:item670, names_to = "item_id", values_to = "answer_full")
-ws_itemized_long$itemID <- gsub("item", "item_", ws_itemized_long$item_id)
-
-prob_df_t <- merge(prob_df, ws_itemized_long[,c("id", "itemID", "answer_full")], by = c("id", "itemID"), all.x = T)
-
-prob_df$error <- prob_df$answers - prob_df$probability
-
-```
-
-
-
-
+By design, a CAT-CDI selects the items that provide the most information for each participant. In practice, this means it draws from a subset of items that both match the participant’s current ability estimate in difficulty and show high discrimination, allowing clear distinctions between individuals with similar ability levels. A potential concern, however, is that the CAT-CDI might repeatedly rely on the same subset of optimal items. CAT-CDI's usefulness in research—particularly in longitudinal studies—lies in the possibility of administering the CDI frequently without parents becoming overly familiar with specific, frequently repeated items. This advantage holds only if the CAT-CDI does not consistently present the same items across administrations. Therefore, we investigated whether the two CAT-CDIs repeatedly selected any items too frequently. In English, 3 items appeared in more than half of administrations - *"long"* in 64% of administrations, *"make"* in 54% of administrations, and *"last"* in 53% of administrations. As expected, they are also high discrimination items in their difficulty bins. "Long" is additionally one of the starting items, i.e. a first item shown to the parent, chosen so that there is high probability the parent can respond positively. In Polish, 3 items appeared in more than half of administrations - *"szukać"* (to look for) appearing in 83% of administrations, *"znaleźć"* (to find) appearing in 61% of administrations, and *"babcia"* (grandmother) appearing in 60% of administrations. As expected, all three items show very high discrimination. and *"Szukać"* (to look for) and *"znaleźć"* (to find) are in fact in top 5 discrimination items in general. *"Babcia"* (grandmother) is one of the starting items. The fact that only 3 items out of c.a. 250 (c.a. 1%) are used in more than half administrations is to CAT-CDI's advantage. 
 
 ```{r}
 items_en_pl <- merge(items_en_pl, items_run_pl[,c("item", "items_perc")], all.x = T, by = "item")
@@ -723,6 +760,9 @@ We also calculated Cohen's kappa per each parent, considering their observed agr
 
 
 # Discussion
+
+
+It seems then that the relation between the two estimates differs, depending on the ability level: for lower abilities, the difference between the two estimates is most visible, with CAT-CDI estimates higher than the full CDI estimtes. For higher ability, the difference decreases or even (as in the case of Polish) changes direction, with CAT-CDI estimates lower than the full CDI estimates.
 
 In points for now:    
 
