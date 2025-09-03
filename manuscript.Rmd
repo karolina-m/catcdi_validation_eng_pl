@@ -156,7 +156,11 @@ The aim of this paper is to evaluate the potential usefulness of CAT-CDIs for bo
 4. Avoid repeated reliance on the same subset of items, which is particularly important in longitudinal or repeated-measures designs.
 We will report these outcomes in the two CAT-CDIs, in English and in Polish and discuss similarities and differences in the context of how the development of two CAT-CDIs differed. We will also discuss how CAT-CDI results (an ability estimate) can be translated to a clinical context. 
 
-We will report these outcomes in the two CAT-CDIs, in English and in Polish and discuss similarities and differences in the context of how the development of two CAT-CDIs differed.
+We will report these outcomes in the two CAT-CDIs, in English and in Polish and discuss similarities and differences in the context of how the development of two CAT-CDIs differed. 
+
+Additionally, we will compare the CAT-CDI item difficulty across Polish and English. Some differences in item parameters are to be expected, given that the IRT calibrations for the two languages were based on slightly different samples. In particular, the English data included younger children, since all age versions of the CDI were collapsed into a single dataset, whereas the Polish calibrations drew on a narrower age range. These sampling differences may influence estimated item parameters, particularly difficulty and discrimination.
+
+At the same time, this comparison also provides an opportunity to examine potential cross-linguistic effects. Differences in lexical mapping may emerge between Polish and English, reflecting item-specific factors such as word frequency, morphological complexity, or typical contextual usage. For example, morphologically complex items may be more challenging in Polish than in English, whereas high-frequency words may show comparable difficulty levels across both languages. Identifying the extent to which observed differences arise from methodological factors (i.e., sample composition) versus genuine cross-linguistic variation is an additional goal of this analysis.
 
 # Methods
 
@@ -183,15 +187,15 @@ In both validation studies (in Polish and in English) the parents were asked to 
 
 # Results
 
-For a CAT-CDI to be effective in these contexts – whether for screening, diagnosis, or broader research purposes – it should meet the following criteria:
+Above we proposed that for a CAT-CDI to be effective in the research and clinical contexts, it should meet the following criteria:
 
 1. Require less administration time.     
 2. Produce estimates that align closely with scores obtained from the full CDI.      
 3. Maintain high measurement precision (i.e., low standard error) across the relevant ability range.      
-4. Avoid repeated reliance on the same subset of items, which is particularly important in longitudinal or repeated-measures designs.
-We will report these outcomes in the two CAT-CDIs, in English and in Polish and discuss similarities and differences in the context of how the development of two CAT-CDIs differed. We will also discuss how CAT-CDI results (an ability estimate) can be translated to a clinical context. 
+4. Avoid repeated reliance on the same subset of items, which is particularly important in longitudinal or repeated-measures designs.     
+Additionally, we will compare the CAT-CDI item difficulty across Polish and English. 
 
-In the following section we will explore the two CAT-CDI's performance on each of those criteria. The English data presented here were also included in a brief validation report by Kachergis et al. (2022). In the present paper, however, we examine these metrics in greater detail and place them in relation to the validation results from the Polish CAT-CDI.
+In the following section we will explore the two CAT-CDI's performance on each of those criteria. The English data presented here were also included in a brief validation section in Kachergis et al. (2022). In the present paper, however, we examine these metrics in greater detail and place them in relation to the validation results from the Polish CAT-CDI.
 
 
 ## Length of administration
