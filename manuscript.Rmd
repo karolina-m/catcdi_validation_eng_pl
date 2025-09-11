@@ -171,8 +171,68 @@ number of years of education attained by the primary caregiver was `r round(mean
 
 In the Polish validation study, 147 parents from an ongoing study were invited via email to take part in the validation study. The sample was White (reflecting the limited ethnic diversity within the Polish population). However, there were 28 children multilingual with Polish (as their home language) and some other (societal) language, living outside of Poland. We considered this group to be too large to exclude from the study, but not large enough to warrant a separate set of analyses. However, we included some comparisons between the Polish monolingual and bilingual groups in Supplementary Material. Next, we excluded participants for whom the time between full CDI and CAT testing was longer than 30 days (n = 31), children who were out of the CDI:WS age range when parents filled in either full or CAT CDI (n = 3). The final dataset included 113 parents (49 girls, `r round(sum(by_child_pl$sex == "dziewczynka")/count(by_child_pl)*100,2)`%). The children were aged between 18 and 34 months (*M* = `r round(mean(by_child_pl$age_CAT),2)`, *Mdn* = `r round(median(by_child_pl$age_CAT),2)`, SD = `r round(sd(by_child_pl$age_CAT),2)`). Parents were asked about their education level and `r sum(by_child_pl$parental_edu == "HIGHER_EDU" | by_child_pl$parental_edu == "PHD", na.rm = T)` (`r round(sum(by_child_pl$parental_edu == "HIGHER_EDU" | by_child_pl$parental_edu == "PHD", na.rm = T)/length(by_child_pl$child_id)*100,2)`%) reported having higher education or PhD, `r sum(by_child_pl$parental_edu == "UNFINISHED_HIGHER_EDU", na.rm = T)` (`r round(sum(by_child_pl$parental_edu == "UNFINISHED_HIGHER_EDU", na.rm = T)/length(by_child_pl$child_id)*100,2)`%) reported having unfinished higher education, `r sum(by_child_pl$parental_edu == "SECONDARY", na.rm = T)` (`r round(sum(by_child_pl$parental_edu == "SECONDARY", na.rm = T)/length(by_child_pl$child_id)*100,2)`%) reported having secondary education and `r sum(is.na(by_child_pl$parental_edu))` (`r round(sum(is.na(by_child_pl$parental_edu))/length(by_child_pl$child_id)*100,2)`%) did not report their education level. 
 
-The two validation samples differed slightly in the mean age of children, `r t_age$full_result`, which may affect the outcomes of direct comparisons between the samples, where age could be a contributing factor. We present one such comparison--standard error of CAT ability--where this difference is explicitly discussed. *NOTE*: You can also view/comment on this on GitHub [Issue #7 linked here](https://github.com/karolina-m/catcdi_validation_eng_pl/issues/7).
 
+```{r}
+# SE by age?
+# ggplot(by_child_pl, aes(x = age_CAT, y = cat_theta_se)) + geom_jitter(color = "blue", alpha = 0.6) + labs(title = "POLISH") + xlim(13,37) + ylim(0, 0.6)
+# ggplot(prod_s, aes(x = age_full, y = catTheta_SE)) + geom_jitter(color = "red", alpha = 0.6) + labs(title = "ENGLISH") + xlim(13,37) + ylim(0, 0.6)
+
+ggplot() +
+  geom_jitter(data = by_child_pl, aes(x = age_CAT, y = cat_theta_se), 
+              color = "blue", width = 0.2, height = 0, alpha = 0.6) +
+  geom_jitter(data = prod_s, aes(x = age_full, y = catTheta_SE), 
+              color = "red", width = 0.2, height = 0, alpha = 0.6) +
+  labs(x = "Age (months)", y = "CAT SE", 
+       title = "CAT SE by Age for PL (blue) and EN (red) (Before matching)") +
+  theme_minimal()
+
+# if we have the same age-range in the two samples (so get rid of AmE on extremes of age), do we have more similar SE?
+
+PL <- by_child_pl %>% select(id, sex, age_CAT, cat_theta_se) %>% rename(age = "age_CAT")
+PL$sex <- fct_recode(PL$sex, Male = "chłopiec", Female = "dziewczynka")
+PL$id <- as.factor(PL$id)
+str(PL)
+
+AM <- prod_s %>% select(subject_id, sex_full, age_full, catTheta_SE) %>% rename(id = "subject_id", age = "age_full", sex = "sex_full", cat_theta_se = "catTheta_SE")
+AM$sex <- as.factor(AM$sex)
+AM$id <- as.factor(AM$id)
+str(AM)
+
+PL$dataset <- "PL"
+AM$dataset <- "AmE"
+
+PL$sex_num <- as.numeric(as.factor(PL$sex))
+AM$sex_num <- as.numeric(as.factor(AM$sex))
+
+# Combine age and sex into a matrix
+PL_mat <- as.matrix(PL[, c("age", "sex_num")])
+AM_mat <- as.matrix(AM[, c("age", "sex_num")])
+
+# Find the nearest neighbor in AmE for each PL child
+library(FNN)
+nn <- get.knnx(AM_mat, PL_mat, k = 1)
+
+# nn$nn.index gives row indices in AmE matched to PL
+matched_AM <- AM[nn$nn.index[,1], ]
+
+t.test(PL$age, matched_AM$age)
+
+mean(PL$cat_theta_se) # 0.11
+mean(matched_AM$cat_theta_se) # 0.15
+
+
+ggplot() +
+  geom_jitter(data = PL, aes(x = age, y = cat_theta_se), 
+              color = "blue", width = 0.2, height = 0, alpha = 0.6) +
+  geom_jitter(data = matched_AM, aes(x = age, y = cat_theta_se), 
+              color = "red", width = 0.2, height = 0, alpha = 0.6) +
+  labs(x = "Age (months)", y = "CAT SE", 
+       title = "CAT SE by Age for PL (blue) and EN (red) (After matching)") +
+  theme_minimal()
+
+# after matching the kids (from the AM and PL samples) one to one on age and sex, we still see higher average SE in AmE, relative to PL
+
+```
 
 
 ## Materials
