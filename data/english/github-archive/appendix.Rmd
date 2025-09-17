@@ -1,0 +1,454 @@
+---
+output:
+  pdf_document: default
+  html_document: default
+---
+
+
+# IRT Model Comparisons
+
+For each dataset, we fitted each of the four standard psychometric models (1PL-4PL) and compared the fits using Akaike and Bayesian Information Criteria (AIC and BIC) to select models with the appropriate level of complexity (i.e. number of parameters) justified by the data.
+Tables A1-A4 show the results of these model comparisons.
+
+### English Comprehension
+
+```{r psycho-models-load-en-comp, echo=F, include=F}
+require(here)
+require(mirt)
+source(here("scripts/IRT_helpers.R"))
+
+load(here("data/comprehension/eng_wg_mod_1pl.Rds"))
+load(here("data/comprehension/eng_wg_mod_2pl.Rds"))
+load(here("data/comprehension/eng_wg_mod_3pl.Rds")) # 
+load(here("data/comprehension/eng_wg_mod_4pl.Rds")) # converges with a worse logLik... than 1-3PL
+
+mc_en <- get_anova_table(mod_1pl, mod_2pl, c("Rasch", "2PL"))
+mc_en <- rbind(mc_en, get_anova_table(mod_2pl, mod_3pl, c("2PL", "3PL"))[2,])
+mc_en <- rbind(mc_en, get_anova_table(mod_3pl, mod_4pl, c("3PL", "4PL"))[2,])
+```
+
+Table A1 shows the model comparison for the `r eng_wg_subjs` children in the English comprehension data.
+Both AIC and BIC prefer the 2PL model over either the simpler Rasch (1PL) model or the more complex 3PL or 4PL models. 
+Note that the 4PL model converged very quickly, yet with a worse overall fit than the other models: this remained the case even after setting a much lower tolerance for convergence.
+Phil Chalmers, the author of the mirt R package, indicates that the 4PL model has too many parameters (and thus flexibility) unless the dataset is in excess of 5000 participants.
+
+```{r anova-en-comp, echo=F, fig.pos="!h"}
+apa_table(mc_en, caption="Comparison of 1PL-4PL models for English comprehension.", placement="H")
+```
+
+### Spanish Comprehension
+
+```{r psycho-models-load-sp-comp, echo=F, include=F}
+load(here("data/comprehension/sp_wg_mod_1pl.Rds"))
+load(here("data/comprehension/sp_wg_mod_2pl.Rds"))
+load(here("data/comprehension/sp_wg_mod_3pl.Rds")) # not converged even after 6000 iterations
+load(here("data/comprehension/sp_wg_mod_4pl.Rds")) # converged in 3 iterations (too fast?)
+
+mc_sp <- get_anova_table(mod_1pl, mod_2pl, c("Rasch", "2PL"))
+mc_sp <- rbind(mc_sp, get_anova_table(mod_2pl, mod_3pl, c("2PL", "3PL"))[2,])
+mc_sp <- rbind(mc_sp, get_anova_table(mod_3pl, mod_4pl, c("3PL", "4PL"))[2,])
+```
+
+Table A2 shows the model comparison for the `r length(mod_2pl@Data$rowID)` children in the Spanish comprehension data.
+The 2PL model is preferred over both the Rasch (1PL) model and the 3PL model.
+As for the English comprehension dataset, the 4PL again converged quickly, but with worse fit than the 3PL, likely due to the small size of the dataset relative to the number of parameters.
+
+```{r anova-sp-comp, echo=F, fig.pos="!h"}
+apa_table(mc_sp, caption="Comparison of 1PL-4PL models for Spanish comprehension.", placement="H")
+```
+
+### English Production
+
+```{r psycho-models-load-en, echo=F, include=F}
+# load 1PL-4PL models
+load(here("data/production/eng_ws_wg_mod_1pl.Rds"))
+load(here("data/production/eng_ws_wg_mod_2pl.Rds"))
+load(here("data/production/eng_ws_wg_mod_3pl.Rds")) # not converged (3000 iterations)
+load(here("data/production/eng_ws_wg_mod_4pl.Rds"))
+
+mc <- get_anova_table(mod_1pl, mod_2pl, c("Rasch", "2PL"))
+mc <- rbind(mc, get_anova_table(mod_2pl, mod_3pl, c("2PL", "3PL"))[2,])
+mc <- rbind(mc, get_anova_table(mod_3pl, mod_4pl, c("3PL", "4PL"))[2,])
+```
+
+
+Table A3 shows the model comparison for the `r length(mod_2pl@Data$rowID)` children in the English production data.
+For both model selection criteria, smaller values are better.
+The 2PL model is preferred over the Rasch (1PL) model by both AIC and BIC, indicating that the 2PL's addition of a discrimination parameter (slope) for each item is justified.
+The 3PL model is preferred over the 2PL by AIC, but not by the more conservative BIC criterion.
+AIC again prefers the more complex 4PL model over the simpler 3PL model, but according to BIC the 2PL model has the appropriate level of complexity for the dataset.
+
+```{r, anova-en-prod, echo=F, fig.pos="!h"}
+apa_table(mc, caption="Comparison of 1PL-4PL models for English production.", placement="H")
+```
+
+
+### Spanish Production
+
+```{r psycho-models-load-sp, echo=F, include=F}
+load(here("data/production/sp_wg_ws_mod_1pl.Rds"))
+load(here("data/production/sp_wg_ws_mod_2pl.Rds"))
+load(here("data/production/sp_ws_wg_mod_3pl.Rds")) # failed to converge (3000 iter)
+load(here("data/production/sp_ws_wg_mod_4pl.Rds")) # 8 iterations (too fast?)
+
+mc_sp <- get_anova_table(mod_1pl, mod_2pl, c("Rasch", "2PL"))
+mc_sp <- rbind(mc_sp, get_anova_table(mod_2pl, mod_3pl, c("2PL", "3PL"))[2,])
+mc_sp <- rbind(mc_sp, get_anova_table(mod_3pl, mod_4pl, c("3PL", "4PL"))[2,])
+```
+
+Table A4 shows the model comparison for the `r nrow(d_mat_sp)` children in the Spanish production data.
+The 2PL model has the lowest AIC value, as well as the lowest BIC value, indicating that it is of the appropriate complexity for this dataset.
+
+```{r anova-sp-prod, echo=F, fig.pos="!h"}
+apa_table(mc_sp, caption="Comparison of 1PL-4PL models for Spanish production.", placement="H")
+```
+
+# Ill-fitting Items
+
+Below we show the full list of items with ill fit (Stone's $\chi^{2}*_{df}$, $p<.001$) in the 2PL model for Spanish production (38 items) and for English production (142 items).
+
+
+```{r, echo=F}
+apa_table(matrix(c(as.character(bad_items_spP), "", ""), nrow=8), placement="H", caption="Ill-fitting Spanish production items")
+```
+
+```{r echo=F}
+load("data/ill-fitting-items.Rdata")
+
+apa_table(matrix(c(as.character(bad_items_engP), "", ""), nrow=24), placement="H", caption="Ill-fitting English production items")
+```
+
+# Simulated CATs
+
+The following sections show the results of the simulated CATs using American English and Mexican Spanish data, conducted for both production (combined WG and WS data) and comprehension (WG data).
+
+
+## Fixed-length CAT Simulations
+
+Following Makransky et al. (2016), we ran a series of fixed-length CAT simulations and compared children's estimated ability ($\theta$) from these CATs to children's estimated ability from the full CDI. 
+The results are shown in Tables C1-C4 for English comprehension (C1), Spanish comprehension (C2), English production (C3), and Spanish production (C4).
+The results were quite good even for 25- and 50-item tests, but note that we added a comparison to tests of randomly-selected questions (per subject), and found that ability estimates from these tests were also strongly correlated with thetas from the full CDI. 
+The mean standard error of the random tests showed more of a difference, especially for shorter tests (e.g., <100 items).
+
+
+```{r, fig.pos="!h"}
+load(here("data/comprehension/eng_wg_CAT_fixed_length.Rds"))
+load(here("data/comprehension/eng_wg_random_test_fixed_length.Rds"))
+
+fcat_tab <- make_fixed_cat_table(en_mat_wg, comp_fs$en, has400=F)
+
+apa_table(fcat_tab, digits=c(0, 3, 3, 3, 3, 3), caption="Fixed-length CAT simulations compared to full CDI for English comprehension", placement="H") 
+```
+
+
+```{r, fig.pos="!h"}
+load(here("data/comprehension/sp_wg_CAT_fixed_length.Rds"))
+load(here("data/comprehension/sp_wg_random_test_fixed_length.Rds"))
+
+fcat_tab <- make_fixed_cat_table(sp_mat_wg, comp_fs$sp, has400=F)
+
+apa_table(fcat_tab, digits=c(0, 3, 3, 3, 3, 3), caption="Fixed-length CAT simulations compared to full CDI for Spanish comprehension", placement="H") 
+```
+
+
+
+```{r, fixed-length-CAT-table, echo=F, fig.pos="!h"}
+load(here("data/production/eng_ws_wg_CAT_fixed_length.Rds"))
+load(here("data/production/eng_ws_wg_random_test_fixed_length.Rds"))
+
+fcat_tab <- make_fixed_cat_table(d_mat_en, prod_fs$en)
+
+apa_table(fcat_tab, digits=c(0, 3, 3, 3, 3, 3), caption="Fixed-length CAT simulations compared to full CDI for English production.", placement="H") 
+```
+
+<!-- ### Correlations Across Age Groups
+This is comparable to Table 3 of Makransky et al. (2016), and the correlations here are consistently high for all age groups, with the lowest correlation being .93 for the 33-36 month-olds on the 25-item CAT. -->
+
+```{r, en-cat-cor-age, include=F, echo=F, fig.pos="!h"}
+
+at1 = get_cor_by_age(d_demo_en, f25) 
+at2 = get_cor_by_age(d_demo_en, f50) 
+at3 = get_cor_by_age(d_demo_en, f75)
+at4 = get_cor_by_age(d_demo_en, f100)
+at5 = get_cor_by_age(d_demo_en, f200)
+at6 = get_cor_by_age(d_demo_en, f300)
+at7 = get_cor_by_age(d_demo_en, f400)
+
+age_table = rbind(c(25, at1$r), 
+                  c(50, at2$r),  
+                  c(75, at3$r), 
+                  c(100, at4$r), 
+                  c(200, at5$r), 
+                  c(300, at6$r), 
+                  c(400, at7$r))
+colnames(age_table) = c("Test Length", paste(names(n_age_en),"mos"))
+
+apa_table(age_table, digits=c(0, rep(3, length(n_age_en))), 
+          caption="English production CAT ability correlations with the full CDI by age group.", placement="H")
+```
+
+
+```{r, fig.pos="!h"}
+load(here("data/production/sp_wg_ws_CAT_fixed_length.Rds"))
+load(here("data/production/sp_wg_ws_random_test_fixed_length.Rds"))
+
+fcat_tab <- make_fixed_cat_table(d_mat_sp, prod_fs$sp)
+
+apa_table(fcat_tab, digits=c(0, 3, 3, 3, 3, 3), caption="Fixed-length CAT simulations compared to full CDI for Spanish production.", placement="H")
+```
+
+
+## Early-stopping CAT Simulations
+
+For each participant in each dataset, we simulated CATs using a maximum of 25, 50, 75, 100, 200, 300, or (for production datasets only) 400 items, with early termination if the estimated standard error of measurement (SEM) reached 0.10 for a given subject.
+For each of these simulations, we report 1) the median and mean number of items used, 2) the correlation of ability scores ($\theta$) estimated from the CAT with IRT-estimated ability scores applied to the full CDI (*r with full CDI*), and 4) the mean estimated SEM achieved by the CATs, 5) the reliability of the ability estimates from the CAT compared to the ability estimated by the full CDI, and 6) how many items were never selected (*Unused Items*).
+The results are shown in Tables C5-C9.
+
+<!-- ### English Comprehension -->
+
+```{r, fig.pos="!h"}
+load(here("data/comprehension/eng_wg_CAT_2pl.Rds"))
+
+cat_tab <- early_stopping_CAT_sim_table(en_mat_wg, comp_fs$en, has400 = F)
+
+apa_table(cat_tab, digits=c(0, 0, 1, 3, 3, 3, 0), 
+          caption="Early-stopping CAT simulations for English comprehension.",
+          placement="H") 
+```
+
+<!-- ### Spanish Comprehension -->
+
+```{r, fig.pos="!h"}
+load(here("data/comprehension/sp_wg_CAT_2pl.Rds"))
+
+cat_tab <- early_stopping_CAT_sim_table(sp_mat_wg, comp_fs$sp, has400 = F)
+
+apa_table(cat_tab, digits=c(0, 0, 1, 3, 3, 3, 0), 
+          caption="Early-stopping CAT simulations for Spanish comprehension.",
+          placement="H") 
+```
+
+
+<!-- ### English Production -->
+
+```{r, analyze-cat-sims, echo=F, fig.pos="!h"}
+load(here("data/production/eng_ws_wg_CAT_2pl.Rds"))
+
+cat_tab <- early_stopping_CAT_sim_table(d_mat_en, prod_fs$en)
+
+apa_table(cat_tab, digits=c(0, 0, 1, 3, 3, 3, 0), 
+          caption="Early-stopping CAT simulations for English production.", 
+          placement="H") 
+```
+
+
+<!-- ### Spanish Production -->
+
+```{r, fig.pos="!h"}
+load(here("data/production/sp_wg_ws_CAT_2pl.Rds"))
+
+cat_tab <- early_stopping_CAT_sim_table(d_mat_sp, prod_fs$sp)
+
+apa_table(cat_tab, digits=c(0, 0, 1, 3, 3, 3, 0), 
+          caption="Early-stopping CAT simulations for Spanish production.", 
+          placement="H") 
+```
+
+
+
+## CAT Performance Across Age Groups
+
+For the preferred settings, it is desirable to know if the CAT can be expected to perform well across the intended age range.
+Thus, for each dataset we examined correlations between the simulated preferred CAT's ability estimates to the IRT-estimated ability from the full CDI.
+
+### English Comprehension
+
+Table C9 shows correlations between ability estimates from the full CDI compared to the estimated ability from the preferred CAT by age group (`r n_age_enC[1]` 8-9 month-olds, `r n_age_enC[2]` 10-11 mos, `r n_age_enC[3]` 12-13 mos, `r n_age_enC[4]` 14-15 mos, and `r n_age_enC[5]` 16-18 mos. 
+
+```{r, fig.pos="!h"}
+age_tabp <- get_prefCAT_age_table(here("data/comprehension/preferredCAT_eng.Rds"), demo_eng_wg, n_age_enC)
+
+apa_table(age_tabp, digits=3, caption="Correlation between the preferred CAT's ability estimates and the full CDI for English comprehension by age group.")
+```
+
+
+### Spanish Comprehension
+
+Table C10 shows correlations between ability estimates from the full CDI compared to ability from the preferred CAT by age group (`r n_age_spC[1]` 8-9 month-olds, `r n_age_spC[2]` 10-11 mos, `r n_age_spC[3]` 12-13 mos, `r n_age_spC[4]` 14-15 mos, and `r n_age_spC[5]` 16-18 mos.
+
+```{r, fig.pos="!h"}
+age_tabp <- get_prefCAT_age_table(here("data/comprehension/preferredCAT_sp.Rds"), demo_sp_wg, n_age_spC)
+
+apa_table(age_tabp, digits=3, caption="Correlation between the preferred CAT's ability estimates and the full CDI for Spanish comprehension by age group.")
+```
+
+### English Production
+
+Table C11 shows correlations between ability from the full CDI compared to ability from the preferred CAT split by age (`r n_age_en[1]` 12-15 month-olds, `r n_age_en[2]` 15-18 mos, `r n_age_en[3]` 18-21 mos, `r n_age_en[4]` 21-24 mos, `r n_age_en[5]` 24-27 mos, `r n_age_en[6]` 27-30 mos, `r n_age_en[7]` 30-33 mos, and `r n_age_en[8]` 33-36 mos). 
+
+```{r, fig.pos="!h"}
+age_tabp <- get_prefCAT_age_table(here("data/production/preferredCAT_en.Rds"), d_demo_en, n_age_en)
+
+apa_table(age_tabp, digits=3, caption="Correlation between the preferred CAT's ability estimates and the full CDI for English production by age group.")
+```
+
+
+### Spanish Production
+
+Table C12 shows correlations between ability from the full CDI compared to ability from the preferred CAT split by age (`r n_age_sp[1]` 12-15 month-olds, `r n_age_sp[2]` 15-18 mos, `r n_age_sp[3]` 18-21 mos, `r n_age_sp[4]` 21-24 mos, `r n_age_sp[5]` 24-27 mos, and `r n_age_sp[6]` 27-30 mos). 
+
+```{r, fig.pos="!h"}
+age_tabp <- get_prefCAT_age_table(here("data/production/preferredCAT_sp.Rds"), d_demo_sp, n_age_sp)
+
+apa_table(age_tabp, digits=3, caption="Correlation between the preferred CAT's ability estimates and the full CDI for Spanish production by age group.")
+```
+
+# Ability vs. Age
+
+For participants in the validation study, Figure D1 shows the relationships between children's age and 1) their total vocabulary from the full CDI:WS (left), 2) their full CDI ability (middle), and 3) their ability measured from the CDI-CAT (right).
+These relationships are all of approximately the same strength, and show the expected female advantage.
+
+```{r theta-vs-age, echo=F, fig.width=7, fig.height=3.8, fig.cap="Children's age vs. their full CDI vocabulary size, full CDI ability, and CAT-estimated ability, by sex of child."}
+p1 <- prod_s %>% rename(Sex=sex_full) %>%
+  ggplot(aes(x=age_full, y=production, color=Sex)) + 
+  geom_point(alpha=.7) + theme_classic() + 
+  xlab("Age (mos)") + ylab("Full CDI Vocabulary Size") +
+  geom_smooth(method="lm") +
+  stat_cor(inherit.aes = F, aes(x=age_full, y=production, 
+               label = paste(..rr.label.., sep = "~`,`~")))
+
+p2 <- prod_s %>% rename(Sex=sex_full) %>%
+  ggplot(aes(x=age_full, y=fullTheta, color=Sex)) + 
+  geom_point(alpha=.7) + theme_classic() + 
+  geom_errorbar(aes(ymin = fullTheta-fullTheta_SE, ymax = fullTheta+fullTheta_SE), 
+                alpha=.7, width=.1) +
+  xlab("Age (mos)") + ylab("Ability from Full CDI") +
+  geom_smooth(method="lm") +
+  stat_cor(inherit.aes = F, aes(x=age_full, y=fullTheta, 
+               label = paste(..rr.label.., sep = "~`,`~")))
+
+p3 <- prod_s %>% rename(Sex=sex_full) %>%
+  ggplot(aes(x=age_full, y=catTheta, color=Sex)) + 
+  geom_point(alpha=.7) + theme_classic() + 
+  geom_errorbar(aes(ymin = catTheta-catTheta_SE, ymax = catTheta+catTheta_SE), 
+                alpha=.7, width=.1) +
+  xlab("Age (mos)") + ylab("Ability from CAT-CDI") +
+  geom_smooth(method="lm") +
+  stat_cor(inherit.aes = F, aes(x=age_full, y=catTheta, 
+               label = paste(..rr.label.., sep = "~`,`~")))
+
+ggarrange(p1, p2, p3, ncol=3, common.legend = T)
+```
+
+# Standard Error of Measurement by Ability
+
+Finally, we examine the standard error of measurement (SEM) for children of varying ability using the preferred CAT settings with age-based starting items.
+The SEM theoretically varies with ability, as the CDI is most informative of children’s ability for children who are of closer to average ability. 
+This is because there are more items of intermediate difficulty than very difficult or very easy items, and so the test is better calibrated to distinguish children of intermediate ability than children at high/low ranges of ability. 
+Figure E1 shows SEM vs. estimated ability (theta) for each child in the Wordbank data using the preferred CDI-CAT settings. 
+The CDI-CATs show fairly minimal SEM for children with ability $-1 \leq \theta \leq 2$, meaning that the CDI-CATs will give a quite precise estimate of ability for $\sim82$% of children.
+For children with estimated $\theta<-2.5$ or $\theta>3$ (i.e. $<2$% of the population) the SEM starts to rise, and it may be advisable to administer a full CDI if it is important to get a precise estimate of the child's language ability.
+
+```{r, echo=F, fig.width=6.5, fig.height=6, fig.cap="Standard Error of Measurement (SEM) vs. children's language ability (theta) using the preferred CDI-CAT settings, with ML-based estimation and age-based starting items).", warning=F}
+
+load(here("data/comprehension/preferredCAT_eng.Rds"))
+enc <- min25_max50_ML_age$parms %>% ggplot(aes(x=thetaCAT, y=CAT_SE)) + geom_point(alpha=.1) +
+    xlab("Theta from CAT") + ylab("SEM from CDI-CAT") + theme_bw() + ylim(0,1.2) +
+  ggtitle("English Comprehension")
+load(here("data/comprehension/preferredCAT_sp.Rds"))
+spc <- min25_max50_ML_age$parms %>% ggplot(aes(x=thetaCAT, y=CAT_SE)) + geom_point(alpha=.1) +
+    xlab("Theta from CDI-CAT") + ylab("SEM from CDI-CAT") + theme_bw() + ylim(0,1.2) +
+  ggtitle("Spanish Comprehension")
+
+load(here("data/production/preferredCAT_en.Rds"))
+enp <- min25_max50_ML_age$parms %>% ggplot(aes(x=thetaCAT, y=CAT_SE)) + geom_point(alpha=.1) +
+    xlab("Theta from CDI-CAT") + ylab("SEM from CDI-CAT") + theme_bw() + ylim(0,1.2) +
+  ggtitle("English Production")
+load(here("data/production/preferredCAT_sp.Rds"))
+spp <- min25_max50_ML_age$parms %>% ggplot(aes(x=thetaCAT, y=CAT_SE)) + geom_point(alpha=.1) +
+    xlab("Theta from CDI-CAT") + ylab("SEM from CDI-CAT") + theme_bw() + ylim(0,1.2) +
+  ggtitle("Spanish Production")
+
+grid.arrange(enc, spc, enp, spp, nrow = 2)
+```
+
+# Comparison of CDI-CAT and CDI Short Forms
+
+```{r, echo=F,fig.width=4, fig.height=3.5, fig.cap="Children's CDI-CAT estimated language ability (theta) vs. IRT-estimated ability from the full CDI. The only children shown are the 308 who would have gotten a floor or ceiling score on one or more 100-item short-form CDIs. On the CDI-CAT, most of these children no longer show a ceiling or floor effect, and their CAT-estimated ability is strongly related to the IRT-estimated ability from the full CDI.", warning=F}
+en_wg_sh <- read_csv("data/short_forms/eng-wg-short.csv")
+en_ws_shA <- read_csv("data/short_forms/eng-ws-shortA.csv")
+en_ws_shB <- read_csv("data/short_forms/eng-ws-shortB.csv")
+
+# line up preferred CAT thetas for production with 
+load(here("data/comprehension/preferredCAT_eng.Rds"))
+#length(min25_max50_MAP_age$parms$thetaCAT) # 2394
+
+CATtheta_comprehension = min25_max50_MAP_age$parms$thetaCAT
+# full CDI sumscore vs. CAT theta
+#cor.test(rowSums(en_mat_wg), CATtheta_comprehension) # r=.943
+
+en_wg_short_cols = na.omit(match(en_wg_sh$word, colnames(en_mat_wg)))
+
+#cor.test(rowSums(en_mat_wg), rowSums(en_mat_wg[,en_wg_short_cols])) # .987
+
+wg_short_vs_CATtheta = cor.test(rowSums(en_mat_wg[,en_wg_short_cols]), 
+                                 CATtheta_comprehension) # .953
+
+# table(rowSums(en_mat_wg[,en_wg_short_cols]))
+# only 11 at floor (we removed most floor subjects) and 15 at ceiling..let's focus on production
+
+load(here("data/production/preferredCAT_en.Rds"))
+CATtheta_production = min25_max50_MAP_age$parms$thetaCAT
+# full CDI sumscore vs. CAT theta
+#cor.test(rowSums(d_mat_en), CATtheta_production) # r=.928
+
+en_ws_shortA_cols = na.omit(match(en_ws_shA$word, colnames(d_mat_en)))
+en_ws_shortB_cols = na.omit(match(en_ws_shB$word, colnames(d_mat_en)))
+
+# if we administered the short WG to older kids, we get a lot more ceiling...but that's unfair
+#en_wg_short_cols2 = na.omit(match(en_wg_sh$word, colnames(d_mat_en)))
+#table(rowSums(d_mat_en[,en_wg_short_cols2])) # 181 floor, 194 ceiling
+
+#cor.test(rowSums(d_mat_en), rowSums(d_mat_en[,en_ws_shortA_cols])) # .987
+#cor.test(rowSums(d_mat_en), rowSums(d_mat_en[,en_ws_shortB_cols])) # .989
+
+ws_shortA_vs_CATtheta = cor.test(rowSums(d_mat_en[,en_ws_shortA_cols]), 
+                                 CATtheta_production) # r=.961
+ws_shortB_vs_CATtheta = cor.test(rowSums(d_mat_en[,en_ws_shortB_cols]), 
+         CATtheta_production) # r=.956
+# demo_eng_wg$comprehension
+
+shdf <- tibble(`CDI:WS Short A` = rowSums(d_mat_en[,en_ws_shortA_cols]),
+              `CDI:WS Short B` = rowSums(d_mat_en[,en_ws_shortB_cols]),
+              `CAT theta` = CATtheta_production,
+              CAT_SEM = min25_max50_MAP_age$parms$CAT_SE,
+              `full CDI` = rowSums(d_mat_en),
+              `full CDI theta` = d_demo_en$ability) %>%
+  mutate(floor = ifelse(`CDI:WS Short A`==0 | `CDI:WS Short B`==0, 1, 0),
+         ceiling = ifelse(`CDI:WS Short A`==100 | `CDI:WS Short B`==100, 1, 0),
+         Extrema = ifelse(floor==1, "Floor", ifelse(ceiling==1, "Ceiling", "No")))
+
+# dim(subset(shdf, floor==1)) # 213
+# dim(subset(shdf, ceiling==1)) # 95
+
+#cor.test(shdf$`CAT theta`, shdf$`full CDI theta`) # .99
+
+cat_floor = nrow(subset(shdf, `CAT theta`==min(shdf$`CAT theta`) & Extrema!="No"))
+cat_ceiling = nrow(subset(shdf, `CAT theta`==max(shdf$`CAT theta`) & Extrema!="No"))
+
+# full CDI theta vs. CAT theta for floor/ceiling children:
+# cor.test(subset(shdf, Extrema!="No")$`full CDI theta`, subset(shdf, Extrema!="No")$`CAT theta`)
+# t = 337.9, df = 306, p-value < 2.2e-16 r=.998
+
+shdf %>% filter(Extrema!="No") %>% # show none/subset of the non-extreme data
+  ggplot(aes(x=`full CDI theta`, y=`CAT theta`, color=Extrema)) + 
+  geom_pointrange(aes(ymin=`CAT theta` - CAT_SEM, ymax=`CAT theta` + CAT_SEM), alpha=.2) + 
+  theme_classic() + geom_abline(aes(slope=1, intercept=0), linetype="dashed")
+```
+
+Finally, we investigated whether the CDI-CAT would mitigate floor and ceiling effects that would be present if participants in the Wordbank English production dataset (N=`r nrow(d_mat_en)`) were given existing 100-item short-form CDIs from Fenson et al. (2000).
+In our dataset, `r nrow(subset(shdf, floor==1))` children would receive a floor score on one or both of the short-form production CDI:WS forms (i.e., be reported by their caregiver to produce 0 of the 100 items), and `r nrow(subset(shdf, ceiling==1))` children would receive a ceiling score on one or both of the short-form production CDIs (i.e., be reported to produce all of the 100 items).
+Figure F1 shows the estimated ability for these `r length(which(shdf$Extrema!="No"))` children as estimated by the production CDI-CAT with preferred settings (MAP-based estimation with age-based start items) vs. their IRT-estimated ability from the full CDI.
+For these children who would have scored at floor or ceiling on the short-form CDIs, only `r cat_floor` scored at floor on the CDI-CAT, and `r cat_ceiling` scored at ceiling on the CDI-CAT.
+Overall, the CDI-CAT thetas vs. the full CDI thetas for these children were strongly related ($r=.999$, $t(306) = 337.9$, $p < .001$).
+Thus, we can conclude that the CDI-CAT will mitigate ceiling and floor effects for many children (289 out of 308 in this sample) that would be found if the 100-item short-form CDIs were used -- and with at most half the number of tested items.
