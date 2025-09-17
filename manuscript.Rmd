@@ -109,7 +109,8 @@ library(tidyverse)
 library(Multilada)
 library(here)
 library(effectsize)
-
+library(viridis)
+library(knitr)
 
 ```
 
@@ -123,7 +124,8 @@ knitr::opts_chunk$set(cache.extra = knitr::rand_seed, echo = F, include = F, war
 ```{r, echo = F}
 # Data
 source(here("data/polish/data_polish.R"))
-source(here("data/english/data_ame_english.R"))
+purl("data/english/github-archive/ms_rev1.Rmd", output = "ms_rev1.R")
+source("ms_rev1.R") # https://osf.io/xdp73/files/71de488a-7305-4409-81eb-044c582d65ab?view_only=#
 ```
 # Introduction
 
@@ -296,6 +298,7 @@ One of the key metrics for CAT-CDI's usefulness is whether it can shorten the CD
 
 ## Comparison of estimates
 
+
 ### Correlations
 
 <!-- AmE r values copied from Kachergis et al. 2022 -->
@@ -303,12 +306,12 @@ One of the key metrics for CAT-CDI's usefulness is whether it can shorten the CD
 
 cor(by_child_pl$cat_theta, by_child_pl$score_full) # AmE:.86, PL: 0.86
 cor(by_child_pl$cat_theta, by_child_pl$full_theta) # AmE: .92, PL: .92
-cor(by_child_pl$full_theta, by_child_pl$score_full) # AmE: .95, PL: 0.94
+cor(by_child_pl$full_theta, by_child_pl$score_full) # AmE: .94, PL: 0.94
 
 ```
 
 
-In both languages, we found similarly strong correlations between the abilities estimated from CAT-CDI and the full CDI scores (English and Polish: $r$ = .86). The correlations were also strong within individual age groups (see Tables \@ref(tab:corr-by-age-eng) and \@ref(tab:corr-by-age-pl)). We also obtained IRT ability estimates from the full CDI using the same 2-PL model. Because these estimates draw on responses to all available items in the full CDI, they incorporate more information about each child’s ability, reducing random error and increasing precision. Such ability estimates from the full test version are often considered a baseline for comparisons with ability estimates from the CAT version. We correlated the abilities estimated from the CAT-CDI and abilities estimated from full CDI and found strong correlations in both languages, English and Polish: $r$ = .92. Finally, we also correlated the abilities estimated from the full CDI and the full CDI scores, i.e. two measures obtained from the same CDI version. This way we examine consistency between model-based abilities and traditional scores. Again, we found strong correlations in both languages (English: $r$ = .95, Polish: $r$ = `r cor(by_child_pl$full_theta, by_child_pl$score_full)`), confirming that both measures reflect the same underlying ability. 
+In both languages, we found similarly strong correlations between the abilities estimated from CAT-CDI and the full CDI scores (English and Polish: $r$ = .86). The correlations were also strong within individual age groups (see Tables \@ref(tab:corr-by-age-eng) and \@ref(tab:corr-by-age-pl)). We also obtained IRT ability estimates from the full CDI using the same 2-PL model. Because these estimates draw on responses to all available items in the full CDI, they incorporate more information about each child’s ability, reducing random error and increasing precision. Such ability estimates from the full test version are often considered a baseline for comparisons with ability estimates from the CAT version. We correlated the abilities estimated from the CAT-CDI and abilities estimated from full CDI and found strong correlations in both languages, English and Polish: $r$ = .92. Finally, we also correlated the abilities estimated from the full CDI and the full CDI scores, i.e. two measures obtained from the same CDI version. This way we examine consistency between model-based abilities and traditional scores. Again, we found strong correlations in both languages (English: $r$ = .94, Polish: $r$ = `r cor(by_child_pl$full_theta, by_child_pl$score_full)`), confirming that both measures reflect the same underlying ability. 
 
 
 ```{r corr-by-age-eng, include = T}
@@ -653,9 +656,170 @@ low_disc <- items_run_en %>% filter(a1 <2 & d > -1.5 & d < 1.5)
 
 It is to be expected that a CAT-CDI will not need to administer all the items from the CDI item bank. In fact, in all the task administrations in the validation study, the English CAT-CDI used altogether `r sum(items_run_en$n != 0)` items (`r round(sum(items_run_en$n != 0)/count(items_run_en)*100,2)`%) and the Polish CAT-CDI used altogether `r sum(items_run_pl$n != 0)` items (`r round(sum(items_run_pl$n != 0)/count(items_run_pl)*100,2)`%) from their respective item banks. By design, a CAT-CDI selects items that provide the most information for each participant. In practice, this means CAT draws from a subset of items that both match the participant’s current ability estimate in difficulty and show high discrimination, allowing clear distinctions between individuals with similar ability levels. A potential concern, however, is that a CAT-CDI might repeatedly rely on the same subset of optimal items. CAT-CDI's usefulness in research—particularly in longitudinal studies—lies in the possibility of administering the CDI frequently without parents becoming overly familiar with specific, frequently repeated items. This advantage holds only if the CAT-CDI does not consistently present the same items across administrations. Therefore, we investigated whether the two CAT-CDIs repeatedly selected any items too frequently. In English, 3 items appeared in more than half of administrations - *"long"* in 64% of administrations, *"make"* in 54% of administrations, and *"last"* in 53% of administrations. As expected, they are also high discrimination items in their difficulty bins. "Long" is additionally one of the starting items, i.e. a first item shown to the parent, chosen so that there is high probability the parent can respond positively. In Polish, 3 items appeared in more than half of administrations - *"szukać"* (to look for) appearing in 83% of administrations, *"znaleźć"* (to find) appearing in 61% of administrations, and *"babcia"* (grandmother) appearing in 60% of administrations. As expected, all three items show very high discrimination. *"Szukać"* (to look for) and *"znaleźć"* (to find) are in fact in top 5 discrimination items in general. *"Babcia"* (grandmother) is one of the starting items. The fact that only 3 items out of c.a. 250 (c.a. 1%) are used in more than half administrations is to CAT-CDI's advantage. 
 
+Since CAT tailors item selection to a child’s ability estimate, parents of children at different ability levels may be expected to receive largely distinct sets of items. However, children with similar ability estimates may be administered items from the same difficulty range, which increases the likelihood of repeated exposure to a particular subset of items. This is not inherently problematic, but in the context of longitudinal testing with frequent administrations, it raises the possibility that parents may encounter very similar sets of items when the child’s ability remains relatively stable.
+
+```{r cat_theta_deciles}
+
+# EN (slightly moved distribution)
+hist(prod_s$catTheta)
+
+# grouping thetas by deciles (0-10)
+prod_s$theta_bin <- cut(
+  prod_s$catTheta,
+  breaks = quantile(prod_s$catTheta, probs = seq(0, 1, length.out = 11), na.rm = TRUE),
+  include.lowest = TRUE,
+  labels = FALSE)
+
+prod_s %>% ggplot(aes(x = as.factor(theta_bin), y = catTheta, group = theta_bin)) + geom_boxplot() + geom_point()
+
+
+# PL
+hist(by_child_pl$cat_theta)
+
+# grouping thetas by deciles (0-10)
+by_child_pl$theta_bin <- cut(
+  by_child_pl$cat_theta,
+  breaks = quantile(by_child_pl$cat_theta, probs = seq(0, 1, length.out = 11), na.rm = TRUE),
+  include.lowest = TRUE,
+  labels = FALSE)
+
+by_child_pl %>% ggplot(aes(x = as.factor(theta_bin), y = cat_theta, group = theta_bin)) + geom_boxplot() + geom_point()
+
+by_child_pl %>% select(cat_theta, theta_bin) %>% view()
+
+```
+
+```{r}
+# add item frequencies by theta bins (deciles)
+
+# EN
+resps <- merge(resps, prod_s[,c("subject_id", "theta_bin")], by = "subject_id", all.x = T) %>% unique()
+n_participants_en <- resps %>% select(subject_id, theta_bin) %>% unique() %>% group_by(theta_bin) %>% mutate(n_participants = n()) %>% select(-subject_id) %>% unique()
+
+items_run_en_dec <- resps %>% filter(response_cat != "no_test") %>% select(subject_id, definition, theta_bin) 
+
+items_run_en_dec_sum <- items_run_en_dec %>% select(definition, theta_bin) %>% 
+     group_by(theta_bin, definition) %>% summarise(n_administered = n())%>%
+     left_join(n_participants_en, by = "theta_bin")
+
+items_run_en_dec_sum <- items_run_en_dec_sum %>% mutate(perc_administered = (n_administered/n_participants)*100)
+
+# PL
+
+responses_cat_pl <- merge(responses_cat_pl, by_child_pl[,c("id", "theta_bin")], by = "id", all.x = T) %>% unique()
+n_participants <- responses_cat_pl %>% select(id, theta_bin) %>% unique() %>% group_by(theta_bin) %>% mutate(n_participants = n()) %>% select(-id) %>% unique()
+
+items_run_pl_dec <- responses_cat_pl %>% select(id, q_id, definition, theta, theta_bin)
+
+
+items_run_pl_dec_sum <- items_run_pl_dec %>% select(definition, theta_bin) %>% 
+     group_by(theta_bin, definition) %>% summarise(n_administered = n())%>%
+     left_join(n_participants, by = "theta_bin")
+
+# note, "woda" appears twice in PL CDI (once as "food" and once as something outside) --> since we did not collect info about the category of shown word or the original item number (from full CDI), we cannot distinguish between the two "woda". I'm removing both "woda" from the dataset.
+
+items_run_pl_dec_sum <- items_run_pl_dec_sum %>% filter(definition != "woda")
+
+items_run_pl_dec_sum <- items_run_pl_dec_sum %>% mutate(perc_administered = (n_administered/n_participants)*100)
+
+```
+
+Thus, we also examined whether parents of children with similar ability estimates were administered the same items in the CAT-CDI. To do so, we divided ability estimates into deciles and calculated the frequency of each item’s occurrence within each theta decile (see Figure \@ref(fig:fig-item-freq)). <!-- some discussion here -->
+
+
+```{r fig-item-freq, include = T}
+
+# plot
+     
+freq1 <- items_run_en_dec_sum %>%
+     filter(!is.na(theta_bin)) %>%
+  ggplot(aes(
+    x = as.factor(theta_bin),
+    y = perc_administered
+  )) +
+  geom_violin(fill = "#bdc4d1", alpha = 0.5) +
+  # geom_jitter(aes(color = perc_administered), width = 0.2, alpha = 0.5, size = 2) +
+     geom_boxplot(fill = "#00416d", alpha = 0.5, width = 0.1) +
+  scale_color_viridis_c(option = "D", direction = -1, end = 1) +
+  labs(
+    title = "A: English",
+    x = "Theta (decile)",
+    y = "(% of adminitrations)") +
+  ylim(0, 105) +
+  theme_minimal() 
+
+# PL
+     
+freq2 <- items_run_pl_dec_sum %>%
+     filter(!is.na(theta_bin)) %>%
+  ggplot(aes(
+    x = as.factor(theta_bin),
+    y = perc_administered
+  )) +
+  geom_violin(fill = "#bdc4d1", alpha = 0.5) +
+  # geom_jitter(aes(color = perc_administered), width = 0.2, alpha = 0.5, size = 2) +
+     geom_boxplot(fill = "#00416d", alpha = 0.5, width = 0.1) +
+  scale_color_viridis_c(option = "D", direction = -1, end = 1) +
+  labs(
+    title = "B: Polish",
+    x = "Theta (decile)",
+    y = "Item frequency in CAT-CDI") +
+  ylim(0, 105) +
+  theme_minimal() 
+
+freq_plot <- ggarrange(freq1, freq2, nrow = 2, common.legend = T)
+freq_plot
+
+```
+
+```{r}
+# # 1. Items in bin 1 (high → low as example)
+# order_bin1 <- items_run_pl_dec_sum %>%
+#   filter(theta_bin == 1) %>%
+#   group_by(definition) %>%
+#   summarise(perc_bin1 = mean(perc_administered, na.rm = TRUE)) %>%
+#   ungroup() %>%
+#   arrange(desc(perc_bin1)) %>%
+#   pull(definition)
+# 
+# # 2. Items in bin 10 (low → high as example)
+# order_bin10 <- items_run_pl_dec_sum %>%
+#   filter(theta_bin == 10, !(definition %in% order_bin1)) %>%
+#   group_by(definition) %>%
+#   summarise(perc_bin10 = mean(perc_administered, na.rm = TRUE)) %>%
+#   ungroup() %>%
+#   arrange(perc_bin10) %>%
+#   pull(definition)
+# 
+# # 3. Remaining items (not in bin 1 or bin 10)
+# all_items <- unique(items_run_pl_dec$definition)
+# remaining <- setdiff(all_items, c(order_bin1, order_bin10))
+# 
+# # 4. Final levels: bin1 items → leftovers → bin10 items
+# final_levels <- c(order_bin1, remaining, order_bin10)
+# 
+# # 5. Apply ordering
+# df_ord <- items_run_pl_dec_sum %>%
+#   mutate(definition = factor(definition, levels = final_levels))
+# 
+# # 6. Plot
+# df_ord %>%
+#      filter(!is.na(theta_bin)) %>%
+# ggplot(aes(x = as.factor(theta_bin), y = definition, fill = perc_administered)) +
+#   geom_tile(color = "white") +
+#   scale_fill_viridis_c(option = "D", direction = -1, end = 1, na.value = "grey90") +
+#   labs(
+#     title = "Items ordered by bin 1 (top), leftovers (middle), bin 10 (bottom)",
+#     x = "Theta bin",
+#     y = "Item ID",
+#     fill = "% administered"
+#   ) +
+#   theme_minimal() +
+#   theme(axis.text.y = element_text(size = 7))
+```
+
 
 ## Item properties in the two CAT-CDIs
-Our second aim was to analyze similarities and differences in IRT item properties in CAT in English and Polish.
 
 There are 679 items in the English CAT-CDI and 666 items in the Polish CAT-CDI. In both languages, the items' difficulty and discrimination parameters were calculated using IRT 2 parameter model (these included separate samples, see Kachergis et al. 2022 and Krajewski et al., in preparation). An item’s difficulty indicates the ability level at which there is a 50% probability that a participant will respond correctly (here: that a child will know a word). Difficulty is expressed on the same scale as theta (measured ability): negative values correspond to harder items, values near zero to items of moderate difficulty, and positive values to easier items (note that difficulty is inversely related to theta and so, negative theta means low ability while positive theta means high ability). An item’s discrimination shows how well it can distinguish between individuals whose abilities are close. In this paper, we focus mainly on item difficulty, as it is directly tied to the ability being measured, whereas discrimination reflects more the quality of the item as a measurement tool.
 
@@ -767,6 +931,7 @@ items_en_pl <- items_en_pl %>% mutate(d_diff = abs(d_en - d_pl))
 
 
 # Discussion
+
 
 
 It seems then that the relation between the two estimates differs, depending on the ability level: for lower abilities, the difference between the two estimates is most visible, with CAT-CDI estimates higher than the full CDI estimtes. For higher ability, the difference decreases or even (as in the case of Polish) changes direction, with CAT-CDI estimates lower than the full CDI estimates.
