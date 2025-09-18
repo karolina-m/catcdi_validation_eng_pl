@@ -147,18 +147,9 @@ In both the English (Kachergis et al. 2022) and Polish (Krajewski et al., in pre
 In both the English and Polish CAT-CDIs, basic caregiver-reported information – specifically the child’s age and sex – is used to generate an initial ability estimate. The first item is then selected based on this estimate. In both versions, we deliberately present a slightly easier item (below the estimated ability level) to encourage a positive response to the first item. Parental response to one item at a time allows the CAT algorithm to update the ability estimate and calculate a standard error (SE) of that estimate. Another important decision concerns the stopping criteria of the CAT task. These criteria can be based on a maximum number of administered items or reaching a target level of estimate precision – typically expressed as a standard error (SE) of the estimate. The English CAT-CDI prioritized a shorter CAT typically ending after 50 items, or sooner if a standard error (SE) of 0.15 was reached. In contrast, the Polish CAT-CDI prioritised greater precision, continuing to a maximum of 75 items until an SE of 0.1 was reached. If this level of precision could not be reached, the test concluded after a maximum of 75 items. These differences in CAT settings may result in relatively shorter English CAT-CDIs but relatively more precise estimates obtained from the Polish CAT-CDIs.
 
 
-The aim of this paper is to evaluate the potential usefulness of CAT-CDIs for both research and clinical applications, using evidence from the validation studies of the two CAT-CDIs in English and in Polish. For a CAT-CDI to be effective in these contexts – whether for screening, diagnosis, or broader research purposes – it should meet the following criteria:
-
-1. Require less administration time.     
-2. Produce estimates that align closely with scores obtained from the full CDI.      
-3. Maintain high measurement precision (i.e., low standard error) across the relevant ability range.      
-4. Avoid repeated reliance on the same subset of items, which is particularly important in longitudinal or repeated-measures designs.     
+The aim of this paper is to evaluate the potential usefulness of CAT-CDIs for both research and clinical applications, using evidence from the validation studies of the two CAT-CDIs in English and in Polish. For a CAT-CDI to be effective in these contexts – whether for screening, diagnosis, or broader research purposes For a CAT-CDI to be considered useful, we propose that it should require less administration time while showing good validity and reliability. CAT-CDIs should avoid reliance on the same subset of items, to support potential for repeated use. Additionally, we will compare the CAT-CDI item difficulty across Polish and English. Some differences in item parameters are to be expected, given that the IRT calibrations for the two languages were based on slightly different samples. In particular, the English data included younger children, since all age versions of the CDI were collapsed into a single dataset, whereas the Polish calibrations drew on a narrower age range. These sampling differences may influence estimated item parameters, particularly difficulty and discrimination. At the same time, such comparison also provides an opportunity to examine potential cross-linguistic effects. Differences in lexical mapping may emerge between Polish and English, reflecting item-specific factors such as word frequency, morphological complexity, or typical contextual usage. For example, morphologically complex items may be more challenging in Polish than in English, whereas high-frequency words may show comparable difficulty levels across both languages. Identifying the extent to which observed differences arise from methodological factors (i.e., sample composition) versus genuine cross-linguistic variation is an additional goal of this analysis.
 
 We will report these outcomes in the two CAT-CDIs, in English and in Polish and discuss similarities and differences in the context of how the development of two CAT-CDIs differed. <!-- We will also discuss how CAT-CDI results (an ability estimate) can be translated to a clinical context. -->
-
-We will report these outcomes in the two CAT-CDIs, in English and in Polish and discuss similarities and differences in the context of how the development of two CAT-CDIs differed. 
-
-Additionally, we will compare the CAT-CDI item difficulty across Polish and English. Some differences in item parameters are to be expected, given that the IRT calibrations for the two languages were based on slightly different samples. In particular, the English data included younger children, since all age versions of the CDI were collapsed into a single dataset, whereas the Polish calibrations drew on a narrower age range. These sampling differences may influence estimated item parameters, particularly difficulty and discrimination. At the same time, such comparison also provides an opportunity to examine potential cross-linguistic effects. Differences in lexical mapping may emerge between Polish and English, reflecting item-specific factors such as word frequency, morphological complexity, or typical contextual usage. For example, morphologically complex items may be more challenging in Polish than in English, whereas high-frequency words may show comparable difficulty levels across both languages. Identifying the extent to which observed differences arise from methodological factors (i.e., sample composition) versus genuine cross-linguistic variation is an additional goal of this analysis.
 
 # Methods
 
@@ -246,15 +237,9 @@ Both studies obtained the approval of adequate ethics committees. In both valida
 
 # Results
 
-Above we proposed that for a CAT-CDI to be effective in the research and clinical contexts, it should meet the following criteria:
+Above we proposed that for a CAT-CDI to be effective in the research and clinical contexts, it should require less administration time while showing good validity and reliability. We also suggest that CAT-CDIs should avoid reliance on the same subset of items, to support potential for repeated use. But on the other hand, we do not expect the same item properies in the English and Polish CAT-CDIs, which we believe could reflect potential cross-linguistic effects.
 
-1. Require less administration time.     
-2. Produce estimates that align closely with scores obtained from the full CDI.      
-3. Maintain high measurement precision (i.e., low standard error) across the relevant ability range.      
-4. Avoid repeated reliance on the same subset of items, which is particularly important in longitudinal or repeated-measures designs.     
-Additionally, we will compare the CAT-CDI item difficulty across Polish and English. 
-
-In the following section we will explore the two CAT-CDI's performance on each of those criteria. The English data presented here were also included in a brief validation report in Kachergis et al. (2022). In the present paper, however, we examine these metrics in greater detail and place them in relation to the validation results from the Polish CAT-CDI.
+In the following section we will explore the two CAT-CDI's performance on those criteria. The English data presented here were also included in a brief validation report in Kachergis et al. (2022). In the present paper, however, we examine these metrics in greater detail and place them in relation to the validation results from the Polish CAT-CDI.
 
 
 ## Length of administration
@@ -851,10 +836,10 @@ items_en_pl <- merge(items_cat_pl, items_cat_en,
 items_en_pl <- items_en_pl %>% filter(!is.na(item) & !is.na(definition)) %>% unique()
 count(items_en_pl) # 431
 
-items_en_pl <- merge(items_en_pl, items_run_pl[,c("item", "items_perc")], all.x = T, by = "item")
+items_en_pl <- merge(items_en_pl, items_run_pl[,c("item", "items_perc")], all.x = T, by = "item") %>% unique()
 names(items_en_pl)[names(items_en_pl) == "items_perc"] <- "items_perc_pl"
 
-items_en_pl <- merge(items_en_pl, items_run_en[,c("definition", "items_perc")], all.x = T, by = "definition")
+items_en_pl <- merge(items_en_pl, items_run_en[,c("definition", "items_perc")], all.x = T, by = "definition") %>% unique()
 names(items_en_pl)[names(items_en_pl) == "items_perc"] <- "items_perc_en"
 
 ```
@@ -895,7 +880,7 @@ The least correlated semantic category was Quantifiers. The discrepancy may be p
 
 Interestingly, the second least correlated semantic category were Clothes. Here, some divergence may be explained by one-to-multiple mapping (e.g., "hat" is either "czapka" or "kapelusz" in Polish), but also words characteristics, e.g., "bib" in Polish is a much more complex word, "śliniaczek"; English "underpants" are more morphologically complex (and maybe less frequent) than Polish "majtki".
 
-Taken together, these two semantic categories reflect the existing cross-linguistic differences in lexical mapping as well as item-specific factors such as frequency, morphological complexity, and contextual usage that .
+Taken together, these two semantic categories reflect the existing cross-linguistic differences in lexical mapping as well as item-specific factors such as frequency, morphological complexity, and contextual usage.
 
 ```{r d-by-cdi-category-tab, include = T}
 # correlations by cdi semantic category on common words
@@ -911,13 +896,13 @@ items_en_pl %>%
      group_by(category) %>% summarise(
      rho = cor(d_pl, d_en, method = "spearman", use = "complete.obs"),
      n = length(category)) %>% arrange(rho) %>%
-     rename("CDI category" = "category") -> corr_by_category
+     rename("CDI category" = "category") %>% unique() -> corr_by_category
 
 apa_table(corr_by_category, caption="Cross-linguistic correlations of item difficulty within each CDI semantic category (Spearman's rank correlations).", placement = "H")
 ```
 
 
-Last, we investigated whether particular lexical categories show related difficulty values across the two languages. We considered the following lexical classes: verbs, nouns, adjectives, function words and other, i.e. mostly sounds and words relating to routines (e.g. "hello", "yes", "thank you") and time (e.g. "tommorow", "day"). Again, we performed a series of Spearman's rank correlations (on the difficulty of items common to CDI-CATs in Polish and English) for each lexical class (see Table \@ref(tab:d-by-lexical-class-tab). The weakest correlation was for verbs(0.38), then function words (0.53), adjectives (0.59), nouns (0.63), other (0.76). Notably, function words include many of the CDI semantic categories which showed the lowest correlations in Table \@ref(tab:d-by-cdi-category-tab), i.e., quantifiers, connecting words, locations, and pronouns. Again, many English function words map onto multiple Polish equivalents, e.g., "which" corresponds to "jaki" (when asking about type, kind, or quality) and "który" (when selecting from a limited set of options). These cross-linguistic differences partially explain the weaker correlation for function words. What is more, because function words are structurally tied to grammar (which is highly language-specific) they naturally vary in frequency in child-directed speech and in their communicative salience, which can affect how well children know them across languages. By contrast, the relatively high correlations for nouns, sounds and words relating to routines (grouped together as "other") reflect their consistent easiness/difficulty across languages: words such as "mum", "ball", "hi", "woof woof" are acquired early, aligning with findings that nouns are strongly and consistently over-represented in early vocabularies across many languages (e.g., Frank et al., 2021). 
+Last, we investigated whether particular lexical categories show related difficulty values across the two languages. We considered the following lexical classes: verbs, nouns, adjectives, function words and other, i.e. mostly sounds and words relating to routines (e.g. "hello", "yes", "thank you") and time (e.g. "tommorow", "day"). Again, we performed a series of Spearman's rank correlations (on the difficulty of items common to CDI-CATs in Polish and English) for each lexical class (see Table \@ref(tab:d-by-lexical-class-tab). The weakest correlation was for verbs (0.37), then function words (0.53), adjectives (0.53), nouns (0.61), other (0.75). Again, with verbs we saw that a single English item (e.g. "break") can map onto two Polish items: "złamać" (to break by snapping or fracturing, usually used for solid objects) and "zepsuć" (to make something stop working properly). Because verbs are structurally tied to grammar (which is highly language-specific) they naturally vary in frequency in child-directed speech and in their communicative salience, which can affect how well children know them across languages. Notably, function words include many of the CDI semantic categories which showed the lowest correlations in Table \@ref(tab:d-by-cdi-category-tab), i.e., quantifiers, connecting words, locations, and pronouns. Again, many English function words map onto multiple Polish equivalents, e.g., "which" corresponds to "jaki" (when asking about type, kind, or quality) and "który" (when selecting from a limited set of options). These cross-linguistic differences partially explain the weaker correlation for function words. By contrast, the relatively high correlations for nouns, sounds and words relating to routines (grouped together as "other") reflect their consistent easiness/difficulty across languages: words such as "mum", "ball", "hi", "woof woof" are acquired early, aligning with findings that nouns are strongly and consistently over-represented in early vocabularies across many languages (e.g., Frank et al., 2021). 
 
 ```{r d-by-lexical-class-tab, include = T}
 # correlations by lexical class on common words
@@ -925,17 +910,17 @@ Last, we investigated whether particular lexical categories show related difficu
 
 # PL
 items_cat_pl <- merge(items_cat_pl, items_full_pl[,c("item_id", "lexical_class")], all.x = T, 
-                      by.x = "itemID", by.y = "item_id") 
+                      by.x = "itemID", by.y = "item_id") %>% unique()
 
 items_full_en <- read.csv("data/english/eng_ws_items.csv")
 items_cat_en <- merge(items_cat_en, items_full_en[,c("definition", "lexical_class")], all.x = T, 
-                      by = "definition") 
+                      by = "definition") %>% unique()
 
 
 items_en_pl <- merge(items_cat_pl, items_cat_en, 
                   all.x = T, all.y = T,
                   suffixes = c("_pl","_en"),
-                  by = "uni_lemma") %>% filter(!is.na(item) & !is.na(definition))
+                  by = "uni_lemma") %>% filter(!is.na(item) & !is.na(definition)) %>% unique()
 
 items_en_pl %>% group_by(lexical_class_en) %>% summarise(
      rho = cor(d_pl, d_en, method = "spearman", use = "complete.obs"),
@@ -956,43 +941,26 @@ The MacArthur–Bates Communicative Development Inventories (CDIs) are widely us
 
 This paper presents validation data for shortened CDIs developed within the framework of Item Response Theory (IRT) and using Computerized Adaptive Testing (CAT). Specifically, we introduce two CAT-based CDIs (CAT-CDIs): one in American English and one in Polish. Although both were created using a broadly similar procedure, certain design choices differed across the two versions. For English, a single CAT-CDI was developed to measure word production across the age ranges covered by all three CDI versions (Words and Gestures, Words and Sentences, and CDI-III). In Polish, a separate CDI was created for each of those age versions. The English CAT-CDI prioritized efficiency, administering up to 50 items but stopping earlier if the target level of precision (a standard error of 0.2) was reached before the 50th item. The Polish CAT-CDI emphasized precision, allowing administrations of up to 75 items and targeting a smaller standard error (0.1). These differences highlight key decision points for researchers or clinicians aiming to develop a CAT-CDI in their own language.
 
-The goal of the present study was to evaluate the usefulness of CAT-CDIs in both research and clinical contexts. Parents (in the USA and in Poland) were asked to fill in both a full version of the CDI and the CAT-CDI. From the CAT-CDI, we obtained the Schildren's ability estimates (and their precision). From the full CDIs we obtained the raw scores and we also calculated the IRT estimates (and their precision). These estimates based on the responses to all items in a full CDI allowed us to obtain a baseline for comparisons with ability estimates from the CAT version. For a CAT-CDI to be considered useful, we propose that it should meet the following criteria: 
+The goal of the present study was to evaluate the usefulness of CAT-CDIs in both research and clinical contexts. Parents (in the USA and in Poland) were asked to fill in both a full version of the CDI and the CAT-CDI. From the CAT-CDI, we obtained the Schildren's ability estimates (and their precision). From the full CDIs we obtained the raw scores and we also calculated the IRT estimates (and their precision). These estimates based on the responses to all items in a full CDI allowed us to obtain a baseline for comparisons with ability estimates from the CAT version. For a CAT-CDI to be considered useful, we propose that it should require less administration time while showing good validity and reliability. We also suggest that CAT-CDIs should avoid reliance on the same subset of items, to support potential for repeated use. But on the other hand, we do not expect the same item properies in the English and Polish CAT-CDIs, which we believe could reflect potential cross-linguistic effects. Below, we summarize and discuss our findings with respect to each of these criteria.
 
-1. Require less administration time.     
-2. Show concurrent validity with the full CDI.      
-3. Maintain high measurement precision (i.e., low standard error) across the relevant ability range.      
-4. Avoid repeated reliance on the same subset of items, which is particularly important in longitudinal or repeated-measures designs.   
+### CAT-CDIs require less administration time.
+Both the English and the Polish CAT-CDIs proved much shorter than their full counterparts, with median times of `r duration(median(prod_s$duration_cat))` (English) and `r duration(median(by_child_pl$duration_cat))` (Polish). In both CAT-CDIs a comparable number of items was administered, English *Mdn* = `r median(resps_sum$n)` (25--50 items), Polish *Mdn* = `r median(by_child_pl$no_items)` (`r min(by_child_pl$no_items)`--`r max(by_child_pl$no_items)` items). Notably, as the medians indicate, for half of the participants, the estimate precision was obtained relatively early and the CATs ended after `r median(resps_sum$n)` (English) or `r median(by_child_pl$no_items)` (Polish) items. NOTE: ENG administration time to be doubled-checked, there are 27 kids with CAT administration time in weeks (possibly an tab opened for too long). Karolina will discuss with George K.
 
-In the following sections, we summarize and discuss our findings with respect to each of these criteria.
+### CAT-CDIs show good validity and reliability.
 
-### Require less administration time.
-Both the English and the Polish CAT-CDIs proved much shorter than their full counterparts, with median times of 
+The CAT-CDI estimates correlate strongly with both full CDI scores and estimates obtained from the full CDI, proving high concurrent validity. The CAT-CDIs were strongly correlated with the full CDI versions in both languages, which supports the overall validity of the CAT approach. These correlations held for both monolingual and Polish multilingual participants (see Supplementary Materials), however, the Polish multilingual sample was small, so further research is needed to confirm these findings. The CAT-CDI estimates also showed excellent reliability. CAT-CDI scores diverged notably from full CDI estimates for only a small number of children in both language groups. A closer look showed that for the lower ability, the CAT-CDI estimates were higher than those of the full CDI, but in the Polish data, the precision of those CAT-CDI estimates was similar or slightly higher than that of the full CDI. This might potentially suggest that for children with lower lexical abilities, CAT estimates may be more aligned with the true abilities. For the higher ability, CAT estimates were more closely aligned with the full CDI estimates, but the precision of the CAT estimates was similar or lower than that of the full CDI. Importantly, for the large majority of children, i.e. `r round(sum(prod_s$catTheta_SE < 0.2)/nrow(prod_s)*100,1)`% of the American participants and `r round(sum(by_child_pl$cat_theta_se < 0.2)/nrow(by_child_pl)*100,1)`% of the Polish participants, the obtained CAT-CDI estimates were below the precision cut-off point suggested by Makransky et al. of 0.2.
+
+### CAT-CDIs avoid repeated reliance on the same subset of items. 
+
+By design, a CAT-CDI selects items that provide the most information for each participant. In practice, this means participant of different abilities may see largely a different set of items. A potential concern, however, is that a CAT-CDI might repeatedly rely on the same subset of optimal items, i.e. items of matching difficulty and high discrimination. As a CAT-CDI's usefulness lies also in the possibility of administering the CDI frequently without parents becoming overly familiar with specific items, we investigated whether the two CAT-CDIs repeatedly selected and items too frequently. We found that in each language only 3 (different) items were shown to more than 50% participants: in English, "long", a starting item for some of the participants, appeared in 64% of administrations, "make" appeared in 54% of administration, and "last" appeared in 53% of administrations; in Polish, "szukać" (to look for) appeared in 83% of administrations, "znaleźć" (to find) appeared in 61% of administrations, and "babcia" (grandmother), a starting item for some particpants, appeared in 60% of administrations. As expected, the three items in each language show high discrimination. We believe that the fact that only 3 items out of c.a. 250 (c.a. 1%) are used in more than half administrations is to CAT-CDI's advantage. 
+
+### CAT-CDIs across languages do not have to show similar item properties.
+
+The comparison of item parameters across English and Polish highlights both methodological and linguistic influences on CAT-CDI development. Differences in calibration samples, particularly the broader age range in English versus the narrower one in Polish, likely contributed to observed shifts in item difficulty, with English items tending to appear more difficult (this was true also for the subset of items found on the CDI lists in both languages). Still the item difficulty for common items in the two languages was positively and moderately correlated. At the same time, variation in lexical mapping, morphological complexity, and frequency of use may also shape item properties across languages. These findings underscore the importance of considering both sample characteristics and language-specific features when interpreting item parameters or developing new CAT-CDIs.
 
 
-Taken together, the results reported so far show that the CAT-CDI estimates correlate strongly with both full CDI scores and estimates obtained from the full CDI. For the lower ability, the CAT-CDI estimates are higher than those of the full CDI, but in the Polish data, the precision of those CAT-CDI estimates is similar or slightly higher than that of the full CDI. This might potentially suggest that for children with lower lexical abilities, CAT estimates may be more aligned with the true abilities. For the higher ability, CAT estimates were more closely aligned with the full CDI estimates, but the precision of the CAT estimates was similar or lower than that of the full CDI. Importantly, for the large majority of children, the obtained CAT-CDI estimates were below the precision cut-off point of 0.2.
-
-Of note here is also the fact that the two CAT-CDIs differed in their settings as to when to finish the administration. Specifically, the Polish CAT-CDI was set so that the SE as low as 0.1 be reached (with as few items as possible), and if the SE could not be lowered to or below 0.1, the CAT-CDI stopped after administering a maximum of 75 items. The English CAT-CDI on the other hand was set to administer a maximum of 50 items, but the administration could be stopped earlier if the SE of 0.15 or lower was reached. In other words, the Polish CAT-CDI prioritized a lower SE, while the English CAT-CDI prioritized shorter test length.
-
-
-It seems then that the relation between the two estimates differs, depending on the ability level: for lower abilities, the difference between the two estimates is most visible, with CAT-CDI estimates higher than the full CDI estimtes. For higher ability, the difference decreases or even (as in the case of Polish) changes direction, with CAT-CDI estimates lower than the full CDI estimates.
-
-In points for now:    
-
-1. *Strong correlations with full CDI*.   
-The CAT-CDIs were strongly correlated with the full CDI versions in both languages, which supports the overall validity of the CAT approach. These correlations held for both monolingual and multilingual participants. However, the Polish sample was small, so further research is needed—and planned—to confirm these findings.    
-
-2. *Cases of extreme divergence*.   
-CAT-CDI scores diverged notably from full CDI estimates for only a small number of children in both language groups. In the Polish sample all divergent cases had low SEM, and their full CDIs were unusually short--maybe the full form underestimated their ability? In the English sample, their full CDIs were not very short, but SEM was relatively low, which is good.     
-
-3. *Item paramteres across languages*.   
-Item parameters (i.e., difficulty and discrimination) showed moderate correlations across languages. These likely stem from variations in the calibration samples. Still, some semantic categories showed consistent patterns across languages, suggesting underlying structural similarities in lexical development.   
-
-4. *Item selection*.   
-Each CAT version used c.a. half of the full CDI item pool. Few items were overused (mostly those with highest discrimination in the item pool or starting items). But we also saw items being chosen for CAT that wouldn't be considered very informative (i.e., of low discrimination). That's something to explore further, I wrote to Phil Chalmers (author of mirt and mirtCAT), maybe he'll be able to help?    
-
-5. *Efficiency and Reliability*.   
-CAT-CDIs were significantly shorter than the full CDIs while maintaining high reliability for most children. The few less reliable estimates were for children at the ends of the ability range (children with either very low or very high lexical skills). Comparing Polish and English samples, the ability ranges with low SEM differed (see Figure 3) - this again might be a result of the calibration samples and item parameters? This is a good place to stress the importance of well-balanced, diverse calibration datasets. 
-Also, while the CAT-CDI is efficient and useful for screening or initial identification (“pomiar przesiewowy” in Polish), it may be less suited for diagnostic purposes where high precision is needed across the full ability range.
+## Conclusions
+Overall, the two validation studies reported here indicate that the English and Polish CAT-CDIs can substantially reduce administration time while still providing reliable and valid estimates of children’s early vocabulary. Both instruments showed strong correlations with full CDI measures, although some systematic differences in estimates were observed, particularly at the lowest and highest ends of ability, where the full CDI itself may also provide less precise estimates. The adaptive format also appeared to minimize over-reliance on a narrow set of items (as compared to a short CDI), supporting its potential for repeated use. At the same time, cross-linguistic comparisons highlighted that differences in calibration samples can affect item parameters, underscoring the need for careful consideration when adapting CAT-CDIs across languages. Importantly, the exact performance of a CAT-CDI is shaped by key design choices, such as the structure of the calibration procedures and stopping criteria. This suggests that future adaptations may need to weigh efficiency against precision to optimize the tool for their specific research or clinical goals. 
 
 \newpage
 
