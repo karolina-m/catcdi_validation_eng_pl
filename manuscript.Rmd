@@ -259,11 +259,13 @@ In the following section we will explore the two CAT-CDI's performance on each o
 
 ## Length of administration
 ```{r}
-# calculate and add duration_cat for Eng
-demo <- demo %>% mutate(
-     duration_cat = lubridate::as.duration(last_modified_cat - created_date_cat))
+# calculate and add duration_cat and _full for Eng
+kept_demo <- kept_demo %>% mutate(
+     duration_cat = lubridate::as.duration(last_modified_cat - created_date_cat),
+     duration_full = lubridate::as.duration(last_modified_full - created_date_full))
 
-prod_s <- merge(prod_s, demo[,c("subject_id", "duration_cat")], all.x = T, by = "subject_id")
+
+prod_s <- merge(prod_s, kept_demo[,c("subject_id", "duration_cat", "duration_full")], all.x = T, by = "subject_id")
 
 ```
 
@@ -949,6 +951,27 @@ items_en_pl <- items_en_pl %>% mutate(d_diff = abs(d_en - d_pl))
 
 
 # Discussion
+
+The MacArthur–Bates Communicative Development Inventories (CDIs) are widely used in both research and practice to assess children’s early language abilities, particularly vocabulary knowledge. To ensure comprehensive coverage, CDIs contain extensive word lists that vary in difficulty, frequency, and lexical class. Because of their length, numerous efforts have been made to shorten CDI administration while preserving the tool’s strong psychometric properties.
+
+This paper presents validation data for shortened CDIs developed within the framework of Item Response Theory (IRT) and using Computerized Adaptive Testing (CAT). Specifically, we introduce two CAT-based CDIs (CAT-CDIs): one in American English and one in Polish. Although both were created using a broadly similar procedure, certain design choices differed across the two versions. For English, a single CAT-CDI was developed to measure word production across the age ranges covered by all three CDI versions (Words and Gestures, Words and Sentences, and CDI-III). In Polish, a separate CDI was created for each of those age versions. The English CAT-CDI prioritized efficiency, administering up to 50 items but stopping earlier if the target level of precision (a standard error of 0.2) was reached before the 50th item. The Polish CAT-CDI emphasized precision, allowing administrations of up to 75 items and targeting a smaller standard error (0.1). These differences highlight key decision points for researchers or clinicians aiming to develop a CAT-CDI in their own language.
+
+The goal of the present study was to evaluate the usefulness of CAT-CDIs in both research and clinical contexts. Parents (in the USA and in Poland) were asked to fill in both a full version of the CDI and the CAT-CDI. From the CAT-CDI, we obtained the Schildren's ability estimates (and their precision). From the full CDIs we obtained the raw scores and we also calculated the IRT estimates (and their precision). These estimates based on the responses to all items in a full CDI allowed us to obtain a baseline for comparisons with ability estimates from the CAT version. For a CAT-CDI to be considered useful, we propose that it should meet the following criteria: 
+
+1. Require less administration time.     
+2. Show concurrent validity with the full CDI.      
+3. Maintain high measurement precision (i.e., low standard error) across the relevant ability range.      
+4. Avoid repeated reliance on the same subset of items, which is particularly important in longitudinal or repeated-measures designs.   
+
+In the following sections, we summarize and discuss our findings with respect to each of these criteria.
+
+### Require less administration time.
+Both the English and the Polish CAT-CDIs proved much shorter than their full counterparts, with median times of 
+
+
+Taken together, the results reported so far show that the CAT-CDI estimates correlate strongly with both full CDI scores and estimates obtained from the full CDI. For the lower ability, the CAT-CDI estimates are higher than those of the full CDI, but in the Polish data, the precision of those CAT-CDI estimates is similar or slightly higher than that of the full CDI. This might potentially suggest that for children with lower lexical abilities, CAT estimates may be more aligned with the true abilities. For the higher ability, CAT estimates were more closely aligned with the full CDI estimates, but the precision of the CAT estimates was similar or lower than that of the full CDI. Importantly, for the large majority of children, the obtained CAT-CDI estimates were below the precision cut-off point of 0.2.
+
+Of note here is also the fact that the two CAT-CDIs differed in their settings as to when to finish the administration. Specifically, the Polish CAT-CDI was set so that the SE as low as 0.1 be reached (with as few items as possible), and if the SE could not be lowered to or below 0.1, the CAT-CDI stopped after administering a maximum of 75 items. The English CAT-CDI on the other hand was set to administer a maximum of 50 items, but the administration could be stopped earlier if the SE of 0.15 or lower was reached. In other words, the Polish CAT-CDI prioritized a lower SE, while the English CAT-CDI prioritized shorter test length.
 
 
 It seems then that the relation between the two estimates differs, depending on the ability level: for lower abilities, the difference between the two estimates is most visible, with CAT-CDI estimates higher than the full CDI estimtes. For higher ability, the difference decreases or even (as in the case of Polish) changes direction, with CAT-CDI estimates lower than the full CDI estimates.
