@@ -566,105 +566,107 @@ ggsave("fig_se_by_theta_alt.jpeg", dpi = 300, width = 200, height = 150, units =
 ```
 
 
-```{r CLS-Langusta}
+```{r plots-for-CLS-Langusta}
 
-library(ggpubr)
-# CLS/Langusta
-
-
-se_pl %>%
-  ggplot(aes(x = theta, y = se, color = method, fill = method)) +
-  geom_smooth(se = FALSE, method = "loess", span = 0.5, size = 1.2) +
-     scale_color_manual(values = c("black", "darkgrey")) +
-  scale_x_continuous(
-    breaks = c(-2.5, -1, 1, 2.5),
-    labels = c("[-3,-1.5]", "(-1.5,0]", "(0,1.5]", "(1.5,3]")) +
-labs(y = "SE", x = "Theta") +
-     ylim(0, 0.5) +
-     geom_hline(yintercept = 0.2, linetype = "dashed", color = "red") +
-  theme_light() + theme(legend.title = element_blank(), legend.position = "right") +
-     ggtitle("CDI:Words and Sentences") + theme(plot.title = element_text(hjust = 0.5, size = 14, face = "bold"))
-
-ggsave("se.jpg", dpi = 300, width = 100, height = 100, units = "mm")
-
-se_pl %>%
-     filter(method == "full") %>%
-  ggplot(aes(x = theta, y = se, color = method, fill = method)) +
-  geom_smooth(se = FALSE, method = "loess", span = 0.5, size = 1.2) +
-     scale_color_manual(values = c("darkgrey")) +
-  scale_x_continuous(
-    breaks = c(-2.5, -1, 1, 2.5),
-    labels = c("[-3,-1.5]", "(-1.5,0]", "(0,1.5]", "(1.5,3]")) +
-labs(y = "SE", x = "Theta") +
-     ylim(0, 0.5) +
-     geom_hline(yintercept = 0.15, linetype = "dashed", color = "red") +
-  theme_light() + theme(legend.title = element_blank(), legend.position = "right") +
-     ggtitle("CDI:Words and Sentences") + theme(plot.title = element_text(hjust = 0.5, size = 14, face = "bold"))
-
-ggsave("se_full.jpg", dpi = 300, width = 100, height = 100, units = "mm")
-
-se_pl %>%
-     filter(method == "cat") %>%
-  ggplot(aes(x = theta, y = se, color = method, fill = method)) +
-  geom_smooth(se = FALSE, method = "loess", span = 0.5, size = 1.2) +
-     scale_color_manual(values = c("black")) +
-  scale_x_continuous(
-    breaks = c(-2.5, -1, 1, 2.5),
-    labels = c("[-3,-1.5]", "(-1.5,0]", "(0,1.5]", "(1.5,3]")) +
-labs(y = "SE", x = "Theta") +
-     ylim(0, 0.5) +
-     geom_hline(yintercept = 0.15, linetype = "dashed", color = "red") +
-  theme_light() + theme(legend.title = element_blank(), legend.position = "right") +
-     ggtitle("CDI:Words and Sentences") + theme(plot.title = element_text(hjust = 0.5, size = 14, face = "bold"))
-
-ggsave("se_cat.jpg", dpi = 300, width = 100, height = 100, units = "mm")
-
-by_child_pl %>%
-  ggplot(aes()) +
-  labs(y = "Theta (CAT)", x = "Raw score (full CDI)") +
-  theme_light() + theme(legend.position = "none") + 
-     ggtitle("CDI:Words and Sentences") + theme(plot.title = element_text(hjust = 0.5, size = 14, face = "bold")) +
-     ylim(-2.3,2.3) + xlim(0, 700)
-
-ggsave("corr_empty.jpg", dpi = 300, width = 100, height = 100, units = "mm")
-
-by_child_pl %>%
-  ggplot(aes(x = score_full, y = cat_theta)) +
-  # Points with conditional coloring
-  geom_jitter(aes(color = "black"), alpha = 0.7) +
-  # Linear regression line in blue
-  geom_smooth(method = "lm", color = "black", se = FALSE) +
-  scale_color_identity() +  # Use the colors as-is
-  labs(y = "Theta (CAT)", x = "Raw score (full CDI)") +
-  theme_light() + theme(legend.position = "none") + 
-       stat_cor(cor.coef.name = "r", p.accuracy = 0.001, r.accuracy = 0.01, size = 5, show.legend = F,
-           label.x.npc = "middle") +
-     ggtitle("CDI:Words and Sentences") + theme(plot.title = element_text(hjust = 0.5, size = 14, face = "bold")) +
-     ylim(-2.3,2.3) + xlim(0, 700)
-
-ggsave("corr.jpg", dpi = 300, width = 100, height = 100, units = "mm")
-
-by_child_pl %>%
-  mutate(point_color = ifelse(cat_theta_se > 0.15, "red", "black")) %>%
-  ggplot(aes(x = score_full, y = cat_theta)) +
-  # Points with conditional coloring
-  geom_jitter(aes(color = point_color), alpha = 0.7) +
-  # Linear regression line in blue
-  geom_smooth(method = "lm", color = "black", se = FALSE) +
-  scale_color_identity() +  # Use the colors as-is
-  labs(y = "Theta (CAT)", x = "Raw score (full CDI)") +
-  theme_light() + theme(legend.position = "none") + 
-       stat_cor(cor.coef.name = "r", p.accuracy = 0.001, r.accuracy = 0.01, size = 5, show.legend = F,
-           label.x.npc = "middle") +
-     ggtitle("CDI:Words and Sentences") + theme(plot.title = element_text(hjust = 0.5, size = 14, face = "bold")) +
-     ylim(-2.3,2.3) + xlim(0, 700)
-
-ggsave("corr_se.jpg", dpi = 300, width = 100, height = 100, units = "mm")
+# plots for CLS/Langusta
+# library(ggpubr)
+# 
+# 
+# se_pl %>%
+#   ggplot(aes(x = theta, y = se, color = method, fill = method)) +
+#   geom_smooth(se = FALSE, method = "loess", span = 0.5, size = 1.2) +
+#      scale_color_manual(values = c("black", "darkgrey")) +
+#   scale_x_continuous(
+#     breaks = c(-2.5, -1, 1, 2.5),
+#     labels = c("[-3,-1.5]", "(-1.5,0]", "(0,1.5]", "(1.5,3]")) +
+# labs(y = "SE", x = "Theta") +
+#      ylim(0, 0.5) +
+#      geom_hline(yintercept = 0.2, linetype = "dashed", color = "red") +
+#   theme_light() + theme(legend.title = element_blank(), legend.position = "right") +
+#      ggtitle("CDI:Words and Sentences") + theme(plot.title = element_text(hjust = 0.5, size = 14, face = "bold"))
+# 
+# ggsave("se.jpg", dpi = 300, width = 100, height = 100, units = "mm")
+# 
+# se_pl %>%
+#      filter(method == "full") %>%
+#   ggplot(aes(x = theta, y = se, color = method, fill = method)) +
+#   geom_smooth(se = FALSE, method = "loess", span = 0.5, size = 1.2) +
+#      scale_color_manual(values = c("darkgrey")) +
+#   scale_x_continuous(
+#     breaks = c(-2.5, -1, 1, 2.5),
+#     labels = c("[-3,-1.5]", "(-1.5,0]", "(0,1.5]", "(1.5,3]")) +
+# labs(y = "SE", x = "Theta") +
+#      ylim(0, 0.5) +
+#      geom_hline(yintercept = 0.15, linetype = "dashed", color = "red") +
+#   theme_light() + theme(legend.title = element_blank(), legend.position = "right") +
+#      ggtitle("CDI:Words and Sentences") + theme(plot.title = element_text(hjust = 0.5, size = 14, face = "bold"))
+# 
+# ggsave("se_full.jpg", dpi = 300, width = 100, height = 100, units = "mm")
+# 
+# se_pl %>%
+#      filter(method == "cat") %>%
+#   ggplot(aes(x = theta, y = se, color = method, fill = method)) +
+#   geom_smooth(se = FALSE, method = "loess", span = 0.5, size = 1.2) +
+#      scale_color_manual(values = c("black")) +
+#   scale_x_continuous(
+#     breaks = c(-2.5, -1, 1, 2.5),
+#     labels = c("[-3,-1.5]", "(-1.5,0]", "(0,1.5]", "(1.5,3]")) +
+# labs(y = "SE", x = "Theta") +
+#      ylim(0, 0.5) +
+#      geom_hline(yintercept = 0.15, linetype = "dashed", color = "red") +
+#   theme_light() + theme(legend.title = element_blank(), legend.position = "right") +
+#      ggtitle("CDI:Words and Sentences") + theme(plot.title = element_text(hjust = 0.5, size = 14, face = "bold"))
+# 
+# ggsave("se_cat.jpg", dpi = 300, width = 100, height = 100, units = "mm")
+# 
+# by_child_pl %>%
+#   ggplot(aes()) +
+#   labs(y = "Theta (CAT)", x = "Raw score (full CDI)") +
+#   theme_light() + theme(legend.position = "none") + 
+#      ggtitle("CDI:Words and Sentences") + theme(plot.title = element_text(hjust = 0.5, size = 14, face = "bold")) +
+#      ylim(-2.3,2.3) + xlim(0, 700)
+# 
+# ggsave("corr_empty.jpg", dpi = 300, width = 100, height = 100, units = "mm")
+# 
+# by_child_pl %>%
+#   ggplot(aes(x = score_full, y = cat_theta)) +
+#   # Points with conditional coloring
+#   geom_jitter(aes(color = "black"), alpha = 0.7) +
+#   # Linear regression line in blue
+#   geom_smooth(method = "lm", color = "black", se = FALSE) +
+#   scale_color_identity() +  # Use the colors as-is
+#   labs(y = "Theta (CAT)", x = "Raw score (full CDI)") +
+#   theme_light() + theme(legend.position = "none") + 
+#        stat_cor(cor.coef.name = "r", p.accuracy = 0.001, r.accuracy = 0.01, size = 5, show.legend = F,
+#            label.x.npc = "middle") +
+#      ggtitle("CDI:Words and Sentences") + theme(plot.title = element_text(hjust = 0.5, size = 14, face = "bold")) +
+#      ylim(-2.3,2.3) + xlim(0, 700)
+# 
+# ggsave("corr.jpg", dpi = 300, width = 100, height = 100, units = "mm")
+# 
+# by_child_pl %>%
+#   mutate(point_color = ifelse(cat_theta_se > 0.15, "red", "black")) %>%
+#   ggplot(aes(x = score_full, y = cat_theta)) +
+#   # Points with conditional coloring
+#   geom_jitter(aes(color = point_color), alpha = 0.7) +
+#   # Linear regression line in blue
+#   geom_smooth(method = "lm", color = "black", se = FALSE) +
+#   scale_color_identity() +  # Use the colors as-is
+#   labs(y = "Theta (CAT)", x = "Raw score (full CDI)") +
+#   theme_light() + theme(legend.position = "none") + 
+#        stat_cor(cor.coef.name = "r", p.accuracy = 0.001, r.accuracy = 0.01, size = 5, show.legend = F,
+#            label.x.npc = "middle") +
+#      ggtitle("CDI:Words and Sentences") + theme(plot.title = element_text(hjust = 0.5, size = 14, face = "bold")) +
+#      ylim(-2.3,2.3) + xlim(0, 700)
+# 
+# ggsave("corr_se.jpg", dpi = 300, width = 100, height = 100, units = "mm")
 
 ```
 
+
 ```{r}
-# dla CAT-WALID
+# compare to WS Pl simulations - histogram of how many items were administered
+
 by_child_pl %>% select(child_id, no_items, cat_theta_se) %>% view()
 
 # Define bins
@@ -789,7 +791,9 @@ low_disc <- items_run_en %>% filter(a1 <2 & d > -1.5 & d < 1.5)
 
 It is to be expected that a CAT-CDI will not need to administer all the items from the CDI item bank. In fact, in all the task administrations in the validation study, the English CAT-CDI used altogether `r sum(items_run_en$n != 0)` items (`r round(sum(items_run_en$n != 0)/nrow(items_run_en)*100,2)`%) and the Polish CAT-CDI used altogether `r sum(items_run_pl$n != 0)` items (`r round(sum(items_run_pl$n != 0)/nrow(items_run_pl)*100,2)`%) from their respective item banks. By design, a CAT-CDI selects items that provide the most information for each participant. In practice, this means CAT draws from a subset of items that both match the participant’s current ability estimate in difficulty and show high discrimination, allowing clear distinctions between individuals with similar ability levels. A potential concern, however, is that a CAT-CDI might repeatedly rely on the same subset of optimal items. CAT-CDI's usefulness in research—particularly in longitudinal studies—lies in the possibility of administering the CDI frequently without parents becoming overly familiar with specific, frequently repeated items. This advantage holds only if the CAT-CDI does not consistently present the same items across administrations. Therefore, we investigated whether the two CAT-CDIs repeatedly selected any items too frequently. In English, 3 items appeared in more than half of administrations - *"long"* in 64% of administrations, *"make"* in 54% of administrations, and *"last"* in 53% of administrations. As expected, they are also high discrimination items in their difficulty bins. "Long" is additionally one of the starting items, i.e. a first item shown to the parent, chosen so that there is high probability the parent can respond positively. In Polish, 3 items appeared in more than half of administrations - *"szukać"* (to look for) appearing in 83% of administrations, *"znaleźć"* (to find) appearing in 61% of administrations, and *"babcia"* (grandmother) appearing in 60% of administrations. As expected, all three items show very high discrimination. *"Szukać"* (to look for) and *"znaleźć"* (to find) are in fact in top 5 discrimination items in general. *"Babcia"* (grandmother) is one of the starting items. The fact that only 3 items out of c.a. 250 (c.a. 1%) are used in more than half administrations is to CAT-CDI's advantage. 
 
-Since CAT tailors item selection to a child’s ability estimate, parents of children at different ability levels may be expected to receive largely distinct sets of items. However, children with similar ability estimates may be administered items from the same difficulty range, which increases the likelihood of repeated exposure to a particular subset of items. This is not inherently problematic, but in the context of longitudinal testing with frequent administrations, it raises the possibility that parents may encounter very similar sets of items when the child’s ability remains relatively stable.
+<!-- Since CAT tailors item selection to a child’s ability estimate, parents of children at different ability levels may be expected to receive largely distinct sets of items. However, children with similar ability estimates may be administered items from the same difficulty range, which increases the likelihood of repeated exposure to a particular subset of items. This is not inherently problematic, but in the context of longitudinal testing with frequent administrations, it raises the possibility that parents may encounter very similar sets of items when the child’s ability remains relatively stable. -->
+
+<!-- Thus, we also examined whether parents of children with similar ability estimates were administered the same items in the CAT-CDI. To do so, we divided ability estimates into deciles and calculated the frequency of each item’s occurrence within each theta decile (see Figure \@ref(fig:fig-item-freq)). FINISH -->
 
 ```{r cat_theta_deciles}
 
@@ -857,8 +861,6 @@ items_run_pl_dec_sum <- items_run_pl_dec_sum %>% mutate(perc_administered = (n_a
 
 ```
 
-Thus, we also examined whether parents of children with similar ability estimates were administered the same items in the CAT-CDI. To do so, we divided ability estimates into deciles and calculated the frequency of each item’s occurrence within each theta decile (see Figure \@ref(fig:fig-item-freq)). <!-- some discussion here -->
-
 
 ```{r fig-item-freq, include = T}
 
@@ -898,57 +900,166 @@ freq2 <- items_run_pl_dec_sum %>%
     x = "Theta (decile)",
     y = "Item frequency in CAT-CDI") +
   ylim(0, 105) +
-  theme_minimal() 
+  theme_minimal()
 
 freq_plot <- ggarrange(freq1, freq2, nrow = 2, common.legend = T)
 freq_plot
 
 ```
 
+```{r res-en}
+# item freq by child's age
+
+# EN
+
+# get child's age from kept_demo
+resps_cat <- resps %>% filter(response_cat != "no_test")
+resps_cat <- merge(resps_cat, kept_demo[,c("subject_id", "age_cat")], by = "subject_id", all.x = T)
+
+# item freq by age
+items_run_en_sum <- resps_cat %>% select(definition, age_cat) %>% 
+     group_by(age_cat, definition) %>% summarise(n_administered = n())
+
+# BELOW HELP FROM CHAT GPT :)
+# start ages (all except the max)
+start_ages <- sort(unique(items_run_en_sum$age_cat))
+start_ages <- start_ages[start_ages < max(start_ages)]
+
+# participants per age (assuming n_participants is constant within age)
+participants_by_age <- items_run_en_sum %>%
+  group_by(age_cat) %>%
+  summarise(n_participants = max(n_participants, na.rm = TRUE), .groups = "drop")
+
+# build sliding windows
+result_en <- map_dfr(start_ages, function(a) {
+  ages_in_window <- c(a, a + 1)
+
+  tmp <- items_run_en_sum %>%
+    filter(age_cat %in% ages_in_window) %>%
+    group_by(definition) %>%
+    summarise(total_administered = sum(n_administered, na.rm = TRUE),
+              .groups = "drop") %>%
+    mutate(age_group = paste0(a, "-", a + 1))
+
+  total_participants_window <- participants_by_age %>%
+    filter(age_cat %in% ages_in_window) %>%
+    summarise(total_participants = sum(n_participants, na.rm = TRUE)) %>%
+    pull(total_participants)
+
+  tmp %>% mutate(total_participants = total_participants_window)
+}) %>%
+  select(age_group, definition, total_administered, total_participants) %>%
+  arrange(age_group, definition)
+
+# optional: make all defs appear in all windows
+# result <- result %>%
+#   complete(age_group, definition, fill = list(total_administered = 0))
+
+result_en <- result_en %>% mutate(freq_perc = (total_administered/total_participants)*100)
+
+# plot
+res_en <- result_en %>%
+  ggplot(aes(x = age_group, y = freq_perc)) +
+  geom_jitter(alpha = 0.3, width = 0.2) +
+  theme_minimal() +
+  geom_hline(yintercept = 50, color = "red", linetype = "dashed") +
+  geom_text_repel(
+    data = subset(result_en, freq_perc > 50),
+    aes(label = definition, color = definition), 
+    show.legend = FALSE) + 
+     labs(x = "Age bin", 
+          y = "Item frequency (% of administractions)",
+          title = "A: ENGLISH") + ylim(0,100)
+res_en
+
+```
+
+```{r res-pl}
+
+# PL
+
+# get child's age from by_child_pl
+responses_cat_pl <- merge(responses_cat_pl, by_child_pl[,c("id", "age_CAT")], by = "id", all.x = T)
+
+# item freq by age
+items_run_pl_sum <- responses_cat_pl %>% select(definition, age_CAT) %>% 
+     group_by(age_CAT, definition) %>% summarise(n_administered = n())
+
+# note: "woda" appears twice in PL CDI (once as "food" and once as something outside) --> since we did not collect info about the category of shown word or the original item number (from full CDI), we cannot distinguish between the two "woda". I'm removing both "woda" from the dataset.
+# note2: removing starting items because they ARE repeatedly administered
+
+items_run_pl_sum <- items_run_pl_sum %>% 
+     filter(!definition %in% c("pa, pa!", "auto/samochód", "babcia")) %>% # starting items
+     filter(definition != "woda") %>%
+     filter(!is.na(age_CAT))
+
+items_run_pl_sum <- items_run_pl_sum %>% mutate(age_CAT = as.integer(age_CAT))
+
+# BELOW HELP FROM CHAT GPT :)
+
+# start ages (all except the max)
+start_ages <- sort(unique(items_run_pl_sum$age_CAT))
+start_ages <- start_ages[start_ages < max(start_ages)]
+
+# participants per age (assuming n_participants is constant within age)
+participants_by_age <- items_run_pl_sum %>%
+  group_by(age_CAT) %>%
+  summarise(n_participants = max(n_participants, na.rm = TRUE), .groups = "drop")
+
+# build sliding windows
+result_pl <- map_dfr(start_ages, function(a) {
+  ages_in_window <- c(a, a + 1)
+
+  tmp <- items_run_pl_sum %>%
+    filter(age_CAT %in% ages_in_window) %>%
+    group_by(definition) %>%
+    summarise(total_administered = sum(n_administered, na.rm = TRUE),
+              .groups = "drop") %>%
+    mutate(age_group = paste0(a, "-", a + 1))
+
+  total_participants_window <- participants_by_age %>%
+    filter(age_CAT %in% ages_in_window) %>%
+    summarise(total_participants = sum(n_participants, na.rm = TRUE)) %>%
+    pull(total_participants)
+
+  tmp %>% mutate(total_participants = total_participants_window)
+}) %>%
+  select(age_group, definition, total_administered, total_participants) %>%
+  arrange(age_group, definition)
+
+# optional: make all defs appear in all windows
+# result <- result %>%
+#   complete(age_group, definition, fill = list(total_administered = 0))
+
+result_pl <- result_pl %>% mutate(freq_perc = (total_administered/total_participants)*100)
+
+
+# plot
+res_pl <- result_pl %>%
+  ggplot(aes(x = age_group, y = freq_perc)) +
+  geom_jitter(alpha = 0.3, width = 0.2) +
+  theme_minimal() +
+  geom_hline(yintercept = 50, color = "red", linetype = "dashed") +
+  geom_text_repel(
+    data = subset(result_pl, freq_perc > 50),
+    aes(label = definition, color = definition), 
+    show.legend = FALSE) + 
+     labs(x = "Age bin", 
+          y = "Item frequency (% of administractions)",
+          title = "B: POLISH") + ylim(0,100)
+
+res_pl
+
+```
+
 ```{r}
-# # 1. Items in bin 1 (high → low as example)
-# order_bin1 <- items_run_pl_dec_sum %>%
-#   filter(theta_bin == 1) %>%
-#   group_by(definition) %>%
-#   summarise(perc_bin1 = mean(perc_administered, na.rm = TRUE)) %>%
-#   ungroup() %>%
-#   arrange(desc(perc_bin1)) %>%
-#   pull(definition)
-# 
-# # 2. Items in bin 10 (low → high as example)
-# order_bin10 <- items_run_pl_dec_sum %>%
-#   filter(theta_bin == 10, !(definition %in% order_bin1)) %>%
-#   group_by(definition) %>%
-#   summarise(perc_bin10 = mean(perc_administered, na.rm = TRUE)) %>%
-#   ungroup() %>%
-#   arrange(perc_bin10) %>%
-#   pull(definition)
-# 
-# # 3. Remaining items (not in bin 1 or bin 10)
-# all_items <- unique(items_run_pl_dec$definition)
-# remaining <- setdiff(all_items, c(order_bin1, order_bin10))
-# 
-# # 4. Final levels: bin1 items → leftovers → bin10 items
-# final_levels <- c(order_bin1, remaining, order_bin10)
-# 
-# # 5. Apply ordering
-# df_ord <- items_run_pl_dec_sum %>%
-#   mutate(definition = factor(definition, levels = final_levels))
-# 
-# # 6. Plot
-# df_ord %>%
-#      filter(!is.na(theta_bin)) %>%
-# ggplot(aes(x = as.factor(theta_bin), y = definition, fill = perc_administered)) +
-#   geom_tile(color = "white") +
-#   scale_fill_viridis_c(option = "D", direction = -1, end = 1, na.value = "grey90") +
-#   labs(
-#     title = "Items ordered by bin 1 (top), leftovers (middle), bin 10 (bottom)",
-#     x = "Theta bin",
-#     y = "Item ID",
-#     fill = "% administered"
-#   ) +
-#   theme_minimal() +
-#   theme(axis.text.y = element_text(size = 7))
+library(grid)
+item_freq_by_age <- ggarrange(res_en + ylab(NULL), res_pl + ylab(NULL), nrow = 2)
+item_freq_by_age <- annotate_figure(item_freq_by_age,
+                left = textGrob("Item frequency (% of administractions)", rot = 90, vjust = 1, gp = gpar(cex = 1.2)))
+
+item_freq_by_age
+
 ```
 
 
