@@ -132,24 +132,23 @@ source("ms_rev1.R") # https://osf.io/xdp73/files/71de488a-7305-4409-81eb-044c582
 
 MacArthur-Bates Communicative Development Inventories (CDI) are parent-report forms that are used worldwide in research and clinical practice to measure children’s language abilities, especially word knowledge. There are over 100 language adaptations of the CDI, including Polish (Smoczyńska et al. 2015), and up to three age versions in each language: Words and Gestures (CDI:WG) for children up to the age of a year and a half, Words and Sentences (CDI:WS) for older children up to around three, and CDI-III for children from three to three and a half or four (exact age ranges vary between adaptations). All CDIs include a vocabulary checklist, a list of words in which parents or other caregivers mark the words that their child “understands” and/or “understands and says.” CDIs and similar parental reports draw on caregivers’ extensive experiences with the child in a variety of contexts. They demonstrate adequate validity with spontaneous language samples (Gatt et al. 2023; O' Toole and Fletcher 2010) and direct language measures (e.g. Dale 1991; Lemhöfer and Broersma 2011; Smolík and Bytešníková 2021) both in typically-developing children as well as children with an elevated likelihood or diagnosis of ASD (Belteki et al. 2025). 
 
-The vocabulary checklists include many words across numerous semantic and lexical categories, varying in their frequency, age-appropriateness, and other properties (e.g., Frank et al. 2021; Garmann et al. 2019). As a result, CDIs tend to include hundreds of words and require a substantial amount of time (e.g., 20-30 minutes) for caregivers to complete. Because of the length, there were many attempts to shorten the CDI word lists. The initial attempts were to simply identify a subset of items from the original lists that correlated most strongly with responses on the full list (Fenson et al. 2000; but later also Ezeizabarrena et al. 2024; Smolík and Bytešníková 2021; Lasorsa et al. 2021; Kim et al. 2014). More recently, Mayor and Mani (2019) administered a random subset of words from the full CDI, combining these with vocabulary data from the WordBank database, and then incorporated information about the child’s age, sex, and language status into Bayesian models that predict the child’s overall vocabulary size as it would appear on the full CDI. This method provided a reliable estimate of the child’s language development level without requiring the complete inventory: using a 25-item lists, CDIs correlated with the full CDIs at $r$ = .96, with an SE of .14 and a reliability of .98; using a 50-items CDIs showed slightly lower correlation at $r$ = .94 with similar SE of .14 and a reliability of .98. However, as noted by Kachergis et al. (2022), while using age and sex to predict vocabulary improves precision with limited data, these factors can also bias individual assessments by pulling scores toward typical expectations for those demographics.
+Because CDIs are inventories, they cover a broad range of words from many semantic and lexical categories, differing in frequency, age-appropriateness, and other properties (e.g., Frank et al., 2021; Garmann et al., 2019). This richness is a clear strength in research settings, where detailed, item-level analyses of children’s vocabularies are often the goal. For practical purposes, however -- such as early screening for language delay -- a lengthy inventory can be less than ideal. Caregivers may need 20–30 minutes to complete the forms, which can make the task burdensome when only a single overall score is needed. For this reason, there were many attempts to shorten the CDI word lists. The initial attempts were to simply identify a subset of items from the original lists that correlated most strongly with responses on the full list (Fenson et al. 2000; but later also Ezeizabarrena et al. 2024; Smolík and Bytešníková 2021; Lasorsa et al. 2021; Kim et al. 2014). More recently, Mayor and Mani (2019) administered a random subset of words from the full CDI, combining these with vocabulary data from the WordBank database, and then incorporated information about the child’s age, sex, and language status into Bayesian models that predict the child’s overall vocabulary size as it would appear on the full CDI. This method provided a reliable estimate of the child’s language development level without requiring the complete inventory: using a 25-item lists, CDIs correlated with the full CDIs at $r$ = .96, with an SE of .14 and a reliability of .98; using a 50-items CDIs showed slightly lower correlation at $r$ = .94 with similar SE of .14 and a reliability of .98. However, as noted by Kachergis et al. (2022), while using age and sex to predict vocabulary improves precision with limited data, these factors can also bias individual assessments by pulling scores toward typical expectations for those demographics.
 
-Other attempts to shorten the CDIs have incorporated Item Response Theory (IRT) and Computerized Adaptive Testing (CAT) (e.g., Makransky et al. 2016; Chai et al. 2020; Kachergis et al. 2022). IRT is a statistical framework used in educational and psychological testing to model the relation between responses to individual test items and the measured ability. Unlike Classical Test Theory (CTT), which focuses on overall test scores in relation to ability, IRT examines each item response and how it contributes to estimating the ability. This ability (often denoted as theta) is represented on a continuum: negative values correspond to lower ability, values near zero to average ability, and positive values to higher ability. A key feature of IRT is its focus on item characteristics (or parameters). In a two-parameter model, each item is described by its difficulty (the ability level required to answer correctly) and discrimination (how well the item distinguishes between individuals of similar ability levels). Once item parameters are known, every response provides information about an individual’s ability. In the CDI context, IRT model captures the difficulty and discrimination of vocabulary items and the relation between parental responses to those items and the child’s vocabulary knowledge, typically using large datasets such as norming samples. Once an IRT model is established and item parameters are estimated, a computerized adaptive task (CAT) can be constructed. This involves specifying how the task should begin, how the ability is to be estimated, and the criteria for ending the task. In a CAT-CDI, items are presented to the parent one at a time. After each response, the algorithm updates the estimate of the child’s vocabulary ability and selects the next item to further refine this estimate. The process continues until either a predetermined number of items is reached or the estimate achieves sufficient precision. IRT and CAT-based tasks are increasingly being developed in many areas of language assessment, including reading (Ma et al. 2025), direct vocabulary testing in older children (Bohn et al. 2024; Bohn et al. 2025) and measuring overall variability in children's learning and development (Frank et al. 2025).
+Other attempts to shorten the CDIs have incorporated Item Response Theory (IRT) and Computerized Adaptive Testing (CAT) (e.g., Makransky et al. 2016; Chai et al. 2020; Kachergis et al. 2022). IRT is a modern psychometric approach, which unlike CTT, examines each item response and how it contributes to estimating a measured ability. This ability (often denoted as theta) is represented on a continuum: negative values correspond to lower ability, values near zero to average ability, and positive values to higher ability. A key feature of IRT is its focus on item characteristics (or parameters). In a two-parameter model, each item is described by its difficulty (the ability level required to answer correctly) and discrimination (how well the item distinguishes between individuals of similar ability levels). Once item parameters are known, every response provides information about an individual’s ability. In the CDI context, IRT model captures the difficulty and discrimination of vocabulary items and the relation between parental responses to those items and the child’s vocabulary knowledge, typically using large datasets such as norming samples. Once an IRT model is established and item parameters are estimated, a computerized adaptive task (CAT) can be constructed. This involves specifying how the task should begin, how the ability is to be estimated, and the criteria for ending the task. In a CAT-CDI, items are presented to the parent one at a time. After each response, the algorithm updates the estimate of the child’s vocabulary ability and selects the next item to further refine this estimate. The process continues until either a predetermined number of items is reached or the estimate achieves sufficient precision. IRT and CAT-based tasks are increasingly being developed in many areas of language assessment, including reading (Ma et al. 2025), direct vocabulary testing in older children (Bohn et al. 2024; Bohn et al. 2025) and measuring overall variability in children's learning and development (Frank et al. 2025).
 
 The first IRT-based CAT-CDI was developed by Makransky et al. (2016) who applied IRT models to normative data from the CDI:WS. Using the full CDI dataset, they simulated CAT-CDIs of different lengths by sequentially selecting items and filling in responses based on participants’ full CDI data. Then they compared the full CDI scores with the scores from various fixed-length CATs ranging from 5 to 400 items. Notably, a CAT with just 50 items produced scores that correlated strongly with the full CDI, achieving a correlation of $r$ = .95. Building on this, Kachergis et al. (2022) developed online CATs for assessing vocabulary in both English and Mexican Spanish and extended the adaptive assessment framework to both receptive and productive vocabulary. Their CAT-CDIs were found to accurately estimate vocabulary comprehension and production using as few as 25--50 items, significantly reducing assessment time while maintaining high validity. 
 
 These developments paved the way for the creation of a CAT-CDI in Polish (Krajewski et al., in preparation). While a detailed description of the development process for both CAT-CDIs is beyond the scope of this paper, we briefly highlight key decisions that researchers must consider when developing a CAT-CDI in a new language. To illustrate, we draw on the English and Polish CAT-CDIs as examples. The primary aim of the present paper is to evaluate the performance of these two instruments in validation studies conducted in the USA and Poland. We believe that such an evaluation can guide future CAT-CDI development, enabling researchers to make more informed and strategic decisions.
 
-### Item parameters calibration.
+### Item parameters estimation.
 In both the English (Kachergis et al. 2022) and Polish (Krajewski et al., in preparation) CAT-CDIs, we applied a two-parameter logistic (2PL) model, in which each item is defined by two characteristics: difficulty and discrimination. These parameters were estimated from large datasets: Wordbank data for English and CDI:WS norming data for Polish. A central design decision concerns how many CAT-CDIs to develop and what data to use for item parameters calibration. For English, two instruments were created: one for comprehension and one for production. Unlike the original CDIs, they are not divided into age-based versions. Instead, both CAT-CDIs span the entire developmental range of the CDI instruments, from the earliest CDI:WG through the CDI-III. This design reflects the assumption that early vocabulary can be captured by two latent traits—comprehension and production—and it maximizes the dataset available for parameter estimation. A practical benefit is that practitioners only need to choose between comprehension and production, without worrying about which age-specific version to administer. In contrast, the Polish CAT-CDIs retain the original structure, with separate adaptive instruments for each age version (e.g., CAT-CDI:WS for word production). This structural difference affects how item characteristics are estimated. The English CDI parameters were calibrated on data from children aged 12–36 months (Kachergis et al. 2022), covering the full CDI age range. By comparison, the Polish CAT-CDI:WS was calibrated on children aged 18–36 months, consistent with the Polish CDI:WS norming data. As a result, an item may appear more difficult in English CAT-CDI (relative to Polish) simply because its parameters were estimated using responses from a younger and more heterogeneous sample. At the same time, we can still expect cross-linguistic similarities -- both at the item level (e.g., the word “mommy” is likely to be easy in both Polish and English) and at the category level (e.g., sound-related words tend to be generally easier across languages).
 
-### CAT settings.
-In both the English and Polish CAT-CDIs, basic caregiver-reported information – specifically the child’s age and sex – is used to generate an initial ability estimate. The first item is then selected based on this estimate. In both versions, we deliberately present a slightly easier item (below the estimated ability level) to encourage a positive response to the first item. Parental response to one item at a time allows the CAT algorithm to update the ability estimate and calculate a standard error (SE) of that estimate. Another important decision concerns the stopping criteria of the CAT task. These criteria can be based on a maximum number of administered items or reaching a target level of estimate precision – typically expressed as a standard error (SE) of the estimate. The English CAT-CDI prioritized a shorter CAT typically ending after 50 items, or sooner if a standard error (SE) of 0.15 was reached. In contrast, the Polish CAT-CDI prioritised greater precision, continuing to a maximum of 75 items until an SE of 0.1 was reached. If this level of precision could not be reached, the test concluded after a maximum of 75 items. These differences in CAT settings may result in relatively shorter English CAT-CDIs but relatively more precise estimates obtained from the Polish CAT-CDIs.
+### CAT settings: ending an administration.
+Computerized adaptive testing involves numerous design choices, such as (but not limited to) how to estimate the initial ability estimate, which algorithm to use for estimating the ability during the task, and which criterion to apply when selecting the next item. In these aspects, the Polish CAT-CDIs followed the procedures described in detail in Kachergis et al., 2022. But one of the important decisions concerns the stopping criteria of the CAT task. These criteria can be based on a maximum number of administered items or reaching a target level of estimate precision – typically expressed as a standard error (SE) of the estimate. The English CAT-CDI prioritized a shorter CAT typically ending after 50 items, or sooner if a standard error (SE) of 0.15 was reached. In contrast, the Polish CAT-CDI prioritized greater precision, continuing to a maximum of 75 items until an SE of 0.1 was reached. If this level of precision could not be reached, the test concluded after a maximum of 75 items. These differences in CAT settings may result in relatively shorter English CAT-CDIs but relatively more precise estimates obtained from the Polish CAT-CDIs.
 
+The aim of this paper is to evaluate the potential usefulness of CAT-CDIs for both research and clinical applications, using evidence from the validation studies of the two CAT-CDIs in English and in Polish. For a CAT-CDI to be effective – whether for screening, diagnosis, or broader research purposes, we propose that it should require less administration time while showing good concurrent validity with the full CDI and good reliability, operationalized as low standard error of the measurement across the ability range. CAT-CDIs should also avoid reliance on the same subset of items, to support potential for repeated use, e.g. in a longitudinal study or progress monitoring. We will report these outcomes in the two CAT-CDIs, in English and in Polish and discuss similarities and differences in the context of how the development of two CAT-CDIs differed. <!-- We will also discuss how CAT-CDI results (an ability estimate) can be translated to a clinical context. -->
 
-The aim of this paper is to evaluate the potential usefulness of CAT-CDIs for both research and clinical applications, using evidence from the validation studies of the two CAT-CDIs in English and in Polish. For a CAT-CDI to be effective in these contexts – whether for screening, diagnosis, or broader research purposes For a CAT-CDI to be considered useful, we propose that it should require less administration time while showing good validity and reliability. CAT-CDIs should avoid reliance on the same subset of items, to support potential for repeated use. Additionally, we will compare the CAT-CDI item difficulty across Polish and English. Some differences in item parameters are to be expected, given that the IRT calibrations for the two languages were based on slightly different samples. In particular, the English data included younger children, since all age versions of the CDI were collapsed into a single dataset, whereas the Polish calibrations drew on a narrower age range. These sampling differences may influence estimated item parameters, particularly difficulty and discrimination. At the same time, such comparison also provides an opportunity to examine potential cross-linguistic effects. Differences in lexical mapping may emerge between Polish and English, reflecting item-specific factors such as word frequency, morphological complexity, or typical contextual usage. For example, morphologically complex items may be more challenging in Polish than in English, whereas high-frequency words may show comparable difficulty levels across both languages. Identifying the extent to which observed differences arise from methodological factors (i.e., sample composition) versus genuine cross-linguistic variation is an additional goal of this analysis.
-
-We will report these outcomes in the two CAT-CDIs, in English and in Polish and discuss similarities and differences in the context of how the development of two CAT-CDIs differed. <!-- We will also discuss how CAT-CDI results (an ability estimate) can be translated to a clinical context. -->
+In addition to evaluating the usefullness of the two CATs, we examined item parameters across the Polish and English versions. This step was motivated by the fact that the two tasks were developed from corresponding long forms and included some overlapping items, but were calibrated on different samples. In particular, the English data included younger children, since all age versions of the CDI were collapsed into a single dataset, whereas the Polish calibrations drew on a narrower age range. Identifying the extent to which observed differences arise from methodological factors (i.e., sample composition) versus genuine cross-linguistic variation is an additional goal of this analysis.
 
 # Methods
 
@@ -233,7 +232,7 @@ ggplot() +
 The data presented here was gathered with CAT-CDIs in American English and Polish presented above. The American English CAT-CDI word production includes  679 items and the Polish CAT-CDI version of WS: Words and Sentences includes  666 items. There are 395 words (c.a. 58%) common to both CDI-CAT language versions.
 
 ## Procedure
-Both studies obtained the approval of adequate ethics committees. In both validation studies (in Polish and in English) the parents were asked to fill in both the full CDI and the CAT-CDI online. The American team administered both CDIs within the Web-CDI interface (DeMayo et al. 2021) and the Polish team administered both CDIs within a web app (CDI-Online) built with R Shiny (Krajewski et al. 2020). In the validation of American English CDI-CAT, parents were given both CDIs in one sitting, but the order of the CDI versions was counterbalanced. In the Polish validation study, since the CAT-CDI was added as a final step to an ongoing study, the order of the CDIs was fixed, with the full CDI always first. After 1–30 days (*M* = `r round(mean(by_child_pl$days_between),2)`, *Mdn* = `r round(median(by_child_pl$days_between),2)`, SD = `r round(sd(by_child_pl$days_between),2)`) parents were asked to fill in the CAT-CDI. In both languages, the view of the CDI differs depending on whether it is a full CDI or a CAT-CDI. In the full CDI (in both languages), each page presents all items in a given semantic category. The smallest categories (with fewest items on a page) are connecting words for English (six items) and modal adverbs in Polish (eight items). The biggest category in both languages are action words (103 items in English and 123 items in Polish). In CAT-CDI in both languages, parents are presented with one word at a time and asked to select one of two answers “Yes” or “No” to indicate whether their child says that word. The word is accompanied by information on the semantic category it belongs to. 
+Both studies obtained the approval of adequate ethics committees. In both validation studies (Polish and English), parents completed the full CDI and the CAT-CDI online using a purpose-built interface designed specifically for CDI administration. The American team administered both CDIs within the Web-CDI interface (DeMayo et al. 2021) and the Polish team administered both CDIs within a web app (CDI-Online) (Krajewski et al. 2020). In the validation of American English CDI-CAT, parents were given both CDIs in one sitting, but the order of the CDI versions was counterbalanced. In the Polish validation study, since the CAT-CDI was added as a final step to an ongoing study, the order of the CDIs was fixed, with the full CDI always first. After 1–30 days (*M* = `r round(mean(by_child_pl$days_between),2)`, *Mdn* = `r round(median(by_child_pl$days_between),2)`, SD = `r round(sd(by_child_pl$days_between),2)`) parents were asked to fill in the CAT-CDI. In both languages, the view of the CDI differs depending on whether it is a full CDI or a CAT-CDI. In the full CDI (in both languages), each page presents all items in a given semantic category. The smallest categories (with fewest items on a page) are connecting words for English (six items) and modal adverbs in Polish (eight items). The biggest category in both languages are action words (103 items in English and 123 items in Polish). In CAT-CDI in both languages, parents are presented with one word at a time and asked to select one of two answers “Yes” or “No” to indicate whether their child says that word. The word is accompanied by information on the semantic category it belongs to. 
 
 # Results
 
@@ -394,7 +393,7 @@ table(prod_s$extreme_discrep)
 
 ```
 
-Next, we checked for the difference between the abilities as estimated by CAT-CDI and the full CDI. For each participant, we calculated the mean squared error (MSE): we subtracted the CAT-CDI estimate from the full estimate and squared this difference to eliminate negative values. The mean squared error in English was `r mean(prod_s$sq_err)` (*Mdn* = `r median(prod_s$sq_err)`, *SD* = `r sd(prod_s$sq_err)`), and in Polish it was `r mean(by_child_pl$sq_err)` (*Mdn* = `r median(by_child_pl$sq_err)`, *SD* = `r sd(by_child_pl$sq_err)`). The MSE was relatively high in English (compared to Polish), indicating a relatively larger discrepancy between CAT-CDI ability estimates and full CDI ability estimates in English. But in both languages, the difference in estimates occurred despite strong correlations between the two measures. This difference between the full and CAT-CDI estimates may be explained by at least two reasons. First, a number of participants with extreme discrepancies between the CAT-CDI and full CDI estimates may be inflating the MSE. Second, there might be a systematic bias, with one estimate higher than the other. 
+Next, we checked for the difference between the abilities as estimated by CAT-CDI and the full CDI. For each participant, we calculated the mean squared error (MSE): we subtracted the CAT-CDI estimate from the full estimate and squared this difference to eliminate negative values. The mean squared error in English was `r mean(prod_s$sq_err)` (*Mdn* = `r median(prod_s$sq_err)`, *SD* = `r sd(prod_s$sq_err)`), and in Polish it was `r mean(by_child_pl$sq_err)` (*Mdn* = `r median(by_child_pl$sq_err)`, *SD* = `r sd(by_child_pl$sq_err)`). The MSE was relatively high in English (compared to Polish), indicating a relatively larger discrepancy between CAT-CDI ability estimates and full CDI ability estimates in English. But in both languages, the difference in estimates occurred despite strong correlations between the two measures. This difference between the full and CAT-CDI estimates may be explained by at least two reasons. First, a number of participants with extreme discrepancies between the CAT-CDI and full CDI estimates may be inflating the MSE. Second, there might be a systematic bias, with the CAT estimate being higher than the full CDI estimate either consistently across the ability range or within a specific segment of it.
 
 ```{r}
 # re-calculating MSE after excluding extreme cases
@@ -564,11 +563,143 @@ fig_se_by_theta_alt <- ggarrange(p3_alt, p4_alt, ncol = 2, common.legend = T, le
 fig_se_by_theta_alt
 ggsave("fig_se_by_theta_alt.jpeg", dpi = 300, width = 200, height = 150, units = "mm")
 
+```
+
+
+```{r CLS-Langusta}
+
+library(ggpubr)
+# CLS/Langusta
+
+
+se_pl %>%
+  ggplot(aes(x = theta, y = se, color = method, fill = method)) +
+  geom_smooth(se = FALSE, method = "loess", span = 0.5, size = 1.2) +
+     scale_color_manual(values = c("black", "darkgrey")) +
+  scale_x_continuous(
+    breaks = c(-2.5, -1, 1, 2.5),
+    labels = c("[-3,-1.5]", "(-1.5,0]", "(0,1.5]", "(1.5,3]")) +
+labs(y = "SE", x = "Theta") +
+     ylim(0, 0.5) +
+     geom_hline(yintercept = 0.2, linetype = "dashed", color = "red") +
+  theme_light() + theme(legend.title = element_blank(), legend.position = "right") +
+     ggtitle("CDI:Words and Sentences") + theme(plot.title = element_text(hjust = 0.5, size = 14, face = "bold"))
+
+ggsave("se.jpg", dpi = 300, width = 100, height = 100, units = "mm")
+
+se_pl %>%
+     filter(method == "full") %>%
+  ggplot(aes(x = theta, y = se, color = method, fill = method)) +
+  geom_smooth(se = FALSE, method = "loess", span = 0.5, size = 1.2) +
+     scale_color_manual(values = c("darkgrey")) +
+  scale_x_continuous(
+    breaks = c(-2.5, -1, 1, 2.5),
+    labels = c("[-3,-1.5]", "(-1.5,0]", "(0,1.5]", "(1.5,3]")) +
+labs(y = "SE", x = "Theta") +
+     ylim(0, 0.5) +
+     geom_hline(yintercept = 0.15, linetype = "dashed", color = "red") +
+  theme_light() + theme(legend.title = element_blank(), legend.position = "right") +
+     ggtitle("CDI:Words and Sentences") + theme(plot.title = element_text(hjust = 0.5, size = 14, face = "bold"))
+
+ggsave("se_full.jpg", dpi = 300, width = 100, height = 100, units = "mm")
+
+se_pl %>%
+     filter(method == "cat") %>%
+  ggplot(aes(x = theta, y = se, color = method, fill = method)) +
+  geom_smooth(se = FALSE, method = "loess", span = 0.5, size = 1.2) +
+     scale_color_manual(values = c("black")) +
+  scale_x_continuous(
+    breaks = c(-2.5, -1, 1, 2.5),
+    labels = c("[-3,-1.5]", "(-1.5,0]", "(0,1.5]", "(1.5,3]")) +
+labs(y = "SE", x = "Theta") +
+     ylim(0, 0.5) +
+     geom_hline(yintercept = 0.15, linetype = "dashed", color = "red") +
+  theme_light() + theme(legend.title = element_blank(), legend.position = "right") +
+     ggtitle("CDI:Words and Sentences") + theme(plot.title = element_text(hjust = 0.5, size = 14, face = "bold"))
+
+ggsave("se_cat.jpg", dpi = 300, width = 100, height = 100, units = "mm")
+
+by_child_pl %>%
+  ggplot(aes()) +
+  labs(y = "Theta (CAT)", x = "Raw score (full CDI)") +
+  theme_light() + theme(legend.position = "none") + 
+     ggtitle("CDI:Words and Sentences") + theme(plot.title = element_text(hjust = 0.5, size = 14, face = "bold")) +
+     ylim(-2.3,2.3) + xlim(0, 700)
+
+ggsave("corr_empty.jpg", dpi = 300, width = 100, height = 100, units = "mm")
+
+by_child_pl %>%
+  ggplot(aes(x = score_full, y = cat_theta)) +
+  # Points with conditional coloring
+  geom_jitter(aes(color = "black"), alpha = 0.7) +
+  # Linear regression line in blue
+  geom_smooth(method = "lm", color = "black", se = FALSE) +
+  scale_color_identity() +  # Use the colors as-is
+  labs(y = "Theta (CAT)", x = "Raw score (full CDI)") +
+  theme_light() + theme(legend.position = "none") + 
+       stat_cor(cor.coef.name = "r", p.accuracy = 0.001, r.accuracy = 0.01, size = 5, show.legend = F,
+           label.x.npc = "middle") +
+     ggtitle("CDI:Words and Sentences") + theme(plot.title = element_text(hjust = 0.5, size = 14, face = "bold")) +
+     ylim(-2.3,2.3) + xlim(0, 700)
+
+ggsave("corr.jpg", dpi = 300, width = 100, height = 100, units = "mm")
+
+by_child_pl %>%
+  mutate(point_color = ifelse(cat_theta_se > 0.15, "red", "black")) %>%
+  ggplot(aes(x = score_full, y = cat_theta)) +
+  # Points with conditional coloring
+  geom_jitter(aes(color = point_color), alpha = 0.7) +
+  # Linear regression line in blue
+  geom_smooth(method = "lm", color = "black", se = FALSE) +
+  scale_color_identity() +  # Use the colors as-is
+  labs(y = "Theta (CAT)", x = "Raw score (full CDI)") +
+  theme_light() + theme(legend.position = "none") + 
+       stat_cor(cor.coef.name = "r", p.accuracy = 0.001, r.accuracy = 0.01, size = 5, show.legend = F,
+           label.x.npc = "middle") +
+     ggtitle("CDI:Words and Sentences") + theme(plot.title = element_text(hjust = 0.5, size = 14, face = "bold")) +
+     ylim(-2.3,2.3) + xlim(0, 700)
+
+ggsave("corr_se.jpg", dpi = 300, width = 100, height = 100, units = "mm")
+
+```
+
+```{r}
+# dla CAT-WALID
+by_child_pl %>% select(child_id, no_items, cat_theta_se) %>% view()
+
+# Define bins
+df <- by_child_pl %>%
+  select(child_id, no_items, cat_theta_se) %>%
+  mutate(items_bin = cut(
+    no_items,
+    breaks = c(0, 10, 15, 25, 35, 50, 74, 75),
+    labels = c("1 - 10", "11 - 15", "16 - 25", "26 - 35", "36 - 50",
+               "51 - 74", "75"),
+    right = TRUE,
+    include.lowest = TRUE
+  ))
+
+# Summarize percentages
+df_summary <- df %>%
+  count(items_bin) %>%
+  mutate(percent = 100 * n / sum(n))
+
+# Plot
+ggplot(df_summary, aes(x = items_bin, y = percent)) +
+  geom_col(fill = "gray30") +
+  geom_text(aes(label = round(percent, 1)), vjust = -0.5) +
+  labs(
+    title = "CDI: WS. SE = 0.1 stop criterion",
+    x = "Number of items administered",
+    y = "Percent of respondents (%)"
+  ) +
+  theme_minimal()
+
 
 ```
 
 
-Nevertheless, in both CAT-CDIs, we have been able to reliably estimate lexical ability for the majority of children. According to Makransky, a standard error (SE) below 0.2 is considered acceptable. In practical terms, an SE of 0.2 indicates that the estimated ability is likely within +/- 0.2 units of the child’s true lexical ability. Such precision of the CAT-CDI estimate was obtained for `r sum(prod_s$catTheta_SE < 0.2)` out of `r length(prod_s$subject_id)` American participants (`r round(sum(prod_s$catTheta_SE < 0.2)/nrow(prod_s)*100,1)`%) and `r sum(by_child_pl$cat_theta_se < 0.2)` out of `r length(by_child_pl$child_id)` Polish participants (`r round(sum(by_child_pl$cat_theta_se < 0.2)/nrow(by_child_pl)*100,1)`%). The remaining participants were at the extremes of the ability scale (see Figure \@ref(fig:fig-se-by-theta)). The ability estimates from the Polish CAT-CDI generally fell well below an SE of 0.15, except for the highest-ability observations. Because the Polish CAT-CDI was designed to stop once an SE of 0.1 was reached, the precision of Polish estimates never went below 0.1 (i.e., the CAT-CDI was stopped at this point). 
+Nevertheless, in both CAT-CDIs, we have been able to reliably estimate lexical ability for the majority of children. According to Makransky, a standard error (SE) below 0.2 is considered acceptable. In practical terms, an SE of 0.2 indicates that the estimated ability is likely within +/- 0.2 units of the child’s true lexical ability. Such precision of the CAT-CDI estimate was obtained for `r sum(prod_s$catTheta_SE < 0.2)` out of `r length(prod_s$subject_id)` American participants (`r round(sum(prod_s$catTheta_SE < 0.2)/nrow(prod_s)*100,1)`%) and `r sum(by_child_pl$cat_theta_se < 0.2)` out of `r length(by_child_pl$child_id)` Polish participants (`r round(sum(by_child_pl$cat_theta_se < 0.2)/nrow(by_child_pl)*100,1)`%). The remaining participants were at the extremes of the ability scale (see Figure \@ref(fig:fig-se-by-theta)). The ability estimates from the Polish CAT-CDI generally fell well below an SE of 0.1, except for the highest-ability observations. Because the Polish CAT-CDI was designed to stop once an SE of 0.1 was reached, the precision of Polish estimates never went below 0.1 (i.e., the CAT-CDI was stopped at this point). 
 
 ```{r reliability}
 irt_reliability <- function(theta, se) {
