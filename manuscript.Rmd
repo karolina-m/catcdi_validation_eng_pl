@@ -1,12 +1,12 @@
 ---
-title             : "Short Adaptive CDIs: Validation and Cross-Linguistic Comparison of Computer-Adaptive Parent Report Measures of Early Vocabulary for Polish and English"
-shorttitle        : "Short Adaptive CDIs: Validation and Cross-Linguistic Comparison"
+title             : "Adaptive assessment of early vocabulary: Insights from English and Polish CAT-CDIs validation studies"
+shorttitle        : "Adaptive assessment of early vocabulary: Insights from validation"
 
 author: 
   - name          : "Karolina Muszyńska"
     affiliation   : "1"
     corresponding : yes    
-    address       : "University of Warsaw, Faculty of Psychology, ul. Stefana Banacha 2D, 02-097 Warsaw, Poland"
+    address       : "University of Warsaw, Faculty of Psychology, Stefana Banacha 2D, 02-097 Warsaw, Poland"
     email         : "karolina.muszynska@psych.uw.edu.pl"
     role: # Contributorship roles from here: https://docs.google.com/spreadsheets/d/1Gxq875LTPtNXkmpYBppRpVkog8T00eZfETX5Lp1kOck/edit?gid=0#gid=0 
       - "Conceptualization"
@@ -32,7 +32,6 @@ author:
       - "Project administration"
       - "Software"
       - "Supervision"
-      - "Writing - Original Draft Preparation"
       - "Writing - Review & Editing"
   - name          : "Magdalena Krysztofiak"
     affiliation   : "1"
@@ -44,7 +43,6 @@ author:
       - "Methodology"
       - "Supervision"
       - "Visualization"
-      - "Writing - Original Draft Preparation"
       - "Writing - Review & Editing"
   - name          : "George Kachergis"
     affiliation   : "2"
@@ -80,9 +78,9 @@ affiliation:
     institution   : "Department of Psychology, Stanford University, USA"
 
 abstract: |
-  Abstract here
+  The MacArthur-Bates Communicative Development Inventories (CDIs) are widely used parent-report tools for assessing children’s early vocabulary and language development. Although CDIs provide detailed insights across a wide range of lexical and semantic categories, their length can make them impractical for screening or clinical use. Recent efforts to shorten CDIs have applied Item Response Theory (IRT) and Computerized Adaptive Testing (CAT). This study evaluates the performance of adaptive CDI instruments in English and Polish. Both instruments employ two-parameter logistic (2PL) IRT models to estimate item difficulty and discrimination based on large normative datasets. The English CAT-CDI -- covering production across the full developmental range (12–36 months) -- prioritizes short administration while the Polish CAT-CDIs retain age-specific versions and emphasize higher precision. Validation studies in the United States and Poland assess each instrument’s concurrent validity with the full CDI and measurement reliability. Cross-linguistic comparisons further explore how differences in calibration samples and linguistic structure influence item parameters. By comparing the two CAT-CDIs, we illustrate how different design choices -- such as calibration sample composition and stopping criteria -- can influence test outcomes, and how these insights can guide future CAT-CDI adaptations in selecting approaches best suited to their research or clinical goals.
   
-keywords          : "keywords"
+keywords          : "MacArthur-Bates Communicative Development Invetories, early vocabulary knowledge, Item Response Theory, Computerized Adaptive Testing"
 wordcount         : "X"
 
 bibliography      : "References from.bib"
@@ -109,7 +107,7 @@ library(tidyverse)
 library(Multilada)
 library(here)
 library(effectsize)
-library(viridis)
+# library(viridis)
 # library(knitr) # for purl()
 
 ```
@@ -123,7 +121,11 @@ knitr::opts_chunk$set(echo = F, include = F, warning = F, message = F, out.width
 
 ```{r, echo = F}
 # Data
+
+# PL
 source(here("data/polish/data_polish.R"))
+
+# EN
 # purl("data/english/github-archive/ms_rev1.Rmd", output = "ms_rev1.R")
 source("ms_rev1.R") # https://osf.io/xdp73/files/71de488a-7305-4409-81eb-044c582d65ab?view_only=#
 ```
@@ -141,14 +143,18 @@ The first IRT-based CAT-CDI was developed by Makransky et al. (2016) who applied
 These developments paved the way for the creation of a CAT-CDI in Polish (Krajewski et al., in preparation). While a detailed description of the development process for both CAT-CDIs is beyond the scope of this paper, we briefly highlight key decisions that researchers must consider when developing a CAT-CDI in a new language. To illustrate, we draw on the English and Polish CAT-CDIs as examples. The primary aim of the present paper is to evaluate the performance of these two instruments in validation studies conducted in the USA and Poland. We believe that such an evaluation can guide future CAT-CDI development, enabling researchers to make more informed and strategic decisions.
 
 ### Item parameters estimation.
-In both the English (Kachergis et al. 2022) and Polish (Krajewski et al., in preparation) CAT-CDIs, we applied a two-parameter logistic (2PL) model, in which each item is defined by two characteristics: difficulty and discrimination. These parameters were estimated from large datasets: Wordbank data for English and CDI:WS norming data for Polish. A central design decision concerns how many CAT-CDIs to develop and what data to use for item parameters calibration. For English, two instruments were created: one for comprehension and one for production. Unlike the original CDIs, they are not divided into age-based versions. Instead, both CAT-CDIs span the entire developmental range of the CDI instruments, from the earliest CDI:WG through the CDI-III. This design reflects the assumption that early vocabulary can be captured by two latent traits—comprehension and production—and it maximizes the dataset available for parameter estimation. A practical benefit is that practitioners only need to choose between comprehension and production, without worrying about which age-specific version to administer. In contrast, the Polish CAT-CDIs retain the original structure, with separate adaptive instruments for each age version (e.g., CAT-CDI:WS for word production). This structural difference affects how item characteristics are estimated. The English CDI parameters were calibrated on data from children aged 12–36 months (Kachergis et al. 2022), covering the full CDI age range. By comparison, the Polish CAT-CDI:WS was calibrated on children aged 18–36 months, consistent with the Polish CDI:WS norming data. As a result, an item may appear more difficult in English CAT-CDI (relative to Polish) simply because its parameters were estimated using responses from a younger and more heterogeneous sample. At the same time, we can still expect cross-linguistic similarities -- both at the item level (e.g., the word “mommy” is likely to be easy in both Polish and English) and at the category level (e.g., sound-related words tend to be generally easier across languages).
+In both the English (Kachergis et al. 2022) and Polish (Krajewski et al., in preparation) CAT-CDIs, we applied a two-parameter logistic (2PL) model, in which each item is defined by two characteristics: difficulty and discrimination. These parameters were estimated from large datasets: Wordbank data for English and CDI:WS norming data for Polish. A central design decision concerns how many CAT-CDIs to develop and what data to use for item parameters calibration. For English, two instruments were created: one for comprehension and one for production. Unlike the original CDIs, they are not divided into age-based versions. Instead, both CAT-CDIs span the entire developmental range of the CDI instruments, from the earliest CDI:WG through the CDI-III. This design reflects the assumption that early vocabulary can be captured by two latent traits—comprehension and production—and it maximizes the dataset available for parameter estimation. A practical benefit is that practitioners only need to choose between comprehension and production, without worrying about which age-specific version to administer. In contrast, the Polish CAT-CDIs retain the original structure, with separate adaptive instruments for each age version (e.g., CAT-CDI:WS for word production). This structural difference affects how item characteristics are estimated. The English item parameters were calibrated on data from children aged 12–36 months (Kachergis et al. 2022), covering the full CDI age range. By comparison, the Polish CAT-CDI:WS item parameters were calibrated on children aged 18–36 months, consistent with the Polish CDI:WS norming data. As a result, an item may appear more difficult in English CAT-CDI (relative to the Polish CAT-CDI) simply because its parameters were estimated using responses from a broader and more heterogeneous sample, rather than reflecting any intrinsic cross-linguistic difference. Such variation is expected and appropriate, as each CAT-CDI is optimized for the population it was designed to assess. At the same time, we can still expect cross-linguistic similarities -- both at the item level (e.g., the word “mommy” is likely to be easy in both Polish and English) and at the category level (e.g., sound-related words tend to be generally easier across languages).
 
 ### CAT settings: ending an administration.
-Computerized adaptive testing involves numerous design choices, such as (but not limited to) how to estimate the initial ability estimate, which algorithm to use for estimating the ability during the task, and which criterion to apply when selecting the next item. In these aspects, the Polish CAT-CDIs followed the procedures described in detail in Kachergis et al., 2022. But one of the important decisions concerns the stopping criteria of the CAT task. These criteria can be based on a maximum number of administered items or reaching a target level of estimate precision – typically expressed as a standard error (SE) of the estimate. The English CAT-CDI prioritized a shorter CAT typically ending after 50 items, or sooner if a standard error (SE) of 0.15 was reached. In contrast, the Polish CAT-CDI prioritized greater precision, continuing to a maximum of 75 items until an SE of 0.1 was reached. If this level of precision could not be reached, the test concluded after a maximum of 75 items. These differences in CAT settings may result in relatively shorter English CAT-CDIs but relatively more precise estimates obtained from the Polish CAT-CDIs.
+Computerized adaptive testing involves numerous design choices, such as (but not limited to) how to estimate the initial ability estimate, which algorithm to use for estimating the ability during the task, and which criterion to apply when selecting the next item. In these aspects, the Polish CAT-CDIs followed the procedures described in detail in Kachergis et al., 2022. But one of the important decisions concerns the stopping criteria of the CAT task. These criteria can be based on a maximum number of administered items or reaching a target level of estimate precision – typically expressed as a standard error (SE) of the estimate. The English CAT-CDI prioritized a shorter CAT typically ending after 50 items, or sooner if a standard error (SE) of 0.15 was reached. In contrast, the Polish CAT-CDI prioritized greater precision, continuing until an SE of 0.1 was reached. If this level of precision could not be reached, the test concluded after a maximum of 75 items. These differences in CAT settings may result in relatively shorter English CAT-CDIs but relatively more precise estimates obtained from the Polish CAT-CDIs.  Importantly, neither approach is inherently better; rather, each reflects different design priorities and assumptions about what a CAT-CDI should optimize - whether efficiency of administration, precision of measurement, or some appropriate balance between the two.
 
-The aim of this paper is to evaluate the potential usefulness of CAT-CDIs for both research and clinical applications, using evidence from the validation studies of the two CAT-CDIs in English and in Polish. For a CAT-CDI to be effective – whether for screening, diagnosis, or broader research purposes, we propose that it should require less administration time while showing good concurrent validity with the full CDI and good reliability, operationalized as low standard error of the measurement across the ability range. CAT-CDIs should also avoid reliance on the same subset of items, to support potential for repeated use, e.g. in a longitudinal study or progress monitoring. We will report these outcomes in the two CAT-CDIs, in English and in Polish and discuss similarities and differences in the context of how the development of two CAT-CDIs differed. <!-- We will also discuss how CAT-CDI results (an ability estimate) can be translated to a clinical context. -->
+# Present Study
 
-In addition to evaluating the usefullness of the two CATs, we examined item parameters across the Polish and English versions. This step was motivated by the fact that the two tasks were developed from corresponding long forms and included some overlapping items, but were calibrated on different samples. In particular, the English data included younger children, since all age versions of the CDI were collapsed into a single dataset, whereas the Polish calibrations drew on a narrower age range. Identifying the extent to which observed differences arise from methodological factors (i.e., sample composition) versus genuine cross-linguistic variation is an additional goal of this analysis.
+Our aim is to evaluate the potential usefulness of CAT-CDIs for both research and clinical applications, using evidence from the validation studies of the two CAT-CDIs in English and in Polish. For a CAT-CDI to be effective -- whether for screening, diagnosis, or broader research purposes -- we propose that it should require less administration time while showing good concurrent validity with the full CDI (expressed as a series of correlations with the scores and estimates obtained from the full CDI) and good reliability (operationalized as low standard error of the measurement across the ability range). CAT-CDIs should also avoid reliance on the same subset of items across administrations, to support potential for repeated use, e.g. in a longitudinal study or progress monitoring. To examine this, we will calculate the frequency with which each item appeared across CAT-CDI administrations, expressed as a percentage of all administrations. We will report these outcomes in the two CAT-CDIs, in English and in Polish and discuss similarities and differences in the context of how the development of two CAT-CDIs differed. <!-- We will also discuss how CAT-CDI results (an ability estimate) can be translated to a clinical context. -->
+
+In addition to evaluating the usefulness of the two CAT-CDIs, we will examine item parameters -- specifically, item difficulty -- across the Polish and English versions. Previous research has shown that certain semantic and lexical categories, such as sound-related words and nouns, tend to exhibit consistent levels of easiness across languages (e.g., Frank et al., 2021). This analysis therefore explores the extent to which such cross-linguistic patterns are reflected in our data. Both CAT-CDIs were derived from corresponding long-form CDIs and include partially overlapping items, but were calibrated on different samples. The English calibration dataset encompassed a broader age range, as all CDI versions were combined into a single dataset, whereas the Polish calibration was based on a narrower, age-specific sample. We will compare and correlate item difficulty estimates across the two languages, hypothesizing that although absolute difficulty values may differ due to different samples, the relative ordering of items will remain correlated, particularly within categories that show robust cross-linguistic consistency.
+
+We aim for these analyses to not only assess the validity of the CAT-CDIs but also provide insights that can guide future adaptations in their core developmental choices.
 
 # Methods
 
@@ -791,12 +797,11 @@ low_disc <- items_run_en %>% filter(a1 <2 & d > -1.5 & d < 1.5)
 
 It is to be expected that a CAT-CDI will not need to administer all the items from the CDI item bank. In fact, in all the task administrations in the validation study, the English CAT-CDI used altogether `r sum(items_run_en$n != 0)` items (`r round(sum(items_run_en$n != 0)/nrow(items_run_en)*100,2)`%) and the Polish CAT-CDI used altogether `r sum(items_run_pl$n != 0)` items (`r round(sum(items_run_pl$n != 0)/nrow(items_run_pl)*100,2)`%) from their respective item banks. By design, a CAT-CDI selects items that provide the most information for each participant. In practice, this means CAT draws from a subset of items that both match the participant’s current ability estimate in difficulty and show high discrimination, allowing clear distinctions between individuals with similar ability levels. A potential concern, however, is that a CAT-CDI might repeatedly rely on the same subset of optimal items. CAT-CDI's usefulness in research—particularly in longitudinal studies—lies in the possibility of administering the CDI frequently without parents becoming overly familiar with specific, frequently repeated items. This advantage holds only if the CAT-CDI does not consistently present the same items across administrations. Therefore, we investigated whether the two CAT-CDIs repeatedly selected any items too frequently. In English, 3 items appeared in more than half of administrations - *"long"* in 64% of administrations, *"make"* in 54% of administrations, and *"last"* in 53% of administrations. As expected, they are also high discrimination items in their difficulty bins. "Long" is additionally one of the starting items, i.e. a first item shown to the parent, chosen so that there is high probability the parent can respond positively. In Polish, 3 items appeared in more than half of administrations - *"szukać"* (to look for) appearing in 83% of administrations, *"znaleźć"* (to find) appearing in 61% of administrations, and *"babcia"* (grandmother) appearing in 60% of administrations. As expected, all three items show very high discrimination. *"Szukać"* (to look for) and *"znaleźć"* (to find) are in fact in top 5 discrimination items in general. *"Babcia"* (grandmother) is one of the starting items. The fact that only 3 items out of c.a. 250 (c.a. 1%) are used in more than half administrations is to CAT-CDI's advantage. 
 
-
 ## Item properties in the two CAT-CDIs
 
-There are 679 items in the English CAT-CDI and 666 items in the Polish CAT-CDI. In both languages, the items' difficulty and discrimination parameters were calculated using IRT 2 parameter model (these included separate samples, see Kachergis et al. 2022 and Krajewski et al., in preparation). An item’s difficulty indicates the ability level at which there is a 50% probability that a participant will respond correctly (here: that a child will know a word). Difficulty is expressed on the same scale as theta (measured ability): negative values correspond to harder items, values near zero to items of moderate difficulty, and positive values to easier items (note that difficulty is inversely related to theta and so, negative theta means low ability while positive theta means high ability). An item’s discrimination shows how well it can distinguish between individuals whose abilities are close. In this paper, we focus mainly on item difficulty, as it is directly tied to the ability being measured, whereas discrimination reflects more the quality of the item as a measurement tool.
 
 ```{r}
+# create set of common items "items_en_pl"
 items_cat_en <- coefs_2pl
 english_items <- get_item_data(language = "English (American)")
 items_cat_en <- merge(items_cat_en, english_items[,c("item_definition", "uni_lemma")], by.x = "definition", by.y = "item_definition", all.x = T)
@@ -807,6 +812,7 @@ items_en_pl <- merge(items_cat_pl, items_cat_en,
 items_en_pl <- items_en_pl %>% filter(!is.na(item) & !is.na(definition)) %>% unique()
 count(items_en_pl) # 431
 
+# add percentage of administrations in which each item was used
 items_en_pl <- merge(items_en_pl, items_run_pl[,c("item", "items_perc")], all.x = T, by = "item") %>% unique()
 names(items_en_pl)[names(items_en_pl) == "items_perc"] <- "items_perc_pl"
 
@@ -814,6 +820,9 @@ items_en_pl <- merge(items_en_pl, items_run_en[,c("definition", "items_perc")], 
 names(items_en_pl)[names(items_en_pl) == "items_perc"] <- "items_perc_en"
 
 ```
+
+
+There are 679 items in the English CAT-CDI and 666 items in the Polish CAT-CDI. Of these, `r nrow(items_en_pl)` are translation equivalents, i.e. items whose meaning is common across the two languages (e.g. "cat", "kot"). The items' difficulty and discrimination parameters were calculated using IRT 2 parameter model (these included separate samples, see Kachergis et al. 2022 and Krajewski et al., in preparation). An item’s difficulty indicates the ability level at which there is a 50% probability that a participant will respond correctly (here: that a child will know a word). Difficulty is expressed on the same scale as theta (measured ability): negative values correspond to harder items, values near zero to items of moderate difficulty, and positive values to easier items (note that difficulty is inversely related to theta and so, negative theta means low ability while positive theta means high ability). An item’s discrimination shows how well it can distinguish between individuals whose abilities are close. In this paper, we focus mainly on item difficulty, as it is directly tied to the ability being measured, whereas discrimination reflects more the quality of the item as a measurement tool.
 
 ```{r diff_across_lgs}
 # item difficulty by language 
@@ -823,13 +832,11 @@ items_cat_en %>%
 items_cat_pl %>% 
      dplyr::summarise(min(d), max(d), mean(d), median(d), sd(d))
 
-t1 <- apa_print(t.test(items_cat_en$d, items_cat_pl$d))
-
 ```
 
 ```{r common_items}
-# common items - still different mean difficulty?
-t2 <- apa_print(t.test(items_en_pl$d_en, items_en_pl$d_pl, paired = T))
+# common items - different mean difficulty?
+t <- apa_print(t.test(items_en_pl$d_en, items_en_pl$d_pl, paired = T))
 
 # visualise
 items_en_pl %>% select(uni_lemma, d_pl, d_en) %>% pivot_longer(cols = d_pl:d_en, names_to = "lang", values_to = "d") %>% ggplot(aes(x = lang, y = d, group = lang)) + geom_boxplot() + geom_jitter(alpha = 0.3)
@@ -843,7 +850,7 @@ items_en_pl %>% select(uni_lemma, d_pl, d_en) %>%
 c <- apa_print(cor.test(items_en_pl$d_pl, items_en_pl$d_en)) # 0.66
 ```
 
-English items were in general more difficult than the Polish items, `r t1$full_result` (English: min = `r round(min(items_cat_en$d),2)`, max = `r round(max(items_cat_en$d),2)`, *M* = `r round(mean(items_cat_en$d),2)`, *Mdn* = `r round(median(items_cat_en$d),2)`, *SD* = `r round(sd(items_cat_en$d),2)`; Polish: min = `r round(min(items_cat_pl$d),2)`, max = `r round(max(items_cat_pl$d),2)`, *M* = `r round(mean(items_cat_pl$d),2)`, *Mdn* = `r round(median(items_cat_pl$d),2)`, *SD* = `r round(sd(items_cat_pl$d),2)`). This was true also for a subset of `r nrow(items_en_pl)` items common to both languages - English items still proved to be more difficult than the Polish ones: `r t2$full_result`. This is a result of the characteristics of the samples used to estimate the item parameters. In English, item difficulty was calculated based on a broader sample of children aged 12–36 months, spanning the CDI:WG, CDI:WS, and CDI-III (reflecting the idea of having one CAT-CDI for all the age versions), whereas the Polish data came from a sample of narrower age range of 18–36 months, corresponding to the CDI:WS. As a result, item difficulty in English was estimated using a relatively younger sample, for whom certain items may have been more challenging -- thus appearing more difficult -- compared to the older Polish sample. Still the item difficulty for common items in the two languages was positively and moderately correlated: `r c$full_result`.
+English items were in general more difficult than the Polish items (English: min = `r round(min(items_cat_en$d),2)`, max = `r round(max(items_cat_en$d),2)`, *M* = `r round(mean(items_cat_en$d),2)`, *Mdn* = `r round(median(items_cat_en$d),2)`, *SD* = `r round(sd(items_cat_en$d),2)`; Polish: min = `r round(min(items_cat_pl$d),2)`, max = `r round(max(items_cat_pl$d),2)`, *M* = `r round(mean(items_cat_pl$d),2)`, *Mdn* = `r round(median(items_cat_pl$d),2)`, *SD* = `r round(sd(items_cat_pl$d),2)`). This was true also for a subset of `r nrow(items_en_pl)` items common to both languages - English items still proved to be more difficult than the Polish ones: `r t$full_result`. This is a result of the characteristics of the samples used to estimate the item parameters. In English, item difficulty was calculated based on a broader sample of children aged 12–36 months, spanning the CDI:WG, CDI:WS, and CDI-III (reflecting the idea of having one CAT-CDI for all the age versions), whereas the Polish data came from a sample of narrower age range of 18–36 months, corresponding to the CDI:WS. As a result, item difficulty in English was estimated using a relatively younger sample, for whom certain items may have been more challenging -- thus appearing more difficult -- compared to the older Polish sample. Still the item difficulty for common items in the two languages was positively and moderately correlated: `r c$full_result`.
 
 We also examined whether CDI semantic categories show comparable difficulty values across the two languages. To this end, we conducted a series of Spearman’s rank correlations on item difficulty within each semantic category (we considered only items common to both the Polish and English CDIs) (see Table \@ref(tab:d-by-cdi-category-tab)). The rank correlations coefficients varied by category, but for half of the categories the correlations were moderate to strong (0.51 to 0.91). 
 
@@ -936,8 +943,7 @@ Overall, the two validation studies reported here indicate that the English and 
 \newpage
 
 # References
+```{r create_r-references}
+r_refs(file = "References from.bib")
+```
 
-::: {#refs custom-style="Bibliography"}
-:::
-
-`r cite_r()`
