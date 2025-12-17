@@ -1,11 +1,6 @@
 ---
 title             : ""
-shorttitle        : "Supplementary Material"
-  
-keywords          : "keywords"
-wordcount         : "X"
-
-bibliography      : "r-references.bib"
+shorttitle        : "Appendix"
 
 floatsintext      : no
 linenumbers       : yes
