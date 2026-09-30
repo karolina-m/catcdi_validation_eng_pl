@@ -106,8 +106,13 @@ by_child_pl <- by_child_pl %>%
      group_by(id) %>%
      filter(days_between == min(days_between))
 
-# if time between testings is more than 30 days --> excluded
+# time between CDI testings?
 by_child_pl$days_between <- abs(by_child_pl$days_between)
+mean(by_child_pl$days_between) # M = 25
+median(by_child_pl$days_between) # Med = 8
+sd(by_child_pl$days_between) # SD = 41
+
+# if time between testings is more than 30 days --> excluded
 by_child_pl <- by_child_pl %>% filter(days_between < 31)
 
 
