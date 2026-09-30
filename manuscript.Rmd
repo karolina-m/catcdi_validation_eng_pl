@@ -82,7 +82,7 @@ abstract: |
   
   **Results**. CAT-CDIs substantially reduced administration time compared to full CDIs. CAT-CDI estimates showed strong concurrent validity with full CDI scores and full CDI ability estimates. Reliability was excellent for both CAT-CDIs, with most children receiving precise estimates. Some systematic differences emerged: CAT estimates tended to be higher than full CDI estimates at low ability levels and more aligned at higher levels, likely reflecting differences in response behavior and item coverage. CAT-CDIs showed minimal item overuse. Cross-linguistic comparisons showed expected differences in absolute difficulty -- driven by different calibration samples -- but moderate correlations for shared items, especially within semantic categories known to show cross-linguistic stability (e.g., nouns, sound-related words).
   
-  **Conslusions**. Both CAT-CDIs provide efficient, valid, and reliable assessments of early vocabulary while dramatically reducing administration time. Our data illustrate how different design choices -- such as calibration sample composition and stopping criteria -- can influence test outcomes, and how these insights can guide future CAT-CDI adaptations in selecting approaches best suited to their research or clinical goals.
+  **Conclusions**. Both CAT-CDIs provide efficient, valid, and reliable assessments of early vocabulary while dramatically reducing administration time. Our data illustrate how different design choices -- such as calibration sample composition and stopping criteria -- can influence test outcomes, and how these insights can guide future CAT-CDI adaptations in selecting approaches best suited to their research or clinical goals.
   
 keywords          : "MacArthur-Bates Communicative Development Inventories, early vocabulary knowledge, Item Response Theory, Computerized Adaptive Testing"
 wordcount         : "6727"
@@ -110,6 +110,7 @@ library(Multilada)
 library(here)
 library(effectsize)
 
+# library(wordbankr)
 # library(viridis)
 # library(knitr) # for purl()
 
@@ -119,17 +120,24 @@ library(effectsize)
 # Seed for random number generation
 set.seed(123)
 knitr::opts_chunk$set(echo = F, include = F, warning = F, message = F, out.width="100%")
+knitr::opts_knit$set(root.dir = "~/Dropbox/R/catcdi_validation_eng_pl")
 ```
 
 ```{r, echo = F}
 # Data
 
 # PL
-source(here("data/polish/data_polish.R"))
+getwd()
+here::i_am("data/polish/data_polish.R")
+source("data/polish/data_polish.R")
 
 # EN
-# purl("data/english/github-archive/ms_rev1.Rmd", output = "ms_rev1.R")
-source("ms_rev1.R") # https://osf.io/xdp73/files/71de488a-7305-4409-81eb-044c582d65ab?view_only=#
+# knitr::purl("data/english/github-archive/ms_rev1.Rmd", output = "ms_rev1.R")
+# source("ms_rev1.R") # https://osf.io/xdp73/files/71de488a-7305-4409-81eb-044c582d65ab?view_only=#
+withr::with_dir("data/english/github-archive", {
+  knitr::purl("ms_rev1.Rmd", output = "ms_rev1.R")
+  source("ms_rev1.R")
+})
 ```
 
 # Introduction
@@ -146,17 +154,18 @@ The first IRT-based CAT-CDI was developed by Makransky et al. (2016) who applied
 
 These developments paved the way for the creation of a CAT-CDI in Polish (Krajewski et al., in preparation). While a detailed description of the development process for both CAT-CDIs is beyond the scope of this paper, we briefly highlight key decisions that researchers must consider when developing a CAT-CDI in a new language. To illustrate, we draw on the English and Polish CAT-CDIs as examples. The primary aim of the present paper is to evaluate the performance of these two instruments in validation studies conducted in the USA and Poland. We believe that such an evaluation can guide future CAT-CDI development, enabling researchers to make more informed and strategic decisions.
 
-### Item parameters estimation.
+## Item parameters estimation.
 
-Both the English [@kachergisOnlineComputerizedAdaptive2022] and Polish (Krajewski et al., in preparation) CAT-CDIs used a two-parameter logistic (2PL) model, in which each item is defined by two characteristics: difficulty and discrimination. These parameters were estimated from large datasets: Wordbank data for English and CDI:WS norming data for Polish. A central design decision concerns how many CAT-CDIs to develop and what data to use for item parameters calibration. For English, two instruments were created: one for comprehension and one for production. Unlike the original CDIs, they are not divided into age-based versions. Instead, both CAT-CDIs span the entire developmental range of the CDI instruments, from the earliest CDI:WG through the CDI-III. This design reflects the assumption that early vocabulary can be captured by two latent traits - comprehension and production - and it maximizes the dataset available for parameter estimation. A practical benefit is that practitioners only need to choose between comprehension and production, without worrying about which age-specific version to administer. In contrast, the Polish CAT-CDIs retain the original structure, with separate adaptive instruments for each age version (e.g., CAT-CDI:WG for word comprehension or production for children aged 8-18 months, CAT-CDI:WS for word production for children aged 18-36 months). This may benefit practitioners who are accustomed to the age-based Polish CDI forms, allowing them to select the appropriate version based on the child’s age. It may also facilitate comparison between CAT-CDI:WS and the original CDI:WS, ensuring consistency in application and interpretation.
+Both the English [@kachergisOnlineComputerizedAdaptive2022] and Polish (Krajewski et al., in preparation) CAT-CDIs used a two-parameter logistic (2PL) model, in which each item is defined by two characteristics: difficulty and discrimination. These parameters were estimated from large datasets: Wordbank data for English and CDI:WS norming data for Polish. A central design decision concerns how many CAT-CDIs to develop and what data to use for item parameters calibration. For English, two instruments were created: one for comprehension and one for production. Unlike the original CDIs, they are not divided into age-based versions. Instead, the production CAT-CDI spans the entire developmental range of the CDI instruments, from the earliest CDI:WG through the CDI-III. The comprehension CAT-CDI covers the age range for which comprehension is assessed in the full CDI, namely the CDI:WG (i.e., up to the age of 18 months). This design reflects the assumption that early vocabulary can be captured by two latent traits - comprehension and production - and it maximizes the dataset available for parameter estimation. A practical benefit is that practitioners only need to choose between comprehension and production, without worrying about which age-specific version to administer. In contrast, the Polish CAT-CDIs retain the original structure, with separate adaptive instruments for each age version (e.g., CAT-CDI:WG for word comprehension or production for children aged 8-18 months, CAT-CDI:WS for word production for children aged 18-36 months). This may benefit practitioners who are accustomed to the age-based Polish CDI forms, allowing them to select the appropriate version based on the child’s age. It may also facilitate comparison between CAT-CDI:WS and the original CDI:WS, ensuring consistency in application and interpretation.
 
 This structural difference affects how item characteristics are estimated. The English item parameters were calibrated on data from children aged 12-36 months [@kachergisOnlineComputerizedAdaptive2022]. The Polish CAT-CDI:WS item parameters were calibrated on children aged 18–36 months, consistent with the Polish CDI:WS norming data. As a result, an item may appear more difficult in English CAT-CDI (relative to the Polish CAT-CDI) simply because its parameters were estimated using responses from a broader and more heterogeneous sample, rather than reflecting any intrinsic cross-linguistic difference. Such variation is expected and appropriate, as each CAT-CDI is optimized for the population it was designed to assess.
 
 At the same time, we can still expect cross-linguistic similarities. These can be found both at the item level (e.g., the word “mommy” is likely to be easy in both Polish and English) and, more broadly, at the category level. Previous research has shown that certain semantic and lexical categories, such as sound-related words and nouns, tend to exhibit consistent levels of easiness across languages [e.g., @frankVariabilityConsistencyEarly2021]. We can expect that item difficulty estimates the relative ordering of items will remain correlated, particularly since both CAT-CDIs were derived from corresponding long-form CDIs and include partially overlapping items. Nevertheless, the CAT-CDIs do not need to show similarities across languages: for practical usefulness, it is more important that each instrument’s item difficulties accurately reflect its own calibration sample. Even if parallel items differ across English and Polish, such differences do not undermine CAT performance, as long as the parameters yield precise and efficient ability estimates within each language.
 
-### CAT settings: ending an administration.
+## CAT settings: ending an administration.
 
 Computerized adaptive testing involves numerous design choices, such as (but not limited to) how to estimate the initial ability estimate, which algorithm to use for estimating the ability during the task, and which criterion to apply when selecting the next item. In these aspects, the Polish CAT-CDIs followed the procedures described in detail in @kachergisOnlineComputerizedAdaptive2022. But one of the important decisions concerns the stopping criteria of the CAT task. These criteria can be based on a maximum number of administered items or reaching a target level of estimate precision – typically expressed as a standard error (SE) of the estimate. The English CAT-CDI prioritized a shorter CAT typically ending after 50 items, or sooner if a standard error (SE) of 0.15 was reached. In contrast, the Polish CAT-CDI prioritized greater precision, continuing until an SE of 0.1 was reached. If this level of precision could not be reached, the test concluded after a maximum of 75 items. These differences in CAT settings may result in relatively shorter English CAT-CDIs but relatively more precise estimates obtained from the Polish CAT-CDIs. Importantly, neither approach is inherently better; rather, each reflects different design priorities and assumptions about what a CAT-CDI should optimize - whether efficiency of administration, precision of measurement, or some appropriate balance between the two.
+
 
 # Present Study
 
@@ -181,11 +190,61 @@ t_age <- apa_print(t.test(by_child_pl$age_CAT, kept_demo$age_cat))
 
 ```
 
-In the Polish validation study, 147 parents from an ongoing study were invited via email to take part in the validation study. The sample was White (reflecting the limited ethnic diversity within the Polish population). However, there were 28 children multilingual with Polish (as their home language) and some other (societal) language, living outside of Poland. We considered this group to be too large to exclude from the study, but not large enough to warrant a separate set of analyses. However, we included some comparisons between the Polish monolingual and bilingual groups in Appendix. Next, we excluded participants for whom the time between full CDI and CAT testing was longer than 30 days (n = 31), children who were out of the CDI:WS age range when parents filled in either full or CAT CDI (n = 3). The final dataset included 113 parents (49 girls, `r round(sum(by_child_pl$sex == "dziewczynka")/nrow(by_child_pl)*100,2)`%). The children were aged between 18 and 34 months (*M* = `r round(mean(by_child_pl$age_CAT),2)`, *Mdn* = `r round(median(by_child_pl$age_CAT),2)`, SD = `r round(sd(by_child_pl$age_CAT),2)`). Parents were asked about their education level and `r sum(by_child_pl$parental_edu == "HIGHER_EDU" | by_child_pl$parental_edu == "PHD", na.rm = T)` (`r round(sum(by_child_pl$parental_edu == "HIGHER_EDU" | by_child_pl$parental_edu == "PHD", na.rm = T)/length(by_child_pl$child_id)*100,2)`%) reported having higher education or PhD, `r sum(by_child_pl$parental_edu == "UNFINISHED_HIGHER_EDU", na.rm = T)` (`r round(sum(by_child_pl$parental_edu == "UNFINISHED_HIGHER_EDU", na.rm = T)/length(by_child_pl$child_id)*100,2)`%) reported having unfinished higher education, `r sum(by_child_pl$parental_edu == "SECONDARY", na.rm = T)` (`r round(sum(by_child_pl$parental_edu == "SECONDARY", na.rm = T)/length(by_child_pl$child_id)*100,2)`%) reported having secondary education and `r sum(is.na(by_child_pl$parental_edu))` (`r round(sum(is.na(by_child_pl$parental_edu))/length(by_child_pl$child_id)*100,2)`%) did not report their education level.
+In the Polish validation study, 147 parents from an ongoing study were invited via email to take part in the validation study of CAT-CDI:WS. The sample was White (reflecting the limited ethnic diversity within the Polish population). However, there were 28 children multilingual with Polish (as their home language) and some other (societal) language, living outside of Poland. We considered this group to be too large to exclude from the study, but not large enough to warrant a separate set of analyses. However, we included some comparisons between the Polish monolingual and bilingual groups in Appendix. Next, we excluded participants for whom the time between full CDI and CAT testing was longer than 30 days (n = 31), \textcolor{blue}{a cutoff intended to minimise developmental change between the two measurements without substantially reducing the sample.} Last, we excluded children who were out of the CDI:WS age range when parents filled in either full or CAT CDI (n = 3). The final dataset included 113 parents (49 girls, `r round(sum(by_child_pl$sex == "dziewczynka")/nrow(by_child_pl)*100,2)`%). The children were aged between 18 and 34 months (*M* = `r round(mean(by_child_pl$age_CAT),2)`, *Mdn* = `r round(median(by_child_pl$age_CAT),2)`, SD = `r round(sd(by_child_pl$age_CAT),2)`). Parents were asked about their education level and `r sum(by_child_pl$parental_edu == "HIGHER_EDU" | by_child_pl$parental_edu == "PHD", na.rm = T)` (`r round(sum(by_child_pl$parental_edu == "HIGHER_EDU" | by_child_pl$parental_edu == "PHD", na.rm = T)/length(by_child_pl$child_id)*100,2)`%) reported having higher education or PhD, `r sum(by_child_pl$parental_edu == "UNFINISHED_HIGHER_EDU", na.rm = T)` (`r round(sum(by_child_pl$parental_edu == "UNFINISHED_HIGHER_EDU", na.rm = T)/length(by_child_pl$child_id)*100,2)`%) reported having unfinished higher education, `r sum(by_child_pl$parental_edu == "SECONDARY", na.rm = T)` (`r round(sum(by_child_pl$parental_edu == "SECONDARY", na.rm = T)/length(by_child_pl$child_id)*100,2)`%) reported having secondary education and `r sum(is.na(by_child_pl$parental_edu))` (`r round(sum(is.na(by_child_pl$parental_edu))/length(by_child_pl$child_id)*100,2)`%) did not report their education level.
+
+```{r}
+# checking if parental_edu is missing at random (Polish sample)
+library(naniar)
+
+by_child_pl$parental_edu <- as.factor(by_child_pl$parental_edu)
+by_child_pl$lang_group <- as.factor(by_child_pl$lang_group)
+
+by_child_pl %>%
+  select(parental_edu, age_CAT, score_full, full_theta, cat_theta, cat_theta_se,
+     sex, lang_group) %>%
+  mutate(edu_missing = as.numeric(parental_edu),          # ordinal -> numeric codes
+         across(c(sex, lang_group), as.numeric)) %>%
+  mcar_test()
+
+# Cohen's d
+library(effectsize)
+
+dat <- by_child_pl %>%
+  mutate(edu_miss = factor(is.na(parental_edu),
+                           levels = c(FALSE, TRUE),
+                           labels = c("reported", "missing")))
+
+# Continuous variables
+vars <- c("age_CAT", "score_full", "full_theta", "cat_theta", "cat_theta_se")
+
+cont <- map_dfr(vars, function(v) {
+  es <- cohens_d(reformulate("edu_miss", v), data = dat)
+  tibble(variable = v,
+         d    = es$Cohens_d,
+         CI   = sprintf("[%.2f, %.2f]", es$CI_low, es$CI_high),
+         p    = t.test(reformulate("edu_miss", v), data = dat)$p.value)
+})
+cont
+
+# Categorical variables (2x2 -> phi)
+cat_vars <- c("sex", "lang_group")
+
+categ <- map_dfr(cat_vars, function(v) {
+  tab <- table(dat$edu_miss, dat[[v]])
+  ph  <- phi(tab, adjust = FALSE)
+  fe  <- fisher.test(tab)
+  tibble(variable = v, phi = ph$phi, p_Fisher = fe$p.value)
+})
+categ
+
+rm(dat, vars, cat_vars)
+
+```
+
 
 ### Materials
 
-The data presented here was gathered with CAT-CDIs in Polish presented above. It includes 666 items, of which 395 words (58%) are also found in the American English CAT-CDI, as identified by unilemmas (Kachergis et al., 2025).
+The data presented here was gathered with the Polish CAT-CDI Words and Sentences presented above. Polish CDI:WS measures word production in children aged 18-36 months. It includes 666 items, of which 395 words (58%) are also found in the American English CAT-CDI, as identified by unilemmas (Kachergis et al., 2025).
 
 ### Procedure
 
@@ -193,7 +252,7 @@ The procedure and instruments used in the Polish validation study were approved 
 
 ## American English validation study
 
-The Polish data is hereby contrasted with the American English data from the validation study reported before in @kachergisOnlineComputerizedAdaptive2022. Their final dataset included 204 children (103 girls, `r round(sum(kept_demo$sex_cat == "F")/nrow(kept_demo)*100,2)`%). The children were aged between 15 and 36 months (*M* = `r round(mean(kept_demo$age_cat),2)`, *Mdn* = `r round(median(kept_demo$age_cat),2)`, SD = `r round(sd(kept_demo$age_cat),2)`). The average number of years of education attained by the primary caregiver was `r round(mean(kept_demo$primary_education_cat),2)` (SD = `r round(sd(kept_demo$primary_education_cat),2)`).
+The Polish data from CAT-CDI:WS (word production) is hereby contrasted with the American English data from the validation study of the CAT-CDI (word production) reported before in @kachergisOnlineComputerizedAdaptive2022. Their final dataset included 204 children (103 girls, `r round(sum(kept_demo$sex_cat == "F")/nrow(kept_demo)*100,2)`%). The children were aged between 15 and 36 months (*M* = `r round(mean(kept_demo$age_cat),2)`, *Mdn* = `r round(median(kept_demo$age_cat),2)`, SD = `r round(sd(kept_demo$age_cat),2)`). The average number of years of education attained by the primary caregiver was `r round(mean(kept_demo$primary_education_cat),2)` (SD = `r round(sd(kept_demo$primary_education_cat),2)`).
 
 The CAT-CDI was administered within the Web-CDI interface (DeMayo et al. 2021). Parents were given both CDIs in one sitting, but the order of the CDI versions was counterbalanced. As in the Polish CDIs, the view of the CDI differs depending on whether it is a full CDI or a CAT-CDI. In the full CDI, each page presents all items in a given semantic category (with categories ranging from under 10 to over 100 items). In CAT-CDI in both languages, parents are presented with one word at a time and asked to select one of two answers “Yes” or “No” to indicate whether their child says that word. The word is accompanied by information on the semantic category it belongs to.
 
@@ -931,7 +990,7 @@ The goal of the present study was to evaluate the usefulness of CAT-CDIs in both
 
 ### CAT-CDIs require less administration time.
 
-Both the English and the Polish CAT-CDIs proved much shorter than their full counterparts, with median times of `r duration(median(prod_s$duration_cat))` (English) and `r duration(median(by_child_pl$duration_cat))` (Polish). In both CAT-CDIs a comparable number of items was administered, English *Mdn* = `r median(resps_sum$n)` (25--50 items), Polish *Mdn* = `r median(by_child_pl$no_items)` (`r min(by_child_pl$no_items)`--`r max(by_child_pl$no_items)` items). Notably, as the medians indicate, for half of the participants, the estimate precision was obtained relatively early and the CATs ended after `r median(resps_sum$n)` (English) or `r median(by_child_pl$no_items)` (Polish) items. NOTE: ENG administration time to be doubled-checked, there are 27 kids with CAT administration time in weeks (possibly an tab opened for too long). Karolina will discuss with George K.
+Both the English and the Polish CAT-CDIs proved much shorter than their full counterparts, with median times of `r duration(median(prod_s$duration_cat))` (English) and `r duration(median(by_child_pl$duration_cat))` (Polish). In both CAT-CDIs a comparable number of items was administered, English *Mdn* = `r median(resps_sum$n)` (25--50 items), Polish *Mdn* = `r median(by_child_pl$no_items)` (`r min(by_child_pl$no_items)`--`r max(by_child_pl$no_items)` items). Notably, as the medians indicate, for half of the participants, the estimate precision was obtained relatively early and the CATs ended after `r median(resps_sum$n)` (English) or `r median(by_child_pl$no_items)` (Polish) items.
 
 ### CAT-CDIs show good validity and reliability.
 
@@ -949,18 +1008,32 @@ The comparison of item parameters across English and Polish highlights both meth
 
 Overall, the two validation studies reported here indicate that the English and Polish CAT-CDIs can substantially reduce administration time while still providing reliable and valid estimates of children’s early vocabulary. Both instruments showed strong correlations with full CDI measures, although some systematic differences in estimates were observed, particularly at the lowest and highest ends of ability, where the full CDI itself may also provide less precise estimates. The adaptive format also appeared to minimize over-reliance on a narrow set of items (as compared to a short CDI), supporting its potential for repeated use. At the same time, cross-linguistic comparisons highlighted that differences in calibration samples can affect item parameters, underscoring the need for careful consideration when adapting CAT-CDIs across languages. Importantly, the exact performance of a CAT-CDI is shaped by key design choices, such as the structure of the calibration procedures and stopping criteria. This suggests that future adaptations may need to weigh efficiency against precision to optimize the tool for their specific research or clinical goals.
 
+# Limitations
+
+The two validation studies reported here focused only on the word production component of the CDI, leaving word comprehension unexamined. Future validations should include the full CDI (possibly also the gestures section from CDI:WG) to assess the overall instrument performance. In addition, neither study included a direct assessment of children's vocabulary, which limits the interpretation of discrepancies between CAT-CDI and full CDI estimates. Specifically, despite strong correlations in both languages, CAT-CDI estimates tended to be higher than full CDI estimates, suggesting a potential bias, especially in the lower ability levels. These differences may reflect either overestimation by the CAT-CDI or underestimation by the full CDI. Without independent measures of children’s lexical ability, it was not possible to determine the source of this discrepancy, although comparisons of estimate precision offered some insight into their relative reliability.
+
 # Data Availability Statement
 
 The Polish validation data is available Open Science Framework (OSF): <https://osf.io/k3bq2/>. For details on American English validation data, please see @kachergisOnlineComputerizedAdaptive2022.
 
 # **Funding**
 
-The Polish validation data collection and analyses were funded by the National Science Center: grant no. 2018/31/B/HS6/03916) granted to Ewa Haman and grant no. 2022/47/D/HS2/00392 granted to Karolina Muszyńska. Partial funding was also obtained from IDUB (Excellence Initiative Research University) within Action IV.2.1. "Strengthening of the research potential of the scientific staff, in particular young scientific staff, with the purpose of achieving scientific excellence"; and Action II 3.7 "Multilingualism" from which Magdalena Krysztofiak was funded.
+The Polish validation data collection and analyses were funded by the National Science Center: grant no. 2018/31/B/HS6/03916) granted to Ewa Haman and grant no. 2022/47/D/HS2/00392 granted to Karolina Muszyńska. Partial funding was also obtained from BWD awarded to Magdalena Krysztofiak (2025) and BWD awarded to Karolina Muszyńska (2024), IDUB (Excellence Initiative Research University) within Action IV.2.1. "Strengthening of the research potential of the scientific staff, in particular young scientific staff, with the purpose of achieving scientific excellence" awarded to Karolina Muszyńska, and Action II 3.7 "Multilingualism" from which Magdalena Krysztofiak was funded.
 
 \newpage
 
-# References
+# Appendix
+
+<!-- yes, the order of the chunks below looks weird, but it renders ok! -->
 
 ```{r create_r-references}
 r_refs(file = "references.bib")
 ```
+
+```{r, child = "appendix.Rmd"}
+
+```
+
+\newpage
+
+# References
