@@ -1,4 +1,4 @@
-## ----analysis-preferences------------------------------------------------------------------------------------------------------------------------
+## ----analysis-preferences---------------------------------------------------------------------------------------------------------------------------------------
 # Seed for random number generation
 set.seed(42)
 knitr::opts_chunk$set(cache.extra = knitr::rand_seed, 
@@ -6,7 +6,7 @@ knitr::opts_chunk$set(cache.extra = knitr::rand_seed,
                       echo = FALSE)
 
 
-## ----setup, include = FALSE----------------------------------------------------------------------------------------------------------------------
+## ----setup, include = FALSE-------------------------------------------------------------------------------------------------------------------------------------
 library(papaja)
 library(wordbankr)
 library(tidyverse)
@@ -20,12 +20,19 @@ library(printr)
 library(ggpubr)
 
 # KM: the only change I made here was changing the path of the files (for loading)
-source(here("data/english/github-archive/scripts/IRT_helpers.R"))
-source(here("data/english/github-archive/scripts/01_load_data.R"))
+source(here("scripts/IRT_helpers.R"))
+source(here("scripts/01_load_data.R"))
 
 
-## ------------------------------------------------------------------------------------------------------------------------------------------------
+## ---------------------------------------------------------------------------------------------------------------------------------------------------------------
+# remotes::install_github("langcog/wordbankr")
 library(wordbankr)
+packageVersion("wordbankr")  
+
+# install.packages("arrow")    # from CRAN (large, may take a while)
+# install.packages("redivis", repos = "https://langcog.r-universe.dev")
+library(redivis)  
+
 ws <- wordbankr::get_administration_data(language = "English (American)", form = "WS", include_demographic_info = T)
 mod_en_ws <- lm(production ~ age * sex, data = ws) # R^2 = .78 
 
@@ -33,7 +40,7 @@ mod_en_ws <- lm(production ~ age * sex, data = ws) # R^2 = .78
 #mod_en_ws <- lm(production ~ age * sex, data = d_demo_en %>% filter(age < 31, age >= 16)) # R^2 = .84 
 
 
-## ----count-participants, include=F---------------------------------------------------------------------------------------------------------------
+## ----count-participants, include=F------------------------------------------------------------------------------------------------------------------------------
 count_na <- function(vec) {
   return(length(which(is.na(vec))))
 }
@@ -85,7 +92,7 @@ ggarrange(en_comp, sp_comp,
 #ggsave(here("figs","Fig1_vocab_vs_age_EN_SP_comp_prod.pdf"), width=6.5, height=5.5)
 
 
-## ----form-overlap--------------------------------------------------------------------------------------------------------------------------------
+## ----form-overlap-----------------------------------------------------------------------------------------------------------------------------------------------
 sp_wg_ws_intersect = length(intersect(sp_wg_items$definition, sp_ws_items$definition))
 # 388 / 428 match
 
@@ -98,10 +105,10 @@ eng_wg_not_ws = setdiff(eng_wg_items$definition, eng_ws_items$definition)
 # WG: "in" / "inside" -> a single WS item ("inside/in")
 
 
-## ----pruning-eng-comp, echo=F--------------------------------------------------------------------------------------------------------------------
-load(here("data/english/github-archive/data/comprehension/eng_wg_2pl_itemfits.Rds"))
-load(here("data/english/github-archive/data/comprehension/LD_en.Rds"))
-load(here("data/english/github-archive/data/comprehension/eng_wg_mod_2pl.Rds"))
+## ----pruning-eng-comp, echo=F-----------------------------------------------------------------------------------------------------------------------------------
+load(here("data/comprehension/eng_wg_2pl_itemfits.Rds"))
+load(here("data/comprehension/LD_en.Rds"))
+load(here("data/comprehension/eng_wg_mod_2pl.Rds"))
 
 bad_items2pl_x2 = which(itfit2pl_x2$p.X2_star_scaled < .001) # 18
 bad_items_engC = subset(itfit2pl_x2, p.X2_star_scaled < .001)$item
@@ -114,10 +121,10 @@ bad_ld_fit = intersect(which(hiLDvio > 0), bad_items2pl_x2) # none
 rm(res, itfit2pl, itfit2pl_x2)
 
 
-## ----pruning-sp-comp, echo=F---------------------------------------------------------------------------------------------------------------------
-load(here("data/english/github-archive/data/comprehension/sp_wg_2pl_itemfits.Rds"))
-load(here("data/english/github-archive/data/comprehension/LD_sp.Rds"))
-load(here("data/english/github-archive/data/comprehension/sp_wg_mod_2pl.Rds"))
+## ----pruning-sp-comp, echo=F------------------------------------------------------------------------------------------------------------------------------------
+load(here("data/comprehension/sp_wg_2pl_itemfits.Rds"))
+load(here("data/comprehension/LD_sp.Rds"))
+load(here("data/comprehension/sp_wg_mod_2pl.Rds"))
 
 bad_items2pl_x2 = which(itfit2pl_x2$p.X2_star_scaled < .001) # 20
 bad_items_spC = subset(itfit2pl_x2, p.X2_star_scaled < .001)$item
@@ -130,10 +137,10 @@ bad_ld_fit = intersect(which(hiLDvio > 0), bad_items2pl_x2) # none
 rm(res, itfit2pl, itfit2pl_x2)
 
 
-## ----pruning-eng-prod, echo=F--------------------------------------------------------------------------------------------------------------------
-load(here("data/english/github-archive/data/production/eng_ws_wg_2pl_itemfits.Rds"))
-load(here("data/english/github-archive/data/production/LD_eng.Rds"))
-load(here("data/english/github-archive/data/production/eng_ws_wg_mod_2pl.Rds"))
+## ----pruning-eng-prod, echo=F-----------------------------------------------------------------------------------------------------------------------------------
+load(here("data/production/eng_ws_wg_2pl_itemfits.Rds"))
+load(here("data/production/LD_eng.Rds"))
+load(here("data/production/eng_ws_wg_mod_2pl.Rds"))
 
 #bad_items2pl = which(itfit2pl$p.S_X2 < .01) # 54 with p<.01 
 bad_items2pl_x2 = which(itfit2pl_x2$p.X2_star_scaled < .001) # 142 with p<.001
@@ -152,10 +159,10 @@ d_mat_en = d_mat_en[,-bad_ld_fit]
 rm(res, itfit2pl, itfit2pl_x2)
 
 
-## ----pruning-sp-prod, echo=F---------------------------------------------------------------------------------------------------------------------
-load(here("data/english/github-archive/data/production/sp_ws_wg_2pl_itemfits.Rds"))
-load(here("data/english/github-archive/data/production/LD_sp.Rds"))
-load(here("data/english/github-archive/data/production/sp_wg_ws_mod_2pl.Rds"))
+## ----pruning-sp-prod, echo=F------------------------------------------------------------------------------------------------------------------------------------
+load(here("data/production/sp_ws_wg_2pl_itemfits.Rds"))
+load(here("data/production/LD_sp.Rds"))
+load(here("data/production/sp_wg_ws_mod_2pl.Rds"))
 
 bad_items2pl_x2 = which(itfit2pl_x2$p.X2_star_scaled < .001) # 38 with p<.001
 bad_items_spP = subset(itfit2pl_x2, p.X2_star_scaled < .001)$item
@@ -175,7 +182,7 @@ d_mat_sp = d_mat_sp[,-bad_ld_fit]
 rm(res, itfit2pl_x2)
 
 
-## ----load-pruned-models, echo=F------------------------------------------------------------------------------------------------------------------
+## ----load-pruned-models, echo=F---------------------------------------------------------------------------------------------------------------------------------
 # final IRT models
 prod_mod <- list()
 comp_mod <- list()
@@ -187,21 +194,21 @@ prod_fs <- list()
 comp_fs <- list()
 
 # final pruned English production model
-load(here("data/english/github-archive/data/production/eng_ws_wg_mod_2pl_nobad.Rds"))
+load(here("data/production/eng_ws_wg_mod_2pl_nobad.Rds"))
 prod_mod$en = mod_2pl
 prod_pars$en = coefs_2pl
 d_demo_en <- d_demo_en %>% left_join(fscores_2pl %>% 
                                        mutate(data_id = as.numeric(data_id)), by="data_id")
 prod_fs$en = fscores_2pl
 # final pruned Spanish production model
-load(here("data/english/github-archive/data/production/sp_ws_wg_mod_2pl_nobad.Rds"))
+load(here("data/production/sp_ws_wg_mod_2pl_nobad.Rds"))
 prod_mod$sp = mod_2pl
 prod_pars$sp = coefs_2pl
 d_demo_sp <- d_demo_sp %>% left_join(fscores_2pl %>% 
                                        mutate(data_id = as.numeric(data_id)), by="data_id")
 prod_fs$sp = fscores_2pl
 # final unpruned English and Spanish comprehension models
-load(here("data/english/github-archive/data/comprehension/eng_wg_mod_2pl.Rds"))
+load(here("data/comprehension/eng_wg_mod_2pl.Rds"))
 comp_mod$en = mod_2pl
 comp_pars$en = coefs_2pl
 d_demo_en <- d_demo_en %>% left_join(fscores_2pl %>% rename(comp_ability = ability) %>%
@@ -210,7 +217,7 @@ comp_fs$en = fscores_2pl
 demo_eng_wg <- demo_eng_wg %>% left_join(fscores_2pl %>% 
                                        mutate(data_id = as.numeric(data_id)), by="data_id")
 
-load(here("data/english/github-archive/data/comprehension/sp_wg_mod_2pl.Rds"))
+load(here("data/comprehension/sp_wg_mod_2pl.Rds"))
 comp_mod$sp = mod_2pl
 comp_pars$sp = coefs_2pl
 d_demo_sp <- d_demo_sp %>% left_join(fscores_2pl %>% rename(comp_ability = ability) %>%
@@ -234,7 +241,7 @@ sp_prod_vs_theta = with(d_demo_sp, cor.test(production, ability)) # .90
 #cor(d_demo_sp$age, d_demo_sp$ability) # .63
 
 
-## ----impute-missing-data, echo=F, warning=F------------------------------------------------------------------------------------------------------
+## ----impute-missing-data, echo=F, warning=F---------------------------------------------------------------------------------------------------------------------
 set.seed(123)
 
 d_mat_en = imputeMissing(prod_mod$en, 
@@ -266,8 +273,8 @@ ggarrange(p1, p2, ncol=2, labels = c("A", "B"))
 #ggsave(here("figs","Fig2_ability_vs_age_n_vocab_EN_prod.pdf"), width=7.5, height=4.8)
 
 
-## ----preferredCAT-tab-en-prod, echo=F------------------------------------------------------------------------------------------------------------
-load(here("data/english/github-archive/data/production/preferredCAT_en.Rds"))
+## ----preferredCAT-tab-en-prod, echo=F---------------------------------------------------------------------------------------------------------------------------
+load(here("data/production/preferredCAT_en.Rds"))
 
 get_preferred_cat_table <- function(d_mat, fs) {
   cat_tab_cols = c("Scoring / Start Item", 
@@ -294,35 +301,35 @@ pref_tab <- get_preferred_cat_table(d_mat_en, prod_fs$en)
 apa_table(pref_tab, digits=c(0, 1, 3, 3, 3), caption="English production CAT simulations with preferred settings.") 
 
 
-## ------------------------------------------------------------------------------------------------------------------------------------------------
-load(here("data/english/github-archive/data/production/preferredCAT_sp.Rds"))
+## ---------------------------------------------------------------------------------------------------------------------------------------------------------------
+load(here("data/production/preferredCAT_sp.Rds"))
 
 pref_tab <- get_preferred_cat_table(d_mat_sp, prod_fs$sp)
 
 apa_table(pref_tab, digits=c(0, 1, 3, 3, 3), caption="Spanish production CAT simulations with preferred settings.")
 
 
-## ------------------------------------------------------------------------------------------------------------------------------------------------
-load(here("data/english/github-archive/data/comprehension/preferredCAT_eng.Rds"))
+## ---------------------------------------------------------------------------------------------------------------------------------------------------------------
+load(here("data/comprehension/preferredCAT_eng.Rds"))
 
 pref_tab <- get_preferred_cat_table(en_mat_wg, comp_fs$en)
 
 apa_table(pref_tab, digits=c(0, 1, 3, 3, 3), caption="English comprehension CAT simulations with preferred settings.")
 
 
-## ----preferredCAT-tab-sp-comp, echo=F------------------------------------------------------------------------------------------------------------
-load(here("data/english/github-archive/data/comprehension/preferredCAT_sp.Rds"))
+## ----preferredCAT-tab-sp-comp, echo=F---------------------------------------------------------------------------------------------------------------------------
+load(here("data/comprehension/preferredCAT_sp.Rds"))
 
 pref_tab <- get_preferred_cat_table(sp_mat_wg, comp_fs$sp)
 
 apa_table(pref_tab, digits=c(0, 1, 3, 3, 3), caption="Spanish comprehension CAT simulations with preferred settings.")
 
 
-## ----validation-participants---------------------------------------------------------------------------------------------------------------------
+## ----validation-participants------------------------------------------------------------------------------------------------------------------------------------
 # all data (without quality exclusions)
-load(here("data/english/github-archive/data/validation/processed_data.Rdata"))
+load(here("data/validation/processed_data.Rdata"))
 # kept_demo / dropped_demo
-load(here("data/english/github-archive/data/validation/processed_exclusions_data.Rdata"))
+load(here("data/validation/processed_exclusions_data.Rdata"))
 
 mom_ed_tab <- table(demo$primary_education_cat) # what to report?
 mom_ed_mean = mean(demo$primary_education_cat) # 15.85
@@ -372,7 +379,7 @@ per_subj <- resps %>% filter(response_cat!="no_test") %>%
 bad_Ss = per_subj %>% filter(agreement <= .25) # no participants excluded 
 
 
-## ----administration procedure--------------------------------------------------------------------------------------------------------------------
+## ----administration procedure-----------------------------------------------------------------------------------------------------------------------------------
 #administration order
 full_first <- filter(kept_demo, order == "full_first")
 cat_first <- filter(kept_demo, order == "cat_first")
@@ -385,11 +392,11 @@ time_gap_multi_day <- kept_demo %>% filter((time_diff_hours > 24) |
                                         (time_diff_hours < -24))
 
 
-## ----cat-procedure, echo=FALSE, fig.cap="Screenshots of the English production CDI-CAT user interface.", out.width = '65%'-----------------------
+## ----cat-procedure, echo=FALSE, fig.cap="Screenshots of the English production CDI-CAT user interface.", out.width = '65%'--------------------------------------
 #knitr::include_graphics("CAT-procedure-figure.png")
 
 
-## ----include=F-----------------------------------------------------------------------------------------------------------------------------------
+## ----include=F--------------------------------------------------------------------------------------------------------------------------------------------------
 full_w <- resps %>% arrange(definition) %>%
   select(-response_cat) %>%
   mutate(item = definition, 
@@ -421,7 +428,7 @@ prod_s <- full_w %>% mutate(production = Reduce("+",.[2:681])) %>%
 full_mat <- as.matrix(full_w %>% select(-subject_id))
 cat_mat <- as.matrix(cat_w %>% select(-subject_id))
 
-load(here("data/english/github-archive/data/production/eng_ws_wg_mod_2pl.Rds"))
+load(here("data/production/eng_ws_wg_mod_2pl.Rds"))
 
 full_thetas <- data.frame(fscores(mod_2pl, method="MAP", response.pattern = full_mat)[,c("F1","SE_F1")])
 cat_thetas <- data.frame(fscores(mod_2pl, method="MAP", response.pattern = cat_mat)[,c("F1","SE_F1")])
@@ -432,13 +439,13 @@ prod_s$catTheta <- cat_thetas[,1]
 prod_s$catTheta_SE <- cat_thetas[,2]
 
 
-## ----echo=F--------------------------------------------------------------------------------------------------------------------------------------
+## ----echo=F-----------------------------------------------------------------------------------------------------------------------------------------------------
 full_vs_cat_theta <- with(prod_s, cor(fullTheta, catTheta)) # .92
 prod_vs_cat_theta <- with(prod_s, cor(production, catTheta)) # .86
 full_theta_vs_sumscore <- with(prod_s, cor(production, fullTheta)) # .95
 
 
-## ----echo=F--------------------------------------------------------------------------------------------------------------------------------------
+## ----echo=F-----------------------------------------------------------------------------------------------------------------------------------------------------
 # t-test on ability differences based on test order
 prod_s <- prod_s %>% mutate(sq_err = (fullTheta - catTheta)^2,
                             full_cat_diff = fullTheta - catTheta)
@@ -472,7 +479,7 @@ prod_s %>% rename(Sex=sex_full) %>%
 #ggsave(here("figs","Fig3_vocab_vs_age_EN_SP_comp_prod.pdf"), width=5, height=4)
 
 
-## ----echo=F--------------------------------------------------------------------------------------------------------------------------------------
+## ----echo=F-----------------------------------------------------------------------------------------------------------------------------------------------------
 valid_tab <- prod_s %>% 
   mutate(age_group = cut(age_full, breaks=seq(12,36,3), right=F, include.lowest = T)) %>%
   group_by(age_group) %>%
@@ -485,10 +492,10 @@ row.names(valid_tab_wide) = c('r CAT vs. full CDI', 'N')
 apa_table(valid_tab_wide, caption="Validation study ability correlations (CDI-CAT vs. full CDI) by age group.") 
 
 
-## ----render-appendix-----------------------------------------------------------------------------------------------------------------------------
+## ----render-appendix--------------------------------------------------------------------------------------------------------------------------------------------
 #render_appendix("appendix.Rmd")
 
 
-## ----create_r-references-------------------------------------------------------------------------------------------------------------------------
+## ----create_r-references----------------------------------------------------------------------------------------------------------------------------------------
 #r_refs(file = "references.bib")
 

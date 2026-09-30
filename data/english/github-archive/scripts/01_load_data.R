@@ -6,7 +6,8 @@
 #items <- items %>% select(num_item_id,definition,lexical_class,category,uni_lemma)
 
 # now WS data has been merged WG and older WebCDI kids in data-merge-WS-WG.R
-load(here("data/english/github-archive/data/production/wordbank_eng_ws_wg_webcdi31-36mos.Rds"))
+getwd()
+load(here("data/production/wordbank_eng_ws_wg_webcdi31-36mos.Rds"))
 eng_ws_items = items
 
 too_young <- which(d_demo$age < 12) # 378 children can't be producing any words yet
@@ -16,7 +17,7 @@ d_mat_en = d_mat[-too_young,]
 d_demo_en$production = rowSums(d_mat_en, na.rm=T)
 
 # WG comprehension data -- keep all WG subjects
-load(here("data/english/github-archive/data/comprehension/wordbank_eng_wg_webcdi.Rds"))
+load(here("data/comprehension/wordbank_eng_wg_webcdi.Rds"))
 en_mat_wg = d_mat_wg #[-which(d_demo$age < 12),]
 
 demo_eng_wg = d_demo #subset(d_demo, age>=12)
@@ -27,14 +28,14 @@ rm(d_mat_wg, d_demo) # need this for anything?
 ## Spanish Data
 
 # now wordbank data has been merged in data-merge-Spanish-WS-WG-III.R
-load(here("data/english/github-archive/data/production/wordbank_sp_ws_wg_webcdi12-30mos.Rds"))
+load(here("data/production/wordbank_sp_ws_wg_webcdi12-30mos.Rds"))
 d_demo_sp = d_demo # already has <12 mos removed
 d_mat_sp = d_mat
 sp_ws_items = items %>% filter(!is.na(lexical_class))
 rm(d_mat, d_demo, items)
 
 # WG comprehension data -- keep all WG subjects
-load(here("data/english/github-archive/data/comprehension/wordbank_sp_wg_webcdi.Rds"))
+load(here("data/comprehension/wordbank_sp_wg_webcdi.Rds"))
 sp_mat_wg = d_mat_wg # [-which(d_demo$age < 12),]
 
 demo_sp_wg = d_demo #subset(d_demo, age>=12)

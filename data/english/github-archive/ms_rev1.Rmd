@@ -68,6 +68,7 @@ set.seed(42)
 knitr::opts_chunk$set(cache.extra = knitr::rand_seed, 
                       cache = TRUE, 
                       echo = FALSE)
+here::i_am("ms_rev1.Rmd")
 ```
 
 
@@ -85,8 +86,8 @@ library(printr)
 library(ggpubr)
 
 # KM: the only change I made here was changing the path of the files (for loading)
-source(here("data/english/github-archive/scripts/IRT_helpers.R"))
-source(here("data/english/github-archive/scripts/01_load_data.R"))
+source(here("scripts/IRT_helpers.R"))
+source(here("scripts/01_load_data.R"))
 ```
 
 
@@ -138,7 +139,14 @@ Scores from a CAT of only 50 items had a correlation of $r=0.95$ with the full C
 However, for the youngest age group (16--18 month-olds), the correlation with the full CDI was somewhat lower ($r=0.87$).
 
 ```{r}
+# remotes::install_github("langcog/wordbankr")
 library(wordbankr)
+packageVersion("wordbankr")  
+
+# install.packages("arrow")    # from CRAN (large, may take a while)
+# install.packages("redivis", repos = "https://langcog.r-universe.dev")
+library(redivis)  
+
 ws <- wordbankr::get_administration_data(language = "English (American)", form = "WS", include_demographic_info = T)
 mod_en_ws <- lm(production ~ age * sex, data = ws) # R^2 = .78 
 
@@ -348,9 +356,9 @@ For example, items with non-monotonic item response functions would show poor fi
 ### English Comprehension
 
 ```{r, pruning-eng-comp, echo=F}
-load(here("data/english/github-archive/data/comprehension/eng_wg_2pl_itemfits.Rds"))
-load(here("data/english/github-archive/data/comprehension/LD_en.Rds"))
-load(here("data/english/github-archive/data/comprehension/eng_wg_mod_2pl.Rds"))
+load(here("data/comprehension/eng_wg_2pl_itemfits.Rds"))
+load(here("data/comprehension/LD_en.Rds"))
+load(here("data/comprehension/eng_wg_mod_2pl.Rds"))
 
 bad_items2pl_x2 = which(itfit2pl_x2$p.X2_star_scaled < .001) # 18
 bad_items_engC = subset(itfit2pl_x2, p.X2_star_scaled < .001)$item
@@ -369,9 +377,9 @@ Only one item showed strong LD ("grandma"), but this item did not show poor fit;
 ### Spanish Comprehension
 
 ```{r, pruning-sp-comp, echo=F}
-load(here("data/english/github-archive/data/comprehension/sp_wg_2pl_itemfits.Rds"))
-load(here("data/english/github-archive/data/comprehension/LD_sp.Rds"))
-load(here("data/english/github-archive/data/comprehension/sp_wg_mod_2pl.Rds"))
+load(here("data/comprehension/sp_wg_2pl_itemfits.Rds"))
+load(here("data/comprehension/LD_sp.Rds"))
+load(here("data/comprehension/sp_wg_mod_2pl.Rds"))
 
 bad_items2pl_x2 = which(itfit2pl_x2$p.X2_star_scaled < .001) # 20
 bad_items_spC = subset(itfit2pl_x2, p.X2_star_scaled < .001)$item
@@ -392,9 +400,9 @@ However, the only item that showed strong LD was "tía", which did not show ill 
 ### English Production
 
 ```{r, pruning-eng-prod, echo=F}
-load(here("data/english/github-archive/data/production/eng_ws_wg_2pl_itemfits.Rds"))
-load(here("data/english/github-archive/data/production/LD_eng.Rds"))
-load(here("data/english/github-archive/data/production/eng_ws_wg_mod_2pl.Rds"))
+load(here("data/production/eng_ws_wg_2pl_itemfits.Rds"))
+load(here("data/production/LD_eng.Rds"))
+load(here("data/production/eng_ws_wg_mod_2pl.Rds"))
 
 #bad_items2pl = which(itfit2pl$p.S_X2 < .01) # 54 with p<.01 
 bad_items2pl_x2 = which(itfit2pl_x2$p.X2_star_scaled < .001) # 142 with p<.001
@@ -420,9 +428,9 @@ This item also showed poor fit, and was thus pruned from the data for simulated 
 ### Spanish Production
 
 ```{r, pruning-sp-prod, echo=F}
-load(here("data/english/github-archive/data/production/sp_ws_wg_2pl_itemfits.Rds"))
-load(here("data/english/github-archive/data/production/LD_sp.Rds"))
-load(here("data/english/github-archive/data/production/sp_wg_ws_mod_2pl.Rds"))
+load(here("data/production/sp_ws_wg_2pl_itemfits.Rds"))
+load(here("data/production/LD_sp.Rds"))
+load(here("data/production/sp_wg_ws_mod_2pl.Rds"))
 
 bad_items2pl_x2 = which(itfit2pl_x2$p.X2_star_scaled < .001) # 38 with p<.001
 bad_items_spP = subset(itfit2pl_x2, p.X2_star_scaled < .001)$item
@@ -460,21 +468,21 @@ prod_fs <- list()
 comp_fs <- list()
 
 # final pruned English production model
-load(here("data/english/github-archive/data/production/eng_ws_wg_mod_2pl_nobad.Rds"))
+load(here("data/production/eng_ws_wg_mod_2pl_nobad.Rds"))
 prod_mod$en = mod_2pl
 prod_pars$en = coefs_2pl
 d_demo_en <- d_demo_en %>% left_join(fscores_2pl %>% 
                                        mutate(data_id = as.numeric(data_id)), by="data_id")
 prod_fs$en = fscores_2pl
 # final pruned Spanish production model
-load(here("data/english/github-archive/data/production/sp_ws_wg_mod_2pl_nobad.Rds"))
+load(here("data/production/sp_ws_wg_mod_2pl_nobad.Rds"))
 prod_mod$sp = mod_2pl
 prod_pars$sp = coefs_2pl
 d_demo_sp <- d_demo_sp %>% left_join(fscores_2pl %>% 
                                        mutate(data_id = as.numeric(data_id)), by="data_id")
 prod_fs$sp = fscores_2pl
 # final unpruned English and Spanish comprehension models
-load(here("data/english/github-archive/data/comprehension/eng_wg_mod_2pl.Rds"))
+load(here("data/comprehension/eng_wg_mod_2pl.Rds"))
 comp_mod$en = mod_2pl
 comp_pars$en = coefs_2pl
 d_demo_en <- d_demo_en %>% left_join(fscores_2pl %>% rename(comp_ability = ability) %>%
@@ -483,7 +491,7 @@ comp_fs$en = fscores_2pl
 demo_eng_wg <- demo_eng_wg %>% left_join(fscores_2pl %>% 
                                        mutate(data_id = as.numeric(data_id)), by="data_id")
 
-load(here("data/english/github-archive/data/comprehension/sp_wg_mod_2pl.Rds"))
+load(here("data/comprehension/sp_wg_mod_2pl.Rds"))
 comp_mod$sp = mod_2pl
 comp_pars$sp = coefs_2pl
 d_demo_sp <- d_demo_sp %>% left_join(fscores_2pl %>% rename(comp_ability = ability) %>%
@@ -626,7 +634,7 @@ In summary, these simulation results suggest that a CAT with 25-50 items, termin
 <!-- ### English Production -->
 
 ```{r, preferredCAT-tab-en-prod, echo=F}
-load(here("data/english/github-archive/data/production/preferredCAT_en.Rds"))
+load(here("data/production/preferredCAT_en.Rds"))
 
 get_preferred_cat_table <- function(d_mat, fs) {
   cat_tab_cols = c("Scoring / Start Item", 
@@ -657,7 +665,7 @@ apa_table(pref_tab, digits=c(0, 1, 3, 3, 3), caption="English production CAT sim
 <!-- ### Spanish Production -->
 
 ```{r}
-load(here("data/english/github-archive/data/production/preferredCAT_sp.Rds"))
+load(here("data/production/preferredCAT_sp.Rds"))
 
 pref_tab <- get_preferred_cat_table(d_mat_sp, prod_fs$sp)
 
@@ -669,7 +677,7 @@ apa_table(pref_tab, digits=c(0, 1, 3, 3, 3), caption="Spanish production CAT sim
 <!-- ### English Comprehension -->
 
 ```{r}
-load(here("data/english/github-archive/data/comprehension/preferredCAT_eng.Rds"))
+load(here("data/comprehension/preferredCAT_eng.Rds"))
 
 pref_tab <- get_preferred_cat_table(en_mat_wg, comp_fs$en)
 
@@ -680,7 +688,7 @@ apa_table(pref_tab, digits=c(0, 1, 3, 3, 3), caption="English comprehension CAT 
 <!-- ### Spanish Comprehension -->
 
 ```{r, preferredCAT-tab-sp-comp, echo=F}
-load(here("data/english/github-archive/data/comprehension/preferredCAT_sp.Rds"))
+load(here("data/comprehension/preferredCAT_sp.Rds"))
 
 pref_tab <- get_preferred_cat_table(sp_mat_wg, comp_fs$sp)
 
@@ -701,9 +709,9 @@ To empirically test the validity of the model as a short version of the CDI voca
 
 ```{r validation-participants}
 # all data (without quality exclusions)
-load(here("data/english/github-archive/data/validation/processed_data.Rdata"))
+load(here("data/validation/processed_data.Rdata"))
 # kept_demo / dropped_demo
-load(here("data/english/github-archive/data/validation/processed_exclusions_data.Rdata"))
+load(here("data/validation/processed_exclusions_data.Rdata"))
 
 mom_ed_tab <- table(demo$primary_education_cat) # what to report?
 mom_ed_mean = mean(demo$primary_education_cat) # 15.85
@@ -825,7 +833,7 @@ prod_s <- full_w %>% mutate(production = Reduce("+",.[2:681])) %>%
 full_mat <- as.matrix(full_w %>% select(-subject_id))
 cat_mat <- as.matrix(cat_w %>% select(-subject_id))
 
-load(here("data/english/github-archive/data/production/eng_ws_wg_mod_2pl.Rds"))
+load(here("data/production/eng_ws_wg_mod_2pl.Rds"))
 
 full_thetas <- data.frame(fscores(mod_2pl, method="MAP", response.pattern = full_mat)[,c("F1","SE_F1")])
 cat_thetas <- data.frame(fscores(mod_2pl, method="MAP", response.pattern = cat_mat)[,c("F1","SE_F1")])
