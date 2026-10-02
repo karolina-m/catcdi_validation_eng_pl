@@ -169,14 +169,20 @@ Computerized adaptive testing involves numerous design choices, such as (but not
 
 # Present Study
 
-Our aim is to evaluate the potential usefulness of CAT-CDIs for both research and clinical applications, using evidence from the validation studies of the two CAT-CDIs in English and in Polish. For a CAT-CDI to be effective - whether for screening, diagnosis, or broader research purposes - we propose that it should meet the following criteria:
+Our aim is to evaluate the potential usefulness of CAT-CDIs for both research and clinical applications, using evidence from the validation studies of the two CAT-CDIs in English and in Polish. For a CAT-CDI to be effective - whether for screening, diagnosis, or broader research purposes - we propose that it should meet the following criteria, \textcolor{blue}{which we address as research questions:}
 
-1.  **CAT-CDIs should require less administration time.** To this end, we will compare the median administration time between the full CDIs and CAT-CDIs.
-2.  **CAT-CDIs should demonstrate good concurrent validity with the full CDI and good reliability**. Concurrent validity will be evaluated via correlations between scores and estimates obtained from the full CDIs and CAT-CDIs. We will also explore cases of discrepancy between the two tools. We will asses precision by examining the standard error of the measurement across the ability range, and empirical reliability of the two CAT-CDIs, in comparison to the respective full CDIs.
-3.  **CAT-CDIs should also avoid reliance on the same subset of items across administrations**, to support potential for repeated use, e.g. in a longitudinal study or progress monitoring. To examine this, we will calculate the frequency with which each item appeared across CAT-CDI administrations, expressed as a percentage of all administrations.
-4.  **CAT-CDIs across language may (but do not have to) show related item properties**. Previous research has shown that certain semantic and lexical categories, such as sound-related words and nouns, tend to exhibit consistent levels of easiness across languages (e.g., Frank et al., 2021). We will compare and correlate item difficulty estimates across the two languages, hypothesizing that although absolute difficulty values may differ due to different samples (due to differences in calibration samples), the relative ordering of items will remain correlated, particularly within categories that show robust cross-linguistic consistency.
+\color{blue}
+1.  Do CAT-CDIs require less administration time than the full CDIs?    
 
-We will report these outcomes in the two CAT-CDIs, in English and in Polish and discuss similarities and differences in the context of how the development of two CAT-CDIs differed. <!-- We will also discuss how CAT-CDI results (an ability estimate) can be translated to a clinical context. --> We aim for these analyses to not only assess the validity of the CAT-CDIs but also provide insights that can guide future adaptations in their core developmental choices.
+2.  Do CAT-CDIs show good concurrent validity with the full CDIs, and good precision and reliability?   
+
+3.  Do CAT-CDIs avoid relying on the same subset of items across administrations? This matters for repeated use, e.g., in longitudinal studies or progress monitoring.    
+
+4.  Do the two CAT-CDIs show related item properties across languages? Because certain semantic and lexical categories show consistent easiness across languages (Frank et al., 2021), we expect that, although absolute item difficulties may differ due to different calibration samples, their relative ordering will be correlated, particularly in cross-linguistically robust categories.   
+
+\color{black}
+
+We will report \textcolor{blue}{answers to these questions} in the two CAT-CDIs, in English and in Polish and discuss similarities and differences in the context of how the development of two CAT-CDIs differed. <!-- We will also discuss how CAT-CDI results (an ability estimate) can be translated to a clinical context. --> We aim for these analyses to not only assess the validity of the CAT-CDIs but also provide insights that can guide future adaptations in their core developmental choices.
 
 # Methods
 
@@ -190,7 +196,7 @@ t_age <- apa_print(t.test(by_child_pl$age_CAT, kept_demo$age_cat))
 
 ```
 
-In the Polish validation study, 147 parents from an ongoing study were invited via email to take part in the validation study of CAT-CDI:WS. The sample was White (reflecting the limited ethnic diversity within the Polish population). However, there were 28 children multilingual with Polish (as their home language) and some other (societal) language, living outside of Poland. We considered this group to be too large to exclude from the study, but not large enough to warrant a separate set of analyses. However, we included some comparisons between the Polish monolingual and bilingual groups in Appendix. Next, we excluded participants for whom the time between full CDI and CAT testing was longer than 30 days (n = 31), \textcolor{blue}{a cutoff intended to minimise developmental change between the two measurements without substantially reducing the sample.} Last, we excluded children who were out of the CDI:WS age range when parents filled in either full or CAT CDI (n = 3). The final dataset included 113 parents (49 girls, `r round(sum(by_child_pl$sex == "dziewczynka")/nrow(by_child_pl)*100,2)`%). The children were aged between 18 and 34 months (*M* = `r round(mean(by_child_pl$age_CAT),2)`, *Mdn* = `r round(median(by_child_pl$age_CAT),2)`, SD = `r round(sd(by_child_pl$age_CAT),2)`). Parents were asked about their education level and `r sum(by_child_pl$parental_edu == "HIGHER_EDU" | by_child_pl$parental_edu == "PHD", na.rm = T)` (`r round(sum(by_child_pl$parental_edu == "HIGHER_EDU" | by_child_pl$parental_edu == "PHD", na.rm = T)/length(by_child_pl$child_id)*100,2)`%) reported having higher education or PhD, `r sum(by_child_pl$parental_edu == "UNFINISHED_HIGHER_EDU", na.rm = T)` (`r round(sum(by_child_pl$parental_edu == "UNFINISHED_HIGHER_EDU", na.rm = T)/length(by_child_pl$child_id)*100,2)`%) reported having unfinished higher education, `r sum(by_child_pl$parental_edu == "SECONDARY", na.rm = T)` (`r round(sum(by_child_pl$parental_edu == "SECONDARY", na.rm = T)/length(by_child_pl$child_id)*100,2)`%) reported having secondary education and `r sum(is.na(by_child_pl$parental_edu))` (`r round(sum(is.na(by_child_pl$parental_edu))/length(by_child_pl$child_id)*100,2)`%) did not report their education level. \textcolor{blue}{Little's MCAR test was non-significant, χ²(7) = 7.47, p = .382. Families with and without reported education did not differ significantly in child age, full CDI score, full-CDI and CAT-CDI ability estimates, or CAT-CDI standard error (all ps > .19, |d| ≤ 0.26), nor in child sex or language group (Fisher's exact tests, ps > .31, φ ≤ .10). We therefore found no evidence that missingness in parental education was related to the observed characteristics.}
+In the Polish validation study, 147 parents from an ongoing study were invited via email to take part in the validation study of CAT-CDI:WS. The sample was White (reflecting the limited ethnic diversity within the Polish population). However, there were 28 children multilingual with Polish (as their home language) and some other (societal) language, living outside of Poland. We considered this group to be too large to exclude from the study, but not large enough to warrant a separate set of analyses. However, we included some comparisons between the Polish monolingual and bilingual groups in Appendix. Next, we excluded participants for whom the time between full CDI and CAT testing was longer than 30 days (n = 31), \textcolor{blue}{a cutoff intended to minimise developmental change between the two measurements without substantially reducing the sample.} Last, we excluded children who were out of the CDI:WS age range when parents filled in either full or CAT CDI (n = 3). The final dataset included 113 parents (49 girls, `r round(sum(by_child_pl$sex == "dziewczynka")/nrow(by_child_pl)*100,2)`%). The children were aged between 18 and 34 months (*M* = `r round(mean(by_child_pl$age_CAT),2)`, *Mdn* = `r round(median(by_child_pl$age_CAT),2)`, SD = `r round(sd(by_child_pl$age_CAT),2)`). Parents were asked about their education level and `r sum(by_child_pl$parental_edu == "HIGHER_EDU" | by_child_pl$parental_edu == "PHD", na.rm = T)` (`r round(sum(by_child_pl$parental_edu == "HIGHER_EDU" | by_child_pl$parental_edu == "PHD", na.rm = T)/length(by_child_pl$child_id)*100,2)`%) reported having higher education or PhD, `r sum(by_child_pl$parental_edu == "UNFINISHED_HIGHER_EDU", na.rm = T)` (`r round(sum(by_child_pl$parental_edu == "UNFINISHED_HIGHER_EDU", na.rm = T)/length(by_child_pl$child_id)*100,2)`%) reported having unfinished higher education, `r sum(by_child_pl$parental_edu == "SECONDARY", na.rm = T)` (`r round(sum(by_child_pl$parental_edu == "SECONDARY", na.rm = T)/length(by_child_pl$child_id)*100,2)`%) reported having secondary education and `r sum(is.na(by_child_pl$parental_edu))` (`r round(sum(is.na(by_child_pl$parental_edu))/length(by_child_pl$child_id)*100,2)`%) did not report their education level. \textcolor{blue}{Little's MCAR test was non-significant, $\chi^2$(7) = 7.47, p = .382. Families with and without reported education did not differ significantly in child age, full CDI score, full-CDI and CAT-CDI ability estimates, or CAT-CDI standard error (all ps > .19, |d| $\leq$ 0.26), nor in child sex or monolingual/multilingual status (Fisher's exact tests, ps > .31, $\varphi$ $\leq$ .10). We therefore found no evidence that missingness in parental education was related to the observed characteristics.}
 
 ```{r}
 # checking if parental_edu is missing at random (Polish sample)
@@ -318,9 +324,26 @@ ggplot() +
 
 ```
 
+## Plan of analysis
+
+
+\color{blue}
+*Administration time*. We compare median completion times for the full CDI and the CAT-CDI, and report the number of items administered in the CAT-CDI.
+
+*Concurrent validity* is evaluated via Pearson correlations between scores and estimates obtained from the full CDIs and CAT-CDIs. We also explore cases of discrepancy between the two tools, i.e. for each participant, we subtract the CAT-CDI estimate from the full estimate and square this difference to eliminate negative values. Overall agreement is summarised as the mean squared error (MSE) which reflects both random and systematic discrepancy. We report its mean, median and SD across participants. Cases with extreme discrepancies are defined as those whose difference deviated by more than 1.5 SD from the mean difference; MSE is also recalculated without these cases. Systematic bias was tested with a paired t-test on the difference (with Cohen's d), and its dependence on ability level was examined by plotting the difference across the ability range.
+
+*Precision and reliability*. We examine the standard error of the measurement across the ability range for both instruments, the proportion of children estimated with SE < 0.2, and empirical reliability for the CAT-CDI and the full CDI.
+
+*(Over)reliance on subset of items*. To examine this, we calculate the frequency with which each item appeared across CAT-CDI administrations, expressed as a percentage of all administrations.
+
+*Cross-linguistic item properties*. Translation-equivalent items were identified via unilemmas (Kachergis et al., 2025). We correlate English and Polish item difficulty parameters overall (Pearson) and within lexical classes (Spearman).    
+
+\color{black}
+
+
 # Results
 
-In the following section we will explore the two CAT-CDI's performance on those criteria. The Polish data has not been reported previously. The English has been reported in Kachergis et al. (2022) and was re-analysed for the purpose of the current paper.
+In the following section we will explore the two CAT-CDI's performance on those criteria. The Polish data has not been reported previously. The English has been reported in Kachergis et al. (2022) and was re-analysed \textcolor{blue}{and extendned} for the purpose of the current paper. \textcolor{blue}{Specifically, here we added evidence that XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX}
 
 ## **Do CAT-CDIs require less time to administer?**
 
