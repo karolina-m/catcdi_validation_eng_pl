@@ -26,24 +26,39 @@ Though the bi-/multilingual group is small in size, we decided to explore their 
 # 1. the table could use some re-styling (lgs as columns?)
 # 2. move to Supplementary (separate .Rmd?)
 
-cor1 <- by_child_pl %>%
-  group_by(lang_group) %>%
-  summarise(r = cor(cat_theta, score_full, method = "spearman"), n = n()) %>%
-  mutate(correlation = "Ability from CDI-CAT ~ full CDI score")
+spearman_by_lang <- function(data, x, y, label) {
+  data %>%
+    group_by(lang_group) %>%
+    summarise(
+      rho = cor({{ x }}, {{ y }}, method = "spearman", use = "complete.obs"),
+      p = if (sum(complete.cases({{ x }}, {{ y }})) > 2)
+            cor.test({{ x }}, {{ y }}, method = "spearman", exact = FALSE)$p.value
+          else NA_real_,
+      n = n(),
+      .groups = "drop") %>%
+    mutate(correlation = label)
+}
 
-cor2 <- by_child_pl %>%
-  group_by(lang_group) %>%
-  summarise(r = cor(cat_theta, full_theta, method = "spearman"), n = n()) %>%
-  mutate(correlation = "Ability from CDI-CAT ~ ability from full CDI")
+lang_cor_table_raw <- bind_rows(
+  spearman_by_lang(by_child_pl, cat_theta,  score_full, "Ability from CDI-CAT $\\sim$ full CDI score"),
+  spearman_by_lang(by_child_pl, cat_theta,  full_theta, "Ability from CDI-CAT $\\sim$ ability from full CDI"),
+  spearman_by_lang(by_child_pl, full_theta, score_full, "Ability from full CDI $\\sim$ full CDI score"))
 
-cor3 <- by_child_pl %>%
-  group_by(lang_group) %>%
-  summarise(r = cor(full_theta, score_full, method = "spearman"), n = n()) %>%
-  mutate(correlation = "Ability from full CDI ~ full CDI score")
+lang_cor_table <- lang_cor_table_raw %>%
+  mutate(lang_group = gsub("_", " ", lang_group),
+         is_sig = !is.na(p) & p < .05,
+         rho    = sprintf("%.2f", rho),
+         p      = fmt_p(p),
+         across(everything(), ~ sig(as.character(.x), is_sig))) %>%
+  select(correlation, lang_group, rho, p, n, -is_sig) %>%
+  rename("Correlation" = "correlation", "Language group" = "lang_group",
+         "$\\rho$" = "rho", "$p$" = "p")
 
-lang_cor_table <- bind_rows(cor1, cor2, cor3)
-rm(cor1, cor2, cor3)
-
-apa_table(lang_cor_table, caption = "Spearman's correlations for monolingual and multilingual children in the Polish dataset", placement = "H")
+apa_table(lang_cor_table, escape = FALSE,
+          align = c("p{7cm}", "l", "c", "c", "c"),
+          font_size = "small",
+          note = "Significant correlations ($p$ < .05) are shown in bold.",
+          caption = "Spearman's correlations for monolingual and multilingual children in the Polish dataset.",
+          placement = "H")
 
 ```
