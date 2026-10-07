@@ -160,7 +160,7 @@ The first IRT-based CAT-CDI was developed by Makransky et al. (2016) who applied
 
 ## Key decisions when developing new IRT-based CAT-CDIs
 
-These developments paved the way for a Polish CAT-CDI (Krajewski et al., in preparation). The Polish instrument followed the procedure established for the English CAT-CDI [@kachergisOnlineComputerizedAdaptive2022], including the IRT model, the procedure for selecting starting items, the ability estimation method, and the item selection rule. However, it deliberately departed from this procedure in two respects: how the instruments are structured, which determined item calibration, and when an administration ends. \textcolor{blue}{Because the Polish and American English CAT-CDIs share most of their design but differ in these two decisions, their comparison examines how such choices affect instrument performance in practice.} We believe that such an evaluation can guide future CAT-CDI development, enabling researchers to make more informed and strategic decisions.
+These developments paved the way for a Polish CAT-CDI (Krajewski et al., in preparation). The Polish instrument followed the procedure established for the English CAT-CDI [@kachergisOnlineComputerizedAdaptive2022], including the IRT model, the ability estimation method, and the item selection rule. However, it deliberately departed from this procedure in two respects: how the instruments are structured, which determined item calibration, and when an administration ends. \textcolor{blue}{Because the Polish and American English CAT-CDIs share most of their design but differ in these two decisions, their comparison examines how such choices affect instrument performance in practice.} We believe that such an evaluation can guide future CAT-CDI development, enabling researchers to make more informed and strategic decisions.
 
 ### \textcolor{blue}{Instrument Structure and Item Calibration.}
 
@@ -259,6 +259,23 @@ rm(dat, vars, cat_vars)
 
 The data presented here was gathered with the Polish CAT-CDI Words and Sentences presented above. Polish CDI:WS measures word production in children aged 18-36 months. It includes 666 items, of which 395 words (58%) are also found in the American English CAT-CDI, as identified by unilemmas (Kachergis et al., 2025).
 
+\color{blue}
+
+|   | English (Kachergis et al., 2022) | Polish |
+|-----------------|---------------------------|---------------------------|
+| Calibration data\* | Wordbank, 7633 children, 12–36 mo | CDI:WS norms, 2297 children, 18–36 mo |
+| Model | 2PL, mirt [@chalmersMirtMultidimensionalItem2012] | 2PL, mirt [@chalmersMirtMultidimensionalItem2012] |
+| Items removed | 1 (misfit + local dependence Cramer's V \> 0.5) | 4 (misfit) |
+| Item bank | 679 | 666 |
+| Starting item\* | age-based: \$\\theta_0\$ = mean \$\\theta\$ for age - 0.5 | age- and sex-based: \$\\theta_0\$ = mean \$\\theta\$ for age and sex - 2 |
+| Item selection | maximum information | maximum information |
+| Theta estimator | MAP | MAP |
+| Stopping rule\* | SE $\leq$ 0.15; min 25, max 50 items | SE $\leq$ 0.10; min 10, max 75 items |
+
+: Table 1. Details of the Polish and American English CAT-CDIs. The rows marked with \* are where the two CAT-CDIs diverged.
+
+\color{black}
+
 ### Procedure
 
 The procedure and instruments used in the Polish validation study were approved by the Ethics Committee at the Faculty of Psychology, University of Warsaw. \textcolor{blue}{Parents were informed about the aims and procedure of the study and provided informed consent, including consent to the confidential use of their data for research purposes.} Parents completed the full CDI and the CAT-CDI online using a web app (CDI-Online) (Krajewski et al. 2020) designed specifically for CDI administration. Since the CAT-CDI was added as a final step to an ongoing study, the order of the CDIs was fixed, with the full CDI always first. After 1–30 days (*M* = `r round(mean(by_child_pl$days_between),2)`, *Mdn* = `r round(median(by_child_pl$days_between),2)`, SD = `r round(sd(by_child_pl$days_between),2)`) parents were asked to fill in the CAT-CDI. In the full CDI, each page presents all items in a given semantic category. The smallest categories (with fewest items on a page) include under 10 items, while the biggest category, action words, contains over 100 items. In CAT-CDI, parents are presented with one word at a time and asked to select one of two answers “Yes” or “No” to indicate whether their child says that word. The word is accompanied by information on the semantic category it belongs to.
@@ -331,27 +348,29 @@ ggplot() +
 
 ```
 
-## Plan of analysis
+## Data Analysis
 
 \color{blue}
 
-*Administration time*. We compare median completion times for the full CDI and the CAT-CDI, and report the number of items administered in the CAT-CDI.
+The English data from Kachergis et al. (2022) were re-analysed with the same analyses as the Polish data.
 
-*Concurrent validity* is evaluated via Pearson correlations between scores and estimates obtained from the full CDIs and CAT-CDIs. We also explore cases of discrepancy between the two tools, i.e. for each participant, we subtract the CAT-CDI estimate from the full estimate and square this difference to eliminate negative values. Overall agreement is summarised as the mean squared error (MSE) which reflects both random and systematic discrepancy. We report its mean, median and SD across participants. Cases with extreme discrepancies are defined as those whose difference deviated by more than 1.5 SD from the mean difference; MSE is also recalculated without these cases. Systematic bias was tested with a paired t-test on the difference (with Cohen's d), and its dependence on ability level was examined by plotting the difference across the ability range.
+*Administration time*. We compared median completion times for the full CDI and the CAT-CDI, and reported the number of items administered in the CAT-CDI.
 
-*Precision and reliability*. We examine the standard error of the measurement across the ability range for both instruments, the proportion of children estimated with SE \< 0.2, and empirical reliability for the CAT-CDI and the full CDI.
+*Concurrent validity* was evaluated via Pearson correlations between scores and estimates obtained from the full CDIs and CAT-CDIs. We also explored cases of discrepancy between the two tools, i.e. for each participant, we subtracted the CAT-CDI estimate from the full estimate and square this difference to eliminate negative values. Overall agreement was summarised as the mean squared error (MSE) which reflects both random and systematic discrepancy. We reported its mean, median and SD across participants. Cases with extreme discrepancies were defined as those whose difference deviated by more than 1.5 SD from the mean difference; MSE was also recalculated without these cases. Systematic bias was tested with a paired t-test on the difference (with Cohen's d), and its dependence on ability level was examined by plotting the difference across the ability range.
 
-*(Over)reliance on subset of items*. To examine this, we calculate the frequency with which each item appeared across CAT-CDI administrations, expressed as a percentage of all administrations.
+*Precision and reliability*. We examined the standard error of the measurement across the ability range for both instruments, the proportion of children estimated with SE \< 0.2, and empirical reliability for the CAT-CDI and the full CDI.
 
-*Cross-linguistic item properties*. Translation-equivalent items were identified via unilemmas (Kachergis et al., 2025). We correlate English and Polish item difficulty parameters overall (Pearson) and within lexical classes (Spearman).
+*(Over)reliance on subset of items*. To examine this, we calculated the frequency with which each item appeared across CAT-CDI administrations, expressed as a percentage of all administrations.
+
+*Cross-linguistic item properties*. Translation-equivalent items were identified via unilemmas (Kachergis et al., 2025). We correlated English and Polish item difficulty parameters overall (Pearson) and within lexical classes (Spearman).
 
 \color{black}
 
 # Results
 
-In the following section we will explore the two CAT-CDI's performance on those criteria. The Polish data has not been reported previously. The English has been reported in Kachergis et al. (2022) and was re-analysed \textcolor{blue}{and extendned} for the purpose of the current paper. \textcolor{blue}{Specifically, here we added evidence that XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX}
+In the following section we will explore the two CAT-CDI's performance on those criteria. The Polish data has not been reported previously. The English has been reported in Kachergis et al. (2022) and was re-analysed \textcolor{blue}{and extendned} for the purpose of the current paper. Specifically, here we added evidence that, XXXXXXXX.
 
-## **Do CAT-CDIs require less time to administer?**
+## Do CAT-CDIs require less time to administer?
 
 ```{r}
 # calculate and add duration_cat and _full for Eng
@@ -387,11 +406,12 @@ resps_sum %>% summarise(mean(n), #31
                           sd(n)) #10.11
 
 t1 <- apa_print(t.test(resps_sum$n, by_child_pl$no_items))
+d1 <- cohens_d(resps_sum$n, by_child_pl$no_items, paired = F)
 
 hist(resps_sum$n)
 ```
 
-CAT-CDIs were significantly shorter to administer: the English CAT-CDI median time was `r duration(median(prod_s$duration_cat))` (median full CDI time was `r duration(median(prod_s$duration_full))`) and the Polish CAT-CDI median time was `r duration(median(by_child_pl$duration_cat))` (median full CDI time was `r duration(median(by_child_pl$duration_full))`). Even though the CAT-CDI in Polish seemed shorter (compared to English CAT-CDI), the number of items administered in the two language versions of CAT-CDI was comparable: English *M* = `r round(mean(resps_sum$n),2)`, *Mdn* = `r median(resps_sum$n)` (25--50 items), Polish *M* = `r round(mean(by_child_pl$no_items),2)`, *Mdn* = `r median(by_child_pl$no_items)` (`r min(by_child_pl$no_items)`--`r max(by_child_pl$no_items)` items). Notably, as the medians indicate, for half of the participants, the estimate precision was obtained relatively early and the CATs ended after `r median(resps_sum$n)` (English) or `r median(by_child_pl$no_items)` (Polish) items.
+CAT-CDIs were significantly shorter to administer: the English CAT-CDI median time was `r duration(median(prod_s$duration_cat))` (median full CDI time was `r duration(median(prod_s$duration_full))`) and the Polish CAT-CDI median time was `r duration(median(by_child_pl$duration_cat))` (median full CDI time was `r duration(median(by_child_pl$duration_full))`). Even though the CAT-CDI in Polish seemed shorter (compared to English CAT-CDI), the number of items administered in the two language versions of CAT-CDI was comparable: `r t1$full_result`, (small effect size: Cohen's $d$ = -0.21, 95% CI $[-0.44, 0.02]$). Notably, as indicated by medians, for half of the participants, the estimate precision was obtained relatively early and the CATs ended after `r median(resps_sum$n)` (English) or `r median(by_child_pl$no_items)` (Polish) items.
 
 ## Do CAT-CDIs demonstrate good concurrent validity and reliability?
 
@@ -406,13 +426,17 @@ cor(by_child_pl$cat_theta, by_child_pl$score_full) # AmE:.86, PL: 0.86
 cor(by_child_pl$cat_theta, by_child_pl$full_theta) # AmE: .92, PL: .92
 cor(by_child_pl$full_theta, by_child_pl$score_full) # AmE: .95, PL: 0.94
 
+cor.test(by_child_pl$cat_theta, by_child_pl$score_full)
+cor.test(by_child_pl$cat_theta, by_child_pl$full_theta)
+cor.test(by_child_pl$full_theta, by_child_pl$score_full)
+
 ```
 
-To examine the concurrent validity of the two CAT-CDIs, we calculated correlations between CAT-CDI estimates and CDI raw scores. In both languages, we found similarly strong correlations between the abilities estimated from CAT-CDI and the full CDI scores (English and Polish: $r$ = .86). The correlations were also strong within individual age groups (see Tables \@ref(tab:corr-by-age-eng) and \@ref(tab:corr-by-age-pl)).
+To examine the concurrent validity of the two CAT-CDIs, we calculated \textcolor{blue}{Pearson} correlations between CAT-CDI estimates and CDI raw scores. In both languages, we found similarly strong correlations between the abilities estimated from CAT-CDI and the full CDI scores (English and Polish: $r$ = .86, \textcolor{blue}{$p$s < .001)}. The correlations were also strong within individual age groups (see Tables \@ref(tab:corr-by-age-eng) and \@ref(tab:corr-by-age-pl)).
 
-For each instrument, we also obtained IRT ability estimates from the full CDI using the same 2-PL model. Because these estimates draw on responses to all available items in the full CDI, they incorporate more information about each child’s ability, reducing random error and increasing precision. Such ability estimates from the full test version are often considered a baseline for comparisons with ability estimates from the CAT version. We correlated the abilities estimated from the CAT-CDI and abilities estimated from full CDI and found strong correlations in both languages, English and Polish: $r$ = .92. The relatively higher correlation indicates that CAT-CDI estimates align more closely with the latent ability captured by the full IRT model than with raw sumscores. Since the CAT–raw-score correlations were lower (\$r = .86\$), this suggests that raw CDI sumscores are less tightly linked to the underlying ability and may therefore yield lower validity than IRT-based scoring.
+For each instrument, we also obtained IRT ability estimates from the full CDI using the same 2-PL model. Because these estimates draw on responses to all available items in the full CDI, they incorporate more information about each child’s ability, reducing random error and increasing precision. Such ability estimates from the full test version are often considered a baseline for comparisons with ability estimates from the CAT version. We correlated the abilities estimated from the CAT-CDI and abilities estimated from full CDI and found strong correlations in both languages, English and Polish: $r$ = .92, \textcolor{blue}{$p$ < .001}. The relatively higher correlation indicates that CAT-CDI estimates align more closely with the latent ability captured by the full IRT model than with raw sumscores. Since the CAT–raw-score correlations were lower ($r$ = .86, \textcolor{blue}{$p$ < .001)}, this suggests that raw CDI sumscores are less tightly linked to the underlying ability and may therefore yield lower validity than IRT-based scoring.
 
-Finally, to examine consistency between model-based and traditional scores, we correlated the abilities estimated from the full CDI and the full CDI scores, i.e. two measures obtained from the same CDI version. Again, we found strong correlations in both languages (English: $r$ = .94=5, Polish: $r$ = `r cor(by_child_pl$full_theta, by_child_pl$score_full)`).
+Finally, to examine consistency between model-based and traditional scores, we correlated the abilities estimated from the full CDI and the full CDI scores, i.e. two measures obtained from the same CDI version. Again, we found strong correlations in both languages (English: $r$ = .95, Polish: $r$ = `r cor(by_child_pl$full_theta, by_child_pl$score_full)`, \textcolor{blue}{$p$s < .001}).
 
 ```{r corr-by-age-eng, include = T}
 
