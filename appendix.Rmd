@@ -26,6 +26,10 @@ Though the bi-/multilingual group is small in size, we decided to explore their 
 # 1. the table could use some re-styling (lgs as columns?)
 # 2. move to Supplementary (separate .Rmd?)
 
+# format p-values: "< .001" for very small ones, otherwise 3 decimals
+fmt_p <- function(p) ifelse(is.na(p), NA,
+                            ifelse(p < .001, "< .001", sprintf("%.3f", p)))
+
 spearman_by_lang <- function(data, x, y, label) {
   data %>%
     group_by(lang_group) %>%
