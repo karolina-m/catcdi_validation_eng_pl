@@ -176,7 +176,7 @@ Computerized adaptive testing involves numerous design choices, such as (but not
 
 # Present Study
 
-Our aim is to evaluate the potential usefulness of CAT-CDIs for both research and clinical applications, using evidence from the validation studies of the two CAT-CDIs in English and in Polish. For a CAT-CDI to be effective - whether for screening, diagnosis, or broader research purposes - we propose that it should meet the following criteria, \textcolor{blue}{which we address as research questions:}
+The present study has \textcolor{blue}{two aims. First,} we evaluate the potential usefulness of CAT-CDIs for research and clinical applications, using data from validation studies of the English and Polish CAT-CDIs. \textcolor{blue}{Second, because the two instruments were developed following the same procedure but differ in two key design decisions, namely instrument structure (and therefore the calibration sample) and stopping rules, we examine how these decisions are reflected in the performance of each instrument.} We propose that, to be effective for screening, diagnosis, or broader research purposes, a CAT-CDI should meet the following criteria, \textcolor{blue}{which we address as research questions:}
 
 \color{blue}
 
@@ -188,9 +188,9 @@ Our aim is to evaluate the potential usefulness of CAT-CDIs for both research an
 
 4.  Do the two CAT-CDIs show related item properties across languages? Because certain semantic and lexical categories show consistent easiness across languages (Frank et al., 2021), we expect that, although absolute item difficulties may differ due to different calibration samples, their relative ordering will be correlated, particularly in cross-linguistically robust categories.
 
-\color{black}
+We address each question for both CAT-CDIs and interpret similarities and differences between them in light of the design decisions described above. In particular, differences in stopping rules are relevant to administration time and measurement precision (RQ1–2), whereas differences in instrument structure and calibration samples are relevant to agreement with the full CDIs and to item properties across languages (RQ2 and RQ4). In this way, we aim not only to evaluate the validity of the two instruments but also to provide evidence that can guide researchers in making key design decisions when developing CAT-CDIs in other languages.
 
-We will report \textcolor{blue}{answers to these questions} in the two CAT-CDIs, in English and in Polish and discuss similarities and differences in the context of how the development of two CAT-CDIs differed. <!-- We will also discuss how CAT-CDI results (an ability estimate) can be translated to a clinical context. --> We aim for these analyses to not only assess the validity of the CAT-CDIs but also provide insights that can guide future adaptations in their core developmental choices.
+\color{black}
 
 # Methods
 
