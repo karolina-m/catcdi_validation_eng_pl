@@ -114,6 +114,8 @@ library(effectsize)
 # library(viridis)
 # library(knitr) # for purl()
 
+# https://libguides.bi.no/datalab/rmarkdown
+
 ```
 
 ```{r analysis-preferences}
@@ -142,7 +144,7 @@ withr::with_dir("data/english/github-archive", {
 
 # Introduction
 
-The MacArthur-Bates Communicative Development Inventories (CDI) are parent-report forms that are used worldwide in research and clinical practice to measure children’s language abilities, especially word knowledge. There are over 100 language adaptations of the CDI, including Polish [@smoczynskaInwentarzeRozwojuMowy2015c], and up to three age versions in each language: Words and Gestures (CDI:WG) for children up to the age of a year and a half, Words and Sentences (CDI:WS) for older children up to around three, and CDI-III for children from three to three and a half or four (exact age ranges vary between adaptations). All CDIs include a vocabulary checklist, a list of words in which parents or other caregivers mark the words that their child “understands” and/or “understands and says”. CDIs and similar parental reports draw on caregivers’ extensive experiences with their child in a variety of contexts. They demonstrate adequate validity with spontaneous language samples [e.g., @gattUsingParentalReport2015; @otooleValidityParentReport2010] and other direct language measures [e.g. @daleValidityParentReport1991; @lemhoferIntroducingLexTALEQuick2011; @smolikValiditySDDS40item2021], both in typically-developing children as well as children with an elevated likelihood or diagnosis of ASD [@beltekiConcurrentValidityStudy2025].
+The MacArthur-Bates Communicative Development Inventories (CDI) are parent-report forms that are used worldwide in research and clinical practice to measure children’s language abilities, especially word knowledge. There are over 100 language adaptations of the CDI, including Polish [@smoczynskaInwentarzeRozwojuMowy2015c], and up to three age versions in each language: Words and Gestures (CDI:WG) for children up to the age of a year and a half, Words and Sentences (CDI:WS) for older children up to around three, and CDI-III for children from three to three and a half or four (exact age ranges vary between adaptations). All CDIs include a vocabulary checklist, a list of words in which parents or other caregivers mark the words that their child “understands” and/or “understands and says”. CDIs and similar parental reports draw on caregivers’ extensive experiences with their child in a variety of contexts. They demonstrate adequate validity with spontaneous language samples [e.g., @gattUsingParentalReport2015; @otooleValidityParentReport2010] and other direct language measures [e.g. @daleValidityParentReport1991; @lemhoferIntroducingLexTALEQuick2011; @smolikValiditySDDS40item2021]. \textcolor{blue}{This validity has been demonstrated not only in typically-developing children but also across a range of atypical populations, including chidren with cochlear implants} [@thalValidityMacArthurBates2007], children with an elevated likelihood or diagnosis of Autism Spectrum Disorder [@beltekiConcurrentValidityStudy2025], \textcolor{blue}{children with Down syndrome} [@millerValidityParentReport1995], \textcolor{blue}{late talkers} [@heilmannUtilityMacArthurBates2005], \textcolor{blue}{and preschoolers with language impairment} [@thalValidityParentReport1999].
 
 Because CDIs are inventories, they cover a broad range of words from many semantic and lexical categories, differing in frequency, age-appropriateness, and other properties [e.g., @frankVariabilityConsistencyEarly2021; @garmannPhonologyChildrensEarly2019b]. This richness is a clear strength in research settings, where detailed, item-level analyses of children’s vocabularies are often the goal. For practical purposes, however - such as early screening for language delay - a lengthy inventory can be less than ideal. Caregivers may need 20-30 minutes to complete the forms, which can make the task burdensome when only a single overall score is needed. For this reason, there have been many attempts to shorten the CDI word lists. The initial attempts were to simply identify a subset of items from the original lists that correlated most strongly with responses on the full list [@fensonShortformVersionsMacArthur2000; but later also @ezeizabarrenaShortVersionsBasque2024; @smolikValiditySDDS40item2021; @lasorsaExploringAgreementMBCDI2021; @kimUsefulnessMBCDIK2014]. More recently, @mayorShortVersionMacArthur2019a administered a random subset of words from the full CDI, combining these with vocabulary data from the WordBank database, and then incorporated information about the child’s age, sex, and language status into Bayesian models that predicted the child’s overall vocabulary size as it would appear on the full CDI. This method provided a reliable estimate of the child’s language development level without requiring the complete inventory: using a 25-item lists, CDIs correlated with the full CDIs at $r$ = .96, with an SE of .14 and a reliability of .98; using a 50-items CDIs showed slightly lower correlation at $r$ = .94 with similar SE of .14 and a reliability of .98. However, as noted by @kachergisOnlineComputerizedAdaptive2022, while using age and sex to predict vocabulary improves precision with limited data, these factors can also bias individual assessments by pulling scores toward typical expectations for those demographics.
 
@@ -166,19 +168,19 @@ At the same time, we can still expect cross-linguistic similarities. These can b
 
 Computerized adaptive testing involves numerous design choices, such as (but not limited to) how to estimate the initial ability estimate, which algorithm to use for estimating the ability during the task, and which criterion to apply when selecting the next item. In these aspects, the Polish CAT-CDIs followed the procedures described in detail in @kachergisOnlineComputerizedAdaptive2022. But one of the important decisions concerns the stopping criteria of the CAT task. These criteria can be based on a maximum number of administered items or reaching a target level of estimate precision – typically expressed as a standard error (SE) of the estimate. The English CAT-CDI prioritized a shorter CAT typically ending after 50 items, or sooner if a standard error (SE) of 0.15 was reached. In contrast, the Polish CAT-CDI prioritized greater precision, continuing until an SE of 0.1 was reached. If this level of precision could not be reached, the test concluded after a maximum of 75 items. These differences in CAT settings may result in relatively shorter English CAT-CDIs but relatively more precise estimates obtained from the Polish CAT-CDIs. Importantly, neither approach is inherently better; rather, each reflects different design priorities and assumptions about what a CAT-CDI should optimize - whether efficiency of administration, precision of measurement, or some appropriate balance between the two.
 
-
 # Present Study
 
 Our aim is to evaluate the potential usefulness of CAT-CDIs for both research and clinical applications, using evidence from the validation studies of the two CAT-CDIs in English and in Polish. For a CAT-CDI to be effective - whether for screening, diagnosis, or broader research purposes - we propose that it should meet the following criteria, \textcolor{blue}{which we address as research questions:}
 
 \color{blue}
-1.  Do CAT-CDIs require less administration time than the full CDIs?    
 
-2.  Do CAT-CDIs show good concurrent validity with the full CDIs, and good precision and reliability?   
+1.  Do CAT-CDIs require less administration time than the full CDIs?
 
-3.  Do CAT-CDIs avoid relying on the same subset of items across administrations? This matters for repeated use, e.g., in longitudinal studies or progress monitoring.    
+2.  Do CAT-CDIs show good concurrent validity with the full CDIs, and good precision and reliability?
 
-4.  Do the two CAT-CDIs show related item properties across languages? Because certain semantic and lexical categories show consistent easiness across languages (Frank et al., 2021), we expect that, although absolute item difficulties may differ due to different calibration samples, their relative ordering will be correlated, particularly in cross-linguistically robust categories.   
+3.  Do CAT-CDIs avoid relying on the same subset of items across administrations? This matters for repeated use, e.g., in longitudinal studies or progress monitoring.
+
+4.  Do the two CAT-CDIs show related item properties across languages? Because certain semantic and lexical categories show consistent easiness across languages (Frank et al., 2021), we expect that, although absolute item difficulties may differ due to different calibration samples, their relative ordering will be correlated, particularly in cross-linguistically robust categories.
 
 \color{black}
 
@@ -246,7 +248,6 @@ categ
 rm(dat, vars, cat_vars)
 
 ```
-
 
 ### Materials
 
@@ -326,20 +327,19 @@ ggplot() +
 
 ## Plan of analysis
 
-
 \color{blue}
+
 *Administration time*. We compare median completion times for the full CDI and the CAT-CDI, and report the number of items administered in the CAT-CDI.
 
 *Concurrent validity* is evaluated via Pearson correlations between scores and estimates obtained from the full CDIs and CAT-CDIs. We also explore cases of discrepancy between the two tools, i.e. for each participant, we subtract the CAT-CDI estimate from the full estimate and square this difference to eliminate negative values. Overall agreement is summarised as the mean squared error (MSE) which reflects both random and systematic discrepancy. We report its mean, median and SD across participants. Cases with extreme discrepancies are defined as those whose difference deviated by more than 1.5 SD from the mean difference; MSE is also recalculated without these cases. Systematic bias was tested with a paired t-test on the difference (with Cohen's d), and its dependence on ability level was examined by plotting the difference across the ability range.
 
-*Precision and reliability*. We examine the standard error of the measurement across the ability range for both instruments, the proportion of children estimated with SE < 0.2, and empirical reliability for the CAT-CDI and the full CDI.
+*Precision and reliability*. We examine the standard error of the measurement across the ability range for both instruments, the proportion of children estimated with SE \< 0.2, and empirical reliability for the CAT-CDI and the full CDI.
 
 *(Over)reliance on subset of items*. To examine this, we calculate the frequency with which each item appeared across CAT-CDI administrations, expressed as a percentage of all administrations.
 
-*Cross-linguistic item properties*. Translation-equivalent items were identified via unilemmas (Kachergis et al., 2025). We correlate English and Polish item difficulty parameters overall (Pearson) and within lexical classes (Spearman).    
+*Cross-linguistic item properties*. Translation-equivalent items were identified via unilemmas (Kachergis et al., 2025). We correlate English and Polish item difficulty parameters overall (Pearson) and within lexical classes (Spearman).
 
 \color{black}
-
 
 # Results
 
