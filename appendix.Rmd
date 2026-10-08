@@ -1,4 +1,9 @@
 
+```{r}
+library(papaja)
+```
+
+
 ```{r, echo = F}
 # Data
 here::i_am("data/polish/data_polish.R")
@@ -30,16 +35,23 @@ Though the bi-/multilingual group is small in size, we decided to explore their 
 fmt_p <- function(p) ifelse(is.na(p), NA,
                             ifelse(p < .001, "< .001", sprintf("%.3f", p)))
 
+sig <- function(x, is_sig) ifelse(is_sig, paste0("\\textbf{", x, "}"), x)
+# or colour: paste0("\\textcolor{blue}{", x, "}")
+
 spearman_by_lang <- function(data, x, y, label) {
   data %>%
     group_by(lang_group) %>%
     summarise(
       rho = cor({{ x }}, {{ y }}, method = "spearman", use = "complete.obs"),
-      p = if (sum(complete.cases({{ x }}, {{ y }})) > 2)
+      n_complete = sum(complete.cases({{ x }}, {{ y }})),
+      p = if (n_complete > 2)
             cor.test({{ x }}, {{ y }}, method = "spearman", exact = FALSE)$p.value
           else NA_real_,
+      ci_low  = spearman_ci(rho, n_complete)[1],
+      ci_high = spearman_ci(rho, n_complete)[2],
       n = n(),
       .groups = "drop") %>%
+    select(-n_complete) %>%
     mutate(correlation = label)
 }
 
@@ -51,15 +63,18 @@ lang_cor_table_raw <- bind_rows(
 lang_cor_table <- lang_cor_table_raw %>%
   mutate(lang_group = gsub("_", " ", lang_group),
          is_sig = !is.na(p) & p < .05,
+         ci     = ifelse(is.na(ci_low), NA,
+                         sprintf("[%.2f, %.2f]", ci_low, ci_high)),
          rho    = sprintf("%.2f", rho),
          p      = fmt_p(p),
          across(everything(), ~ sig(as.character(.x), is_sig))) %>%
-  select(correlation, lang_group, rho, p, n, -is_sig) %>%
+  select(correlation, lang_group, rho, ci, p, n) %>%
   rename("Correlation" = "correlation", "Language group" = "lang_group",
-         "$\\rho$" = "rho", "$p$" = "p")
+         "$\\rho$" = "rho", "95\\% CI" = "ci", "$p$" = "p")
 
-apa_table(lang_cor_table, escape = FALSE,
-          align = c("p{7cm}", "l", "c", "c", "c"),
+apa_table(lang_cor_table, 
+          escape = FALSE,
+          align = c("l", "l", "c", "c", "c", "c"),
           font_size = "small",
           note = "Significant correlations ($p$ < .05) are shown in bold.",
           caption = "Spearman's correlations for monolingual and multilingual children in the Polish dataset.",

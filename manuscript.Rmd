@@ -262,7 +262,7 @@ The data presented here was gathered with the Polish CAT-CDI Words and Sentences
 \color{blue}
 
 |   | English (Kachergis et al., 2022) | Polish |
-|-----------------|---------------------------|---------------------------|
+|------------------|---------------------------|---------------------------|
 | Calibration data\* | Wordbank, 7633 children, 12–36 mo | CDI:WS norms, 2297 children, 18–36 mo |
 | Model | 2PL, mirt [@chalmersMirtMultidimensionalItem2012] | 2PL, mirt [@chalmersMirtMultidimensionalItem2012] |
 | Items removed | 1 (misfit + local dependence Cramer's V \> 0.5) | 4 (misfit) |
@@ -432,11 +432,11 @@ cor.test(by_child_pl$full_theta, by_child_pl$score_full)
 
 ```
 
-To examine the concurrent validity of the two CAT-CDIs, we calculated \textcolor{blue}{Pearson} correlations between CAT-CDI estimates and CDI raw scores. In both languages, we found similarly strong correlations between the abilities estimated from CAT-CDI and the full CDI scores (English and Polish: $r$ = .86, \textcolor{blue}{$p$s < .001)}. The correlations were also strong within individual age groups (see Tables \@ref(tab:corr-by-age-eng) and \@ref(tab:corr-by-age-pl)).
+To examine the concurrent validity of the two CAT-CDIs, we calculated \textcolor{blue}{Pearson} correlations between CAT-CDI estimates and CDI raw scores. In both languages, we found similarly strong correlations between the abilities estimated from CAT-CDI and the full CDI scores (English and Polish: $r$ = .86, \textcolor{blue}{95\% CI [0.81, 0.90], $p$s < .001)}. The correlations were also strong within individual age groups (see Tables \@ref(tab:corr-by-age-eng) and \@ref(tab:corr-by-age-pl)).
 
-For each instrument, we also obtained IRT ability estimates from the full CDI using the same 2-PL model. Because these estimates draw on responses to all available items in the full CDI, they incorporate more information about each child’s ability, reducing random error and increasing precision. Such ability estimates from the full test version are often considered a baseline for comparisons with ability estimates from the CAT version. We correlated the abilities estimated from the CAT-CDI and abilities estimated from full CDI and found strong correlations in both languages, English and Polish: $r$ = .92, \textcolor{blue}{$p$ < .001}. The relatively higher correlation indicates that CAT-CDI estimates align more closely with the latent ability captured by the full IRT model than with raw sumscores. Since the CAT–raw-score correlations were lower ($r$ = .86, \textcolor{blue}{$p$ < .001)}, this suggests that raw CDI sumscores are less tightly linked to the underlying ability and may therefore yield lower validity than IRT-based scoring.
+For each instrument, we also obtained IRT ability estimates from the full CDI using the same 2-PL model. Because these estimates draw on responses to all available items in the full CDI, they incorporate more information about each child’s ability, reducing random error and increasing precision. Such ability estimates from the full test version are often considered a baseline for comparisons with ability estimates from the CAT version. We correlated the abilities estimated from the CAT-CDI and abilities estimated from full CDI and found strong correlations in both languages, English and Polish: $r$ = .92, \textcolor{blue}{95\% CI [0.88, 0.94], $p$ < .001}. The relatively higher correlation indicates that CAT-CDI estimates align more closely with the latent ability captured by the full IRT model than with raw sumscores. Since the CAT–raw-score correlations were lower ($r$ = .86, \textcolor{blue}{95\% CI [0.81, 0.90], $p$ < .001)}, this suggests that raw CDI sumscores are less tightly linked to the underlying ability and may therefore yield lower validity than IRT-based scoring.
 
-Finally, to examine consistency between model-based and traditional scores, we correlated the abilities estimated from the full CDI and the full CDI scores, i.e. two measures obtained from the same CDI version. Again, we found strong correlations in both languages (English: $r$ = .95, Polish: $r$ = `r cor(by_child_pl$full_theta, by_child_pl$score_full)`, \textcolor{blue}{$p$s < .001}).
+Finally, to examine consistency between model-based and traditional scores, we correlated the abilities estimated from the full CDI and the full CDI scores, i.e. two measures obtained from the same CDI version. Again, we found strong correlations in both languages (English: $r$ = .95, Polish: $r$ = `r cor(by_child_pl$full_theta, by_child_pl$score_full)`, \textcolor{blue}{95\% CI [0.91,0.96], $p$s < .001}).
 
 ```{r corr-by-age-eng, include = T}
 
@@ -445,46 +445,60 @@ Finally, to examine consistency between model-based and traditional scores, we c
 # 2. can we specify place in text where the tables should be placed (rn it seems random)
 # ^ See Issue https://github.com/karolina-m/catcdi_validation_eng_pl/issues/5
 
-# English
-# valid_tab <- prod_s %>% 
-#   mutate(age_group = cut(age_full, breaks=seq(12,36,3), right=F, include.lowest = T)) %>%
-#   group_by(age_group) %>%
-#   summarise(r = cor(fullTheta, catTheta), n=n()) #%>% kableExtra::kable(digits=2)
-# 
-# valid_tab_wide = rbind(round(valid_tab$r, 2), as.character(valid_tab$n))
-# colnames(valid_tab_wide) = as.character(valid_tab$age_group)
-# row.names(valid_tab_wide) = c('$r$ ability CAT vs full CDI', '$p$', 'N')
-
-valid_tab <- prod_s %>% 
-  mutate(age_group = cut(age_full, breaks = seq(12, 36, 3), right = FALSE, include.lowest = TRUE)) %>%
-  group_by(age_group) %>%
-  summarise(
-    r = cor(fullTheta, catTheta),
-    p = if (n() > 2) cor.test(fullTheta, catTheta)$p.value else NA_real_,
-    n = n(),
-    .groups = "drop") %>%
-  bind_rows(
-    tibble(
-      age_group = factor("[15,18)", levels = levels(.$age_group)),
-      r = NA_real_,
-      p = NA_real_,
-      n = NA_integer_)) %>%
-  arrange(age_group)
+pearson_ci <- function(r, n, level = .95) {
+  if (is.na(r) || is.na(n) || n < 4) return(c(NA_real_, NA_real_))
+  tanh(atanh(r) + c(-1, 1) * qnorm(1 - (1 - level) / 2) / sqrt(n - 3))
+}
 
 # format p-values: "< .001" for very small ones, otherwise 3 decimals
 fmt_p <- function(p) ifelse(is.na(p), NA,
                             ifelse(p < .001, "< .001", sprintf("%.3f", p)))
 
-valid_tab_wide <- rbind(
-  round(valid_tab$r, 2),
-  fmt_p(valid_tab$p),
-  as.character(valid_tab$n))
-colnames(valid_tab_wide) <- as.character(valid_tab$age_group)
-row.names(valid_tab_wide) <- c('$r$ ability CAT vs full CDI', '$p$', 'N')
+fmt2  <- function(x) ifelse(is.na(x), NA, sprintf("%.2f", x))
+fmt_ci <- function(lo, hi) ifelse(is.na(lo), NA, sprintf("[%.2f, %.2f]", lo, hi))
 
-apa_table(valid_tab_wide, caption="English: Correlations between ability estimated by CAT-CDI and ability estimated from full CDI by children's age.", 
-          note = "A square bracket means the endpoint is included and a round bracket means it is excluded, e.g. [15,18) includes children aged 15 up to, but not including, 18 months. The final range, [33,36], includes both endpoints.",
-          placement = "H", escape = F, col_spanners = list(`Age (months)` = c(2, ncol(valid_tab_wide) + 1)))
+age_cor <- function(data, age, x, y) {
+  data %>%
+    mutate(age_group = cut({{ age }}, breaks = seq(12, 36, 3),
+                           right = FALSE, include.lowest = TRUE)) %>%
+    filter(!is.na(age_group)) %>%
+    group_by(age_group) %>%
+    summarise(
+      r = cor({{ x }}, {{ y }}, use = "complete.obs"),
+      n = sum(complete.cases({{ x }}, {{ y }})),
+      p = if (n > 2) cor.test({{ x }}, {{ y }})$p.value else NA_real_,
+      ci_low  = pearson_ci(r, n)[1],
+      ci_high = pearson_ci(r, n)[2],
+      .groups = "drop") %>%
+    complete(age_group)   # adds empty rows for any missing age group, e.g. [15,18) in Polish
+}
+
+valid_tab     <- age_cor(prod_s,      age_full, fullTheta,  catTheta)    # English
+age_cor_table <- age_cor(by_child_pl, age_CAT,  full_theta, cat_theta)   # Polish
+
+
+lang_block <- function(tab) {
+  tibble(r = fmt2(tab$r), ci = fmt_ci(tab$ci_low, tab$ci_high),
+         p = fmt_p(tab$p), n = as.character(tab$n))
+}
+
+age_cor_both <- bind_cols(
+  tibble(Age = as.character(valid_tab$age_group)),
+  lang_block(valid_tab),
+  lang_block(age_cor_table))
+names(age_cor_both) <- c("Age (months)",
+                         rep(c("$r$", "95\\% CI", "$p$", "$N$"), 2))
+
+apa_table(age_cor_both, escape = FALSE,
+          col_spanners = list(English = c(2, 5), Polish = c(6, 9)),
+          font_size = "small",
+          caption = "Correlations between ability estimated by CDI-CAT and ability estimated from the full CDI, by children's age.",
+          note = "A square bracket means the endpoint is included and a round bracket means it is excluded; e.g., [15,18) includes children aged 15 up to, but not including, 18 months. The final range, [33,36], includes both endpoints.",
+          placement = "H")
+
+
+
+
 
 ```
 
@@ -493,50 +507,34 @@ apa_table(valid_tab_wide, caption="English: Correlations between ability estimat
 # age_cor_table <- by_child_pl %>% 
 #   mutate(age_group = cut(age_CAT, breaks = seq(12, 36, 3), right = FALSE, include.lowest = TRUE)) %>%
 #   group_by(age_group) %>%
-#   summarise(r = cor(full_theta, cat_theta), n = n(), .groups = "drop") %>%
+#   summarise(
+#     r = cor(full_theta, cat_theta),
+#     p = if (n() > 2) cor.test(full_theta, cat_theta)$p.value else NA_real_,
+#     n = n(),
+#     .groups = "drop") %>%
 #   # adding a row for [15,18) age range - present in Kachergis et al. data, absent in Polish
 #   bind_rows(
 #     tibble(
-#       age_group = factor("[15,18)", levels = levels(.$age_group)), # keep factor consistency
+#       age_group = factor("[15,18)", levels = levels(.$age_group)),
 #       r = NA_real_,
+#       p = NA_real_,
 #       n = NA_integer_)) %>%
 #   arrange(age_group)
 # 
-# age_cor_table_wide <- rbind(round(age_cor_table$r, 2), as.character(age_cor_table$n))
+# # format p-values: "< .001" for very small ones, otherwise 3 decimals
+# fmt_p <- function(p) ifelse(is.na(p), NA,
+#                             ifelse(p < .001, "< .001", sprintf("%.3f", p)))
+# 
+# age_cor_table_wide <- rbind(
+#   round(age_cor_table$r, 2),
+#   fmt_p(age_cor_table$p),
+#   as.character(age_cor_table$n))
 # colnames(age_cor_table_wide) <- as.character(age_cor_table$age_group)
-# row.names(age_cor_table_wide) <- c('r ability CAT vs full CDI', 'N')
-
-age_cor_table <- by_child_pl %>% 
-  mutate(age_group = cut(age_CAT, breaks = seq(12, 36, 3), right = FALSE, include.lowest = TRUE)) %>%
-  group_by(age_group) %>%
-  summarise(
-    r = cor(full_theta, cat_theta),
-    p = if (n() > 2) cor.test(full_theta, cat_theta)$p.value else NA_real_,
-    n = n(),
-    .groups = "drop") %>%
-  # adding a row for [15,18) age range - present in Kachergis et al. data, absent in Polish
-  bind_rows(
-    tibble(
-      age_group = factor("[15,18)", levels = levels(.$age_group)),
-      r = NA_real_,
-      p = NA_real_,
-      n = NA_integer_)) %>%
-  arrange(age_group)
-
-# format p-values: "< .001" for very small ones, otherwise 3 decimals
-fmt_p <- function(p) ifelse(is.na(p), NA,
-                            ifelse(p < .001, "< .001", sprintf("%.3f", p)))
-
-age_cor_table_wide <- rbind(
-  round(age_cor_table$r, 2),
-  fmt_p(age_cor_table$p),
-  as.character(age_cor_table$n))
-colnames(age_cor_table_wide) <- as.character(age_cor_table$age_group)
-row.names(age_cor_table_wide) <- c('$r$ ability CAT vs full CDI', '$p$', 'N')
-
-apa_table(age_cor_table_wide, caption = "Polish: Correlations between ability estimated by CAT-CDI and ability estimated from full CDI by children's age.", 
-          note = "A square bracket means the endpoint is included and a round bracket means it is excluded, e.g. [15,18) includes children aged 15 up to, but not including, 18 months. The final range, [33,36], includes both endpoints.",
-          placement = "H", escape = F, col_spanners = list(`Age (months)` = c(2, ncol(age_cor_table_wide) + 1)))
+# row.names(age_cor_table_wide) <- c('$r$ ability CAT vs full CDI', '$p$', 'N')
+# 
+# apa_table(age_cor_table_wide, caption = "Polish: Correlations between ability estimated by CAT-CDI and ability estimated from full CDI by children's age.", 
+#           note = "A square bracket means the endpoint is included and a round bracket means it is excluded, e.g. [15,18) includes children aged 15 up to, but not including, 18 months. The final range, [33,36], includes both endpoints.",
+#           placement = "H", escape = F, col_spanners = list(`Age (months)` = c(2, ncol(age_cor_table_wide) + 1)))
 ```
 
 ### Discrepancy
@@ -1035,49 +1033,59 @@ c <- apa_print(cor.test(items_en_pl$d_pl, items_en_pl$d_en)) # 0.66
 
 English items were in general more difficult than the Polish items (English: min = `r round(min(items_cat_en$d),2)`, max = `r round(max(items_cat_en$d),2)`, *M* = `r round(mean(items_cat_en$d),2)`, *Mdn* = `r round(median(items_cat_en$d),2)`, *SD* = `r round(sd(items_cat_en$d),2)`; Polish: min = `r round(min(items_cat_pl$d),2)`, max = `r round(max(items_cat_pl$d),2)`, *M* = `r round(mean(items_cat_pl$d),2)`, *Mdn* = `r round(median(items_cat_pl$d),2)`, *SD* = `r round(sd(items_cat_pl$d),2)`). This was true also for a subset of `r nrow(items_en_pl)` items common to both languages - English items still proved to be more difficult than the Polish ones: `r t$full_result`. This is a result of the characteristics of the samples used to estimate the item parameters. In English, item difficulty was calculated based on a broader sample of children aged 12–36 months, spanning the CDI:WG, CDI:WS, and CDI-III (reflecting the idea of having one CAT-CDI for all the age versions), whereas the Polish data came from a sample of narrower age range of 18–36 months, corresponding to the CDI:WS. As a result, item difficulty in English was estimated using a relatively younger sample, for whom certain items may have been more challenging -- thus appearing more difficult -- compared to the older Polish sample. Still the item difficulty for common items in the two languages was positively and moderately correlated: `r c$full_result`.
 
-We also examined whether CDI semantic categories show comparable difficulty values across the two languages. To this end, we conducted a series of Spearman’s rank correlations on item difficulty within each semantic category (we considered only items common to both the Polish and English CDIs) (see Table \@ref(tab:d-by-cdi-category-tab)). The rank correlations coefficients varied by category, but for half of the categories the correlations were moderate to strong (0.51 to 0.91).
-
-The least correlated semantic category was Quantifiers \textcolor{blue}{($rho$ = 0.11, $p$ = 0.763)}. The discrepancy may be partially to the fact that many English quantifiers map onto multiple Polish equivalents - for example, "some" maps to two Polish CDI items, "jeszcze" (with a similar difficulty value as the English "some") and "więcej" (more difficult than "jeszcze" and "some"). These two Polish items are used in different contexts, i.e., "jeszcze" would be used more often in child directed speech than "więcej" also because it can be used to refer to both quantity and repetitive actions (meaning "again"). "Więcej" implies a quantitative comparison of some sorts, as in "more than before" or "more than two".
-
-Interestingly, the second least correlated semantic category were Clothes \textcolor{blue}{($rho$ = 0.21, $p$ = 0.399)}. Here, some divergence may be explained by one-to-multiple mapping (e.g., "hat" is either "czapka" or "kapelusz" in Polish), but also words characteristics, e.g., "bib" in Polish is a much more complex word, "śliniaczek"; English "underpants" are more morphologically complex (and maybe less frequent) than Polish "majtki".
-
-Taken together, these two semantic categories reflect the existing cross-linguistic differences in lexical mapping as well as item-specific factors such as frequency, morphological complexity, and contextual usage.
+We also examined whether CDI semantic categories show comparable difficulty values across the two languages. To this end, we conducted a series of Spearman’s rank correlations on item difficulty within each semantic category (we considered only items common to both the Polish and English CDIs) (see Table \@ref(tab:d-by-cdi-category-tab)). The coefficients varied across categories, from \$rho\$ = .11, \$p\$ = .763 (quantifiers) to \$rho\$ = .91, $p$ \< .001 (question words). \textcolor{blue}{However, 17 of the 23 categories included 20 or fewer common items, so most of these estimates should be interpreted with caution.}
 
 ```{r d-by-cdi-category-tab, include = T}
 # correlations by cdi semantic category on common words
 # spearman because ranked
 
-items_en_pl %>% 
-     mutate(category = 
-                 fct_recode(category,
-                    "descriptive_words" = "descriptive_words (adverbs)")) %>%
-     mutate(category = 
-                 fct_recode(category,
-                    "descriptive_words" = "descriptive_words (adjectives)")) %>%
-     group_by(category) %>% summarise(
-     rho = cor(d_pl, d_en, method = "spearman", use = "complete.obs"),
-     p = if (sum(complete.cases(d_pl, d_en)) > 2)
-          cor.test(d_pl, d_en, method = "spearman", exact = FALSE)$p.value
-        else NA_real_,
-     n = length(category)) %>% arrange(rho) %>% unique() -> corr_by_category_raw
-
 sig <- function(x, is_sig) ifelse(is_sig, paste0("\\textbf{", x, "}"), x)
 # or colour: paste0("\\textcolor{blue}{", x, "}")
 
-corr_by_category <- corr_by_category_raw %>%   # the table before fmt_p()
-  mutate(category = gsub("_", " ", category),   # "connecting_words" -> "connecting words"
-       is_sig = !is.na(p) & p < .05,
-         rho    = sprintf("%.2f", rho),
-         p      = fmt_p(p),
-         across(everything(), ~ sig(as.character(.x), is_sig))) %>%
-  select(-is_sig) %>%
-  rename("CDI category" = "category", "$\\rho$" = "rho", "$p$" = "p")
+spearman_ci <- function(rho, n, level = .95) {
+     if (is.na(rho) || n < 4) return(c(NA_real_, NA_real_))
+     z  <- atanh(rho)
+     se <- sqrt((1 + rho^2 / 2) / (n - 3))   # Bonett & Wright (2000)
+     q  <- qnorm(1 - (1 - level) / 2)
+     tanh(z + c(-1, 1) * q * se)
+}
+
+items_en_pl %>% 
+     mutate(category = fct_recode(category,
+                                  "descriptive_words" = "descriptive_words (adverbs)",
+                                  "descriptive_words" = "descriptive_words (adjectives)")) %>%
+     group_by(category) %>%
+     summarise(
+          rho = cor(d_pl, d_en, method = "spearman", use = "complete.obs"),
+          n_complete = sum(complete.cases(d_pl, d_en)),
+          p = if (n_complete > 2)
+               cor.test(d_pl, d_en, method = "spearman", exact = FALSE)$p.value
+          else NA_real_,
+          ci_low  = spearman_ci(rho, n_complete)[1],
+          ci_high = spearman_ci(rho, n_complete)[2],
+          n = length(category),
+          .groups = "drop") %>%
+     select(-n_complete) %>%
+     arrange(rho) -> corr_by_category_raw
+
+corr_by_category <- corr_by_category_raw %>%
+     mutate(category = gsub("_", " ", category),
+            is_sig = !is.na(p) & p < .05,
+            ci     = ifelse(is.na(ci_low), NA,
+                            sprintf("[%.2f, %.2f]", ci_low, ci_high)),
+            rho    = sprintf("%.2f", rho),
+            p      = fmt_p(p),
+            across(everything(), ~ sig(as.character(.x), is_sig))) %>%
+     select(category, rho, ci, p, n) %>%
+     rename("CDI category" = "category", "$\\rho$" = "rho",
+            "95\\% CI" = "ci", "$p$" = "p")
 
 apa_table(corr_by_category, escape = FALSE,
-          align = c("p{8cm}", "c", "c", "c"),
+          align = c("p{6cm}", "c", "c", "c", "c"),
           font_size = "small",
           note = "Significant correlations ($p$ < .05) are shown in bold.",
-          caption="Cross-linguistic correlations of item difficulty within each CDI semantic category (Spearman's rank correlations).", placement = "H")
+          caption = "Cross-linguistic correlations of item difficulty within each CDI semantic category (Spearman's rank correlations).",
+          placement = "H")
 
 
 ```
@@ -1089,40 +1097,50 @@ Last, we investigated whether particular lexical categories show related difficu
 # spearman because ranked
 
 # PL
-items_cat_pl <- merge(items_cat_pl, items_full_pl[,c("item_id", "lexical_class")], all.x = T, 
+items_cat_pl <- 
+     merge(items_cat_pl, items_full_pl[,c("item_id", "lexical_class")], all.x = T, 
                       by.x = "itemID", by.y = "item_id") %>% unique()
 
 items_full_en <- read.csv("data/english/eng_ws_items.csv")
-items_cat_en <- merge(items_cat_en, items_full_en[,c("definition", "lexical_class")], all.x = T, 
+items_cat_en <- 
+     merge(items_cat_en, items_full_en[,c("definition", "lexical_class")], all.x = T, 
                       by = "definition") %>% unique()
 
-
-items_en_pl <- merge(items_cat_pl, items_cat_en, 
-                  all.x = T, all.y = T,
-                  suffixes = c("_pl","_en"),
-                  by = "uni_lemma") %>% filter(!is.na(item) & !is.na(definition)) %>% unique()
+items_en_pl <- 
+     merge(items_cat_pl, items_cat_en, 
+               all.x = T, all.y = T,
+               suffixes = c("_pl","_en"),
+               by = "uni_lemma") %>% filter(!is.na(item) & !is.na(definition)) %>% unique()
 
 items_en_pl %>%
-  group_by(lexical_class_en) %>%
-  summarise(
-    rho = cor(d_pl, d_en, method = "spearman", use = "complete.obs"),
-    p = if (sum(complete.cases(d_pl, d_en)) > 2)
-          cor.test(d_pl, d_en, method = "spearman", exact = FALSE)$p.value
-        else NA_real_,
-    n = length(lexical_class_en)) %>%
-  arrange(rho) -> corr_by_lex_class_raw
+     group_by(lexical_class_en) %>%
+     summarise(
+          rho = cor(d_pl, d_en, method = "spearman", use = "complete.obs"),
+          n_complete = sum(complete.cases(d_pl, d_en)),
+          p = if (n_complete > 2)
+               cor.test(d_pl, d_en, method = "spearman", exact = FALSE)$p.value
+          else NA_real_,
+          ci_low  = spearman_ci(rho, n_complete)[1],
+          ci_high = spearman_ci(rho, n_complete)[2],
+          n = length(lexical_class_en),
+          .groups = "drop") %>%
+     select(-n_complete) %>%
+     arrange(rho) -> corr_by_lex_class_raw
 
 corr_by_lex_class <- corr_by_lex_class_raw %>%
-  mutate(lexical_class_en = gsub("_", " ", lexical_class_en),   # e.g. "function_words" -> "function words"
-         is_sig = !is.na(p) & p < .05,
-         rho    = sprintf("%.2f", rho),
-         p      = fmt_p(p),
-         across(everything(), ~ sig(as.character(.x), is_sig))) %>%
-  select(-is_sig) %>%
-  rename("Lexical class" = "lexical_class_en", "$\\rho$" = "rho", "$p$" = "p")
+     mutate(lexical_class_en = gsub("_", " ", lexical_class_en),
+            is_sig = !is.na(p) & p < .05,
+            ci     = ifelse(is.na(ci_low), NA,
+                            sprintf("[%.2f, %.2f]", ci_low, ci_high)),
+            rho    = sprintf("%.2f", rho),
+            p      = fmt_p(p),
+            across(everything(), ~ sig(as.character(.x), is_sig))) %>%
+     select(lexical_class_en, rho, ci, p, n) %>%
+     rename("Lexical class" = "lexical_class_en", "$\\rho$" = "rho",
+            "95\\% CI" = "ci", "$p$" = "p")
 
 apa_table(corr_by_lex_class, escape = FALSE,
-          align = c("p{8cm}", "c", "c", "c"),
+          align = c("p{6cm}", "c", "c", "c", "c"),
           font_size = "small",
           note = "Significant correlations ($p$ < .05) are shown in bold.",
           caption = "Cross-linguistic correlations of item difficulty within each lexical class (Spearman's rank correlations).",
@@ -1155,7 +1173,11 @@ By design, a CAT-CDI selects items that provide the most information for each pa
 
 ### CAT-CDIs across languages do not have to show similar item properties.
 
-The comparison of item parameters across English and Polish highlights both methodological and linguistic influences on CAT-CDI development. Differences in calibration samples, particularly the broader age range in English versus the narrower one in Polish, likely contributed to observed shifts in item difficulty, with English items tending to appear more difficult (this was true also for the subset of items found on the CDI lists in both languages). Still the item difficulty for common items in the two languages was positively and moderately correlated. At the same time, variation in lexical mapping, morphological complexity, and frequency of use may also shape item properties across languages. These findings underscore the importance of considering both sample characteristics and language-specific features when interpreting item parameters or developing new CAT-CDIs. Importantly, CAT-CDIs do not need to be identical across languages, since the primary requirement is that each instrument’s item difficulties accurately reflect its own calibration sample. Differences in parallel items across English and Polish are both expected and scientifically interesting, as cross-linguistic comparisons of item properties are frequently investigated; nonetheless, such differences do not compromise CAT performance, as long as the parameters enable precise and efficient ability estimation within each language.
+The comparison of item parameters across English and Polish highlights both methodological and linguistic influences on CAT-CDI development. Differences in calibration samples, particularly the broader age range in English versus the narrower one in Polish, likely contributed to observed shifts in item difficulty, with English items tending to appear more difficult (this was true also for the subset of items found on the CDI lists in both languages). Nevertheless, the difficulty of common items was positively and moderately correlated across the two languages.
+
+\textcolor{blue}{At the same time, variation in lexical mapping, morphological complexity, and frequency of use may also shape item properties across languages. Although the category-level correlations were too imprecise to support firm conclusions, individual items illustrate how such factors may operate.} Some English words map onto more than one Polish CDI item, and these items differ in their contexts of use. For example, "some" maps to two Polish CDI items, "jeszcze" (with a similar difficulty value as the English "some") and "więcej" (more difficult than "jeszcze" and "some"). These two Polish items are used in different contexts, i.e., "jeszcze" would be used more often in child directed speech than "więcej" also because it can be used to refer to both quantity and repetitive actions (meaning "again"). "Więcej" implies a quantitative comparison of some sorts, as in "more than before" or "more than two". Similarly, "hat" is either "czapka" or "kapelusz" in Polish). Differences in word form may also matter: "bib" in Polish is a much more complex word, "śliniaczek"; English "underpants" are more morphologically complex (and maybe less frequent) than Polish "majtki". Taken together, these two semantic categories reflect the existing cross-linguistic differences in lexical mapping as well as item-specific factors such as frequency, morphological complexity, and contextual usage.
+
+These findings underscore the importance of considering both sample characteristics and language-specific features when interpreting item parameters or developing new CAT-CDIs. Importantly, CAT-CDIs do not need to be identical across languages, since the primary requirement is that each instrument's item difficulties accurately reflect its own calibration sample. Differences in parallel items across English and Polish are both expected and of scientific interest, as cross-linguistic comparisons of item properties are frequently investigated; nonetheless, such differences do not compromise CAT performance, as long as the parameters enable precise and efficient ability estimation within each language.
 
 # Conclusions
 
