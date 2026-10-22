@@ -1041,6 +1041,24 @@ English items were in general more difficult than the Polish items (English: min
 <!--- ADDED in revision round 1: could borrowed parameters work for some categories, even if not for the whole bank? -->
 
 ```{r}
+
+# PL
+items_cat_pl <- 
+     merge(items_cat_pl, items_full_pl[,c("item_id", "lexical_class")], all.x = T, 
+           by.x = "itemID", by.y = "item_id") %>% unique()
+
+items_full_en <- read.csv("data/english/eng_ws_items.csv")
+items_cat_en <- 
+     merge(items_cat_en, items_full_en[,c("definition", "lexical_class")], all.x = T, 
+           by = "definition") %>% unique()
+
+items_en_pl <- 
+     merge(items_cat_pl, items_cat_en, 
+           all.x = T, all.y = T,
+           suffixes = c("_pl","_en"),
+           by = "uni_lemma") %>% filter(!is.na(item) & !is.na(definition)) %>% unique()
+
+
 # standardizing item difficulty in each language
 
 items_en_pl <- items_en_pl %>%
@@ -1059,18 +1077,13 @@ items_en_pl %>% summarise(
      perc_gt_0.5 = mean(abs(z_diff) > 0.5) * 100,
      perc_gt_1 = mean(abs(z_diff) > 1)   * 100)
 
-# After standardising item difficulties within each language, the root mean squared difference between English and Polish translation equivalents was 0.82 SD. Nearly half of the items (49.3%) differed by more than 0.5 SD in relative difficulty, and 19.2% by more than 1 SD (approximately 1.4 units on the Polish ability scale).
+```
 
-# by semantic category
-items_en_pl %>%
-     group_by(category) %>%
-     summarise(n  = n(),
-               rmsd = sqrt(mean(z_diff^2)),
-               perc_gt_0.5 = mean(abs(z_diff) > 0.5) * 100,
-               perc_gt_1 = mean(abs(z_diff) > 1)   * 100) %>%
-     arrange(rmsd)
+\color{blue}
 
-# largest deviations for categories consisting of function words: quantifiers, demonstrative pronouns, locations, connecting words and prepositions (RMSD = 1.05–1.63 SD; 25–75% of items deviating by more than 1 SD). Deviations were smallest for adjectives, household items, animals and action words (RMSD = 0.55–0.69 SD). But even in these categories 35–50% of items differed by more than 0.5 SD in relative difficulty
+To remove overall scale differences arising from the different calibration samples, item difficulties were standardised within each language, and cross-language differences were summarised using the root mean squared difference (RMSD). The RMSD between English and Polish translation equivalents was 0.82 SD. Nearly half of the items (49.3%) differed by more than 0.5 SD in relative difficulty, and 19.2% by more than 1 SD (approximately 1.4 units on the Polish ability scale).
+
+```{r}
 
 # by lexical class
 items_en_pl %>%
@@ -1084,7 +1097,55 @@ items_en_pl %>%
 kruskal.test(abs(z_diff) ~ lexical_class_en, data = items_en_pl) # classes differ in deviation size
 items_en_pl %>% group_by(lexical_class_en) %>% summarise(mean_diff = mean(z_diff))  # systematic shift?
 
+# by semantic category
+items_en_pl %>%
+     group_by(category) %>%
+     summarise(n  = n(),
+               rmsd = sqrt(mean(z_diff^2)),
+               perc_gt_0.5 = mean(abs(z_diff) > 0.5) * 100,
+               perc_gt_1 = mean(abs(z_diff) > 1)   * 100) %>%
+     arrange(rmsd)
+
+
 ```
+
+```{r dev-by-category-tab}
+
+dev_class <- items_en_pl %>%
+     group_by(lexical_class_en) %>%
+     summarise(n           = n(),
+               mean_diff   = mean(z_diff),
+               rmsd        = sqrt(mean(z_diff^2)),
+               perc_gt_0.5 = mean(abs(z_diff) > 0.5) * 100,
+               perc_gt_1   = mean(abs(z_diff) > 1)   * 100) %>%
+     arrange(rmsd)
+
+dev_all <- items_en_pl %>%
+     summarise(lexical_class_en = "All items",
+               n           = n(),
+               mean_diff   = mean(z_diff),
+               rmsd        = sqrt(mean(z_diff^2)),
+               perc_gt_0.5 = mean(abs(z_diff) > 0.5) * 100,
+               perc_gt_1   = mean(abs(z_diff) > 1)   * 100)
+
+bind_rows(dev_class, dev_all) %>%
+     mutate(lexical_class_en = recode(lexical_class_en,
+                                      adjectives = "Adjectives", nouns = "Nouns", verbs = "Verbs",
+                                      other = "Other", function_words = "Function words")) %>%
+     apa_table(
+          note      = "Item difficulties were standardised within each language; differences are English minus Polish, in SD units. $M_{diff}$ = mean difference; RMSD = root mean squared difference.",
+          col.names = c("Lexical class", "$n$", "$M_{diff}$", "RMSD",
+                        "\\% > 0.5 SD", "\\% > 1 SD"),
+          align     = c("l", rep("r", 5)),
+          digits    = c(0, 0, 2, 2, 1, 1),
+          escape    = FALSE
+     )
+
+```
+
+Deviations differed across lexical classes, Kruskal–Wallis \$\\chi\^2\$ (`r kw$parameter`) = `r printnum(kw$statistic)`, *p* = `r printp(kw$p.value)` (Table \@ref(tab:dev-by-class-tab)). They were largest for function words and smallest for adjectives, but in every class at least 40% of items differed by more than 0.5 SD in relative difficulty. Mean differences within lexical classes were negligible, indicating that deviations were item-specific rather than shared within a class.
+
+\color{black}
 
 # Discussion
 
