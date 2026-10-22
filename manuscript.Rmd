@@ -1032,136 +1032,13 @@ t <- apa_print(t.test(items_en_pl$d_en, items_en_pl$d_pl, paired = T))
 # visualise
 items_en_pl %>% select(uni_lemma, d_pl, d_en) %>% pivot_longer(cols = d_pl:d_en, names_to = "lang", values_to = "d") %>% ggplot(aes(x = lang, y = d, group = lang)) + geom_boxplot() + geom_jitter(alpha = 0.3)
 
-items_en_pl %>% select(uni_lemma, d_pl, d_en) %>% 
-     ggplot(aes(x = d_pl, y = d_en)) + geom_jitter(alpha = 0.3) + geom_smooth(method = "lm") +
-     stat_cor(cor.coef.name = "r", p.accuracy = 0.001, r.accuracy = 0.01, size = 5, show.legend = F) +
-     theme_light() + labs(x = "Item difficulty in Polish", y = "Item difficulty in English")
-
 # corr
 c <- apa_print(cor.test(items_en_pl$d_pl, items_en_pl$d_en)) # 0.66
 ```
 
 English items were in general more difficult than the Polish items (English: min = `r round(min(items_cat_en$d),2)`, max = `r round(max(items_cat_en$d),2)`, *M* = `r round(mean(items_cat_en$d),2)`, *Mdn* = `r round(median(items_cat_en$d),2)`, *SD* = `r round(sd(items_cat_en$d),2)`; Polish: min = `r round(min(items_cat_pl$d),2)`, max = `r round(max(items_cat_pl$d),2)`, *M* = `r round(mean(items_cat_pl$d),2)`, *Mdn* = `r round(median(items_cat_pl$d),2)`, *SD* = `r round(sd(items_cat_pl$d),2)`). This was true also for a subset of `r nrow(items_en_pl)` items common to both languages - English items still proved to be more difficult than the Polish ones: `r t$full_result`. The item difficulty for common items in the two languages was positively and moderately correlated: `r c$full_result`.
 
-We also examined whether CDI semantic categories show comparable difficulty values across the two languages. To this end, we conducted a series of Spearman’s rank correlations on item difficulty within each semantic category (we considered only items common to both the Polish and English CDIs) (see Table \@ref(tab:d-by-cdi-category-tab)). The coefficients varied across categories, from \$rho\$ = .11, \$p\$ = .763 (quantifiers) to \$rho\$ = .91, $p$ \< .001 (question words). \textcolor{blue}{However, 17 of the 23 categories included 20 or fewer common items, so most of these estimates should be interpreted with caution.}
-
-```{r d-by-cdi-category-tab, include = T}
-# correlations by cdi semantic category on common words
-# spearman because ranked
-
-sig <- function(x, is_sig) ifelse(is_sig, paste0("\\textbf{", x, "}"), x)
-# or colour: paste0("\\textcolor{blue}{", x, "}")
-
-spearman_ci <- function(rho, n, level = .95) {
-     if (is.na(rho) || n < 4) return(c(NA_real_, NA_real_))
-     z  <- atanh(rho)
-     se <- sqrt((1 + rho^2 / 2) / (n - 3))   # Bonett & Wright (2000)
-     q  <- qnorm(1 - (1 - level) / 2)
-     tanh(z + c(-1, 1) * q * se)
-}
-
-items_en_pl %>% 
-     mutate(category = fct_recode(category,
-                                  "descriptive_words" = "descriptive_words (adverbs)",
-                                  "descriptive_words" = "descriptive_words (adjectives)")) %>%
-     group_by(category) %>%
-     summarise(
-          rho = cor(d_pl, d_en, method = "spearman", use = "complete.obs"),
-          n_complete = sum(complete.cases(d_pl, d_en)),
-          p = if (n_complete > 2)
-               cor.test(d_pl, d_en, method = "spearman", exact = FALSE)$p.value
-          else NA_real_,
-          ci_low  = spearman_ci(rho, n_complete)[1],
-          ci_high = spearman_ci(rho, n_complete)[2],
-          n = length(category),
-          .groups = "drop") %>%
-     select(-n_complete) %>%
-     arrange(rho) -> corr_by_category_raw
-
-corr_by_category <- corr_by_category_raw %>%
-     mutate(category = gsub("_", " ", category),
-            is_sig = !is.na(p) & p < .05,
-            ci     = ifelse(is.na(ci_low), NA,
-                            sprintf("[%.2f, %.2f]", ci_low, ci_high)),
-            rho    = sprintf("%.2f", rho),
-            p      = fmt_p(p),
-            across(everything(), ~ sig(as.character(.x), is_sig))) %>%
-     select(category, rho, ci, p, n) %>%
-     rename("CDI category" = "category", "$\\rho$" = "rho",
-            "95\\% CI" = "ci", "$p$" = "p")
-
-apa_table(corr_by_category, escape = FALSE,
-          align = c("p{6cm}", "c", "c", "c", "c"),
-          font_size = "small",
-          note = "Significant correlations ($p$ < .05) are shown in bold.",
-          caption = "Cross-linguistic correlations of item difficulty within each CDI semantic category (Spearman's rank correlations).",
-          placement = "H")
-
-
-```
-
-Last, we investigated whether particular lexical categories show related difficulty values across the two languages. We considered the following lexical classes: verbs, nouns, adjectives, function words and other, i.e. mostly sounds and words relating to routines (e.g. "hello", "yes", "thank you") and time (e.g. "tomorrow", "day"). Again, we performed a series of Spearman's rank correlations (on the difficulty of items common to CDI-CATs in Polish and English) for each lexical class (see Table \@ref(tab:d-by-lexical-class-tab). The weakest correlation was for verbs \textcolor{blue}{($rho$ = 0.37, $p$ < .001)}, then function words \textcolor{blue}{($rho$ = 0.53, $p$ < .001)} and adjectives \textcolor{blue}{($rho$ = 0.53, $p$ = .006)}, nouns \textcolor{blue}{($rho$ = 0.60, $p$ < .001)}, other \textcolor{blue}{($rho$ = 0.74, $p$ < .001)}. Notably, function words include many of the CDI semantic categories which showed the lowest correlations in Table \@ref(tab:d-by-cdi-category-tab), i.e., quantifiers, connecting words, locations, and pronouns. By contrast, we found relatively high correlations for nouns, sounds and words relating to routines (grouped together as "other").
-
-```{r d-by-lexical-class-tab, include = T}
-# correlations by lexical class on common words
-# spearman because ranked
-
-# PL
-items_cat_pl <- 
-     merge(items_cat_pl, items_full_pl[,c("item_id", "lexical_class")], all.x = T, 
-                      by.x = "itemID", by.y = "item_id") %>% unique()
-
-items_full_en <- read.csv("data/english/eng_ws_items.csv")
-items_cat_en <- 
-     merge(items_cat_en, items_full_en[,c("definition", "lexical_class")], all.x = T, 
-                      by = "definition") %>% unique()
-
-items_en_pl <- 
-     merge(items_cat_pl, items_cat_en, 
-               all.x = T, all.y = T,
-               suffixes = c("_pl","_en"),
-               by = "uni_lemma") %>% filter(!is.na(item) & !is.na(definition)) %>% unique()
-
-items_en_pl %>%
-     group_by(lexical_class_en) %>%
-     summarise(
-          rho = cor(d_pl, d_en, method = "spearman", use = "complete.obs"),
-          n_complete = sum(complete.cases(d_pl, d_en)),
-          p = if (n_complete > 2)
-               cor.test(d_pl, d_en, method = "spearman", exact = FALSE)$p.value
-          else NA_real_,
-          ci_low  = spearman_ci(rho, n_complete)[1],
-          ci_high = spearman_ci(rho, n_complete)[2],
-          n = length(lexical_class_en),
-          .groups = "drop") %>%
-     select(-n_complete) %>%
-     arrange(rho) -> corr_by_lex_class_raw
-
-corr_by_lex_class <- corr_by_lex_class_raw %>%
-     mutate(lexical_class_en = gsub("_", " ", lexical_class_en),
-            is_sig = !is.na(p) & p < .05,
-            ci     = ifelse(is.na(ci_low), NA,
-                            sprintf("[%.2f, %.2f]", ci_low, ci_high)),
-            rho    = sprintf("%.2f", rho),
-            p      = fmt_p(p),
-            across(everything(), ~ sig(as.character(.x), is_sig))) %>%
-     select(lexical_class_en, rho, ci, p, n) %>%
-     rename("Lexical class" = "lexical_class_en", "$\\rho$" = "rho",
-            "95\\% CI" = "ci", "$p$" = "p")
-
-apa_table(corr_by_lex_class, escape = FALSE,
-          align = c("p{6cm}", "c", "c", "c", "c"),
-          font_size = "small",
-          note = "Significant correlations ($p$ < .05) are shown in bold.",
-          caption = "Cross-linguistic correlations of item difficulty within each lexical class (Spearman's rank correlations).",
-          placement = "H")
-
-# add d_diff = differences in item difficulty between PL and ENG:
-items_en_pl <- items_en_pl %>% mutate(d_diff = abs(d_en - d_pl))
-
-```
-
-<!--- could borrowed parameters work for some categories, even if not for the whole bank? -->
+<!--- ADDED in revision round 1: could borrowed parameters work for some categories, even if not for the whole bank? -->
 
 ```{r}
 # standardizing item difficulty in each language
